@@ -83,7 +83,7 @@ public class ComplexState implements IState {
     }
 
     private IStateTransition createTransition(ITreeNode<IState> node, IStateTransition trans) {
-        ITree<IState> nextStateTree = new StateTree<IState>(tree, node, trans);
+        ITree<IState> nextStateTree = new StateTree(tree, node, trans);
         ComplexState nextState = factory.getState(nextStateTree);
         
         if (nextState == null) {
