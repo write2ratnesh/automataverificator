@@ -25,10 +25,14 @@ public class ComplexState implements IState {
 
     private IState activeState;
 
-    public ComplexState(IComplexStateFactory<ComplexState> factory) {
+    public ComplexState(ITree<IState> tree, IComplexStateFactory<ComplexState> factory) {
+        if (tree == null) {
+            throw new IllegalArgumentException("tree can't be null");
+        }
         if (factory == null) {
             throw new IllegalArgumentException("IComplexStateFactory parameter can't be null");
         }
+        this.tree = tree;
         this.factory = factory;
     }
 
@@ -44,10 +48,11 @@ public class ComplexState implements IState {
     }
 
     public StateType getType() {
-        return activeState.getType();
+        return (activeState != null) ? activeState.getType() : StateType.NORMAL;
     }
 
-    public List<IAction> getActions() {
+    public List<IAction> getActions() throws IllegalStateException {
+        checkActiveState();
         return activeState.getActions();
     }
 
@@ -55,7 +60,8 @@ public class ComplexState implements IState {
         return Collections.emptySet();
     }
 
-    public boolean isTerminal() {
+    public boolean isTerminal() throws IllegalStateException {
+        checkActiveState();
         return activeState.isTerminal();
     }
 
@@ -86,9 +92,6 @@ public class ComplexState implements IState {
         ITree<IState> nextStateTree = new StateTree(tree, node, trans);
         ComplexState nextState = factory.getState(nextStateTree);
         
-        if (nextState == null) {
-            nextState = factory.addState(this, trans);
-        }
         return new ComplexTransition(trans, nextState);
     }
 
@@ -96,6 +99,12 @@ public class ComplexState implements IState {
         buf.append('\"').append(node.getState().getName()).append("\", ");
         for (ITreeNode<IState> n: node.getChildren()) {
             nameBuild(n, buf);
+        }
+    }
+
+    private void checkActiveState() throws IllegalStateException {
+        if (activeState == null) {
+            throw new IllegalComplexStateException("Active state is null. Set it to get state actions.");
         }
     }
 }

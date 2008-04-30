@@ -16,7 +16,9 @@ public interface IStateMashine<S extends IState> {
 
     String getName();
 
-    IStateMashine<? extends S> getParentStateMashine();
+    IStateMashine<S> getParentStateMashine();
+
+    Set<IStateMashine<S>> getNestedStateMashines();
 
     S getParentState();
 

@@ -18,7 +18,7 @@ public class StateTree implements ITree<IState> {
 
     private ITreeNode<IState> root;
 
-    protected StateTree(ITreeNode<IState> root) {
+    public StateTree(ITreeNode<IState> root) {
         this.root = root;
     }
 

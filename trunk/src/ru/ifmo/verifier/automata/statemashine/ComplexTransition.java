@@ -17,6 +17,12 @@ public class ComplexTransition implements IStateTransition {
     private ComplexState target;
 
     public ComplexTransition(IStateTransition transition, ComplexState target) {
+        if (transition == null) {
+            throw new IllegalArgumentException("transition can't be null");
+        }
+        if (target == null) {
+            throw new IllegalArgumentException("ComplexState target can't be null");
+        }
         this.transition = transition;
         this.target = target;
     }

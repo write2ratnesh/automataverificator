@@ -8,7 +8,12 @@ import ru.ifmo.automata.statemashine.IStateTransition;
 import ru.ifmo.automata.statemashine.IStateMashine;
 import ru.ifmo.verifier.automata.tree.ITree;
 import ru.ifmo.verifier.automata.tree.ITreeNode;
+import ru.ifmo.verifier.automata.tree.TreeNode;
+import ru.ifmo.verifier.automata.tree.StateTree;
 import org.apache.commons.lang.NotImplementedException;
+
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * TODO: add comment
@@ -17,15 +22,34 @@ import org.apache.commons.lang.NotImplementedException;
  */
 public class ComplexStateFactory implements IComplexStateFactory<ComplexState> {
 
+    private Map<ITree<IState>, ComplexState> stateMap = new HashMap<ITree<IState>, ComplexState>();
+    private ComplexState initial;
+
     public ComplexState getInitialState(IStateMashine<IState> stateMashine) {
-        throw new NotImplementedException(); //TODO
+        if (initial == null) {
+            ITree<IState> initTree = new StateTree(getInitial(stateMashine, true));
+            
+            initial = new ComplexState(initTree, this);
+        }
+        return initial;
     }
 
     public ComplexState getState(ITree<IState> tree) {
-        throw new NotImplementedException(); //TODO
+        ComplexState res = stateMap.get(tree);
+        if (res == null) {
+            res = new ComplexState(tree, this);
+            stateMap.put(tree, res);
+        }
+        return res;
     }
 
-    public ComplexState addState(ComplexState cs, IStateTransition trans) {
-        throw new NotImplementedException(); //TODO
+    private ITreeNode<IState> getInitial(IStateMashine<IState> stateMashine, boolean active) {
+        TreeNode<IState> node = new TreeNode<IState>(stateMashine.getInitialState(), stateMashine, active);
+
+        for (IStateMashine<IState> sm: stateMashine.getNestedStateMashines()) {
+            //Only root node can be active
+            node.addChildren(getInitial(sm, false));
+        }
+        return node;
     }
 }
