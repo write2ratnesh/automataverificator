@@ -5,6 +5,7 @@ package ru.ifmo.verifier.automata.statemashine;
 
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IStateTransition;
+import ru.ifmo.automata.statemashine.IStateMashine;
 import ru.ifmo.verifier.automata.tree.ITree;
 import ru.ifmo.verifier.automata.tree.ITreeNode;
 
@@ -14,6 +15,8 @@ import ru.ifmo.verifier.automata.tree.ITreeNode;
  * @author: Kirill Egorov
  */
 public interface IComplexStateFactory<S extends IState> {
+
+    S getInitialState(IStateMashine<IState> stateMashine);
 
     S getState(ITree<IState> tree);
 
