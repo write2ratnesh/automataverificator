@@ -19,6 +19,4 @@ public interface IComplexStateFactory<S extends IState> {
     S getInitialState(IStateMashine<IState> stateMashine);
 
     S getState(ITree<IState> tree);
-
-    S addState(S cs, IStateTransition trans);
 }

@@ -26,8 +26,10 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
     private Map<String, Map<String, ?>> sources;
     private Map<S, List<IFunction>> functions;
 
-    private IStateMashine<? extends S> parentStateMashine;
+    private IStateMashine<S> parentStateMashine;
     private S parentState;
+
+    private Set<IStateMashine<S>> nestedStateMashines;
 
     public StateMashine(String name) {
         this.name = name;
@@ -48,15 +50,19 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
         return name;
     }
 
-    public IStateMashine<? extends S> getParentStateMashine() {
+    public IStateMashine<S> getParentStateMashine() {
         return parentStateMashine;
+    }
+
+    public Set<IStateMashine<S>> getNestedStateMashines() {
+        return nestedStateMashines;
     }
 
     public S getParentState() {
         return parentState;
     }
 
-    public <T extends IStateMashine<? extends S>> void setParent(T parentStateMashine, S parentState) {
+    public <T extends IStateMashine<S>> void setParent(T parentStateMashine, S parentState) {
         if (parentStateMashine == null || parentState == null) {
             throw new IllegalArgumentException("parent parameters can't be null");
         }
@@ -71,6 +77,10 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
         }
         this.parentStateMashine = parentStateMashine;
         this.parentState = parentState;
+    }
+
+    public void addNestedStateMashine(IStateMashine<State> stateMashine) {
+        //TODO:
     }
 
     public boolean isNested() {
