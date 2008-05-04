@@ -12,12 +12,12 @@ import ru.ifmo.automata.statemashine.IStateTransition;
  *
  * @author: Kirill Egorov
  */
-public interface IPredicateUtils {
+public interface IPredicateUtils<S extends IState> {
 
     /**
      * To check predicate in transition.getTarget() state.
      * @param state previous state
      * @param transition transition from state to transition.getTarget()
      */
-    void setAutomataState(IState state, IStateTransition transition);
+    void setAutomataState(S state, IStateTransition transition);
 }

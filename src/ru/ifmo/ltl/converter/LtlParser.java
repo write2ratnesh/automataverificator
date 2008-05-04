@@ -19,7 +19,7 @@ import ognl.OgnlException;
  */
 public class LtlParser implements ILtlParser {
 
-    GrammarConverter converter;
+    private GrammarConverter converter;
 
     public LtlParser(IAutomataContext context, IPredicateUtils predicatesObj) {
         converter = new GrammarConverter(context, predicatesObj);

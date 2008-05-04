@@ -217,7 +217,7 @@ public class UnimodXmlReader implements IAutomataReader {
         return e.getAttribute(ATTR_NAME);
     }
 
-    private void parseCtrlObjects(StateMashine<? extends State> m, Element e) {
+    private void parseCtrlObjects(StateMashine<State> m, Element e) {
         if (!StringUtils.equals(STATE_MASHINE, e.getNodeName())) {
             throw new IllegalArgumentException("Element isn't stateMashine");
         }
@@ -234,7 +234,7 @@ public class UnimodXmlReader implements IAutomataReader {
         }
     }
 
-    private Map<String, State> parseStates(StateMashine<? extends State> m, Element e) throws AutomataFormatException {
+    private Map<String, State> parseStates(StateMashine<State> m, Element e) throws AutomataFormatException {
         if (!StringUtils.equals(STATE_MASHINE, e.getNodeName())) {
             throw new IllegalArgumentException("Element isn't stateMashine");
         }
@@ -249,7 +249,7 @@ public class UnimodXmlReader implements IAutomataReader {
         return states;
     }
 
-    private State parseState(StateMashine<? extends State> m, Element e) throws AutomataFormatException {
+    private State parseState(StateMashine<State> m, Element e) throws AutomataFormatException {
         if (!StringUtils.equals(STATE, e.getNodeName())) {
             throw new IllegalArgumentException("Element isn't state element");
         }
@@ -271,6 +271,7 @@ public class UnimodXmlReader implements IAutomataReader {
             StateMashine<State> nested = stateMashines.get(sm);
             state.addNestedStateMashine(nested);
             nested.setParent(m, state);
+            m.addNestedStateMashine(nested);
         }
 
         return state;
@@ -283,7 +284,7 @@ public class UnimodXmlReader implements IAutomataReader {
      * @param e element to be parsed
      * @throws AutomataFormatException
      */
-    private void addTransitions(StateMashine<? extends State> m, Element e) throws AutomataFormatException {
+    private void addTransitions(StateMashine<State> m, Element e) throws AutomataFormatException {
         if (!StringUtils.equals(STATE_MASHINE, e.getNodeName())) {
             throw new IllegalArgumentException("Element isn't stateMashine");
         }
@@ -294,7 +295,7 @@ public class UnimodXmlReader implements IAutomataReader {
         }
     }
 
-    private void parseTransition(StateMashine<? extends State> m, Element e) throws AutomataFormatException {
+    private void parseTransition(StateMashine<State> m, Element e) throws AutomataFormatException {
         if (!StringUtils.equals(TRANSITION, e.getNodeName())) {
             throw new IllegalArgumentException("Element isn't transition");
         }
@@ -325,7 +326,7 @@ public class UnimodXmlReader implements IAutomataReader {
      * @return action
      * @throws AutomataFormatException
      */
-    private IAction parseAction(StateMashine<? extends State> m, Element node) throws AutomataFormatException {
+    private IAction parseAction(StateMashine<State> m, Element node) throws AutomataFormatException {
         String actionFullName = node.getAttribute(ATTR_ACTION);
         if (!actionFullName.matches(StateMashine.METHOD_PATTERN)) {
             throw new AutomataFormatException("Wrong output action format: " + actionFullName);
@@ -351,7 +352,7 @@ public class UnimodXmlReader implements IAutomataReader {
      * @return IEvent instance or null if event Attr is blank
      * @throws AutomataFormatException
      */
-    private IEvent parseEvent(StateMashine<? extends State> m, String eventAttr) throws AutomataFormatException {
+    private IEvent parseEvent(StateMashine<State> m, String eventAttr) throws AutomataFormatException {
         String[] a = eventAttr.split("\\.");
         if (a.length > 2) {
             throw new AutomataFormatException("Wrong event format: " + eventAttr);

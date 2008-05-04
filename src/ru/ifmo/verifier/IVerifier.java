@@ -6,6 +6,7 @@ package ru.ifmo.verifier;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.automata.statemashine.IState;
 
 import java.util.List;
 
@@ -14,9 +15,9 @@ import java.util.List;
  *
  * @author: Kirill Egorov
  */
-public interface IVerifier {
+public interface IVerifier<S extends IState> {
 
-    List<IInterNode> verify(IBuchiAutomata buchi, IPredicateUtils predicates);
+    List<IInterNode> verify(IBuchiAutomata buchi, IPredicateUtils<S> predicates);
 
-    List<IInterNode> verify(String ltlFormula, IPredicateUtils predicates) throws LtlParseException;
+    List<IInterNode> verify(String ltlFormula, IPredicateUtils<S> predicates) throws LtlParseException;
 }

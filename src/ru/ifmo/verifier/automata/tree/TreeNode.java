@@ -6,8 +6,7 @@ package ru.ifmo.verifier.automata.tree;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IStateMashine;
 
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * TODO: add comment
@@ -19,7 +18,8 @@ public class TreeNode<S extends IState> implements ITreeNode<S> {
     private IStateMashine<S> stateMashine;
     private boolean active;
 
-    private Set<ITreeNode<S>> children;
+    private Map<IStateMashine<S>, ITreeNode<S>> children
+            = new LinkedHashMap<IStateMashine<S>, ITreeNode<S>>();
 
     public TreeNode(S state, IStateMashine<S> stateMashine, boolean active) {
         this.state = state;
@@ -39,18 +39,34 @@ public class TreeNode<S extends IState> implements ITreeNode<S> {
         return active;
     }
 
-    public synchronized void addChildren(ITreeNode<S> node) {
-        if (children == null) {
-            children = new HashSet<ITreeNode<S>>();
-        }
-        children.add(node);
+    public void addChildren(ITreeNode<S> node) {
+        children.put(node.getStateMashine(), node);
     }
 
     /**
      * Get modifiable set of children
      * @return set of children nodes
      */
-    public Set<ITreeNode<S>> getChildren() {
-        return children;
+    public Collection<ITreeNode<S>> getChildren() {
+        return children.values();
+    }
+
+    public ITreeNode<S> getChild(IStateMashine<S> stateMashine) {
+        return children.get(stateMashine);
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TreeNode)) return false;
+
+        TreeNode treeNode = (TreeNode) o;
+
+        if (state != null ? !state.equals(treeNode.state) : treeNode.state != null) return false;
+
+        return true;
+    }
+
+    public String toString() {
+        return stateMashine.getName() + '.' + state.getName();
     }
 }

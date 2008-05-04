@@ -15,16 +15,16 @@ import java.util.*;
  *
  * @author: Kirill Egorov
  */
-public class IntersectionAutomata {
+public class IntersectionAutomata<S extends IState> {
 
-    private IPredicateUtils predicates;
+    private IPredicateUtils<S> predicates;
     private IBuchiAutomata buchiAutomata;
 
-    private Set<IntersectionNode> nodes = new HashSet<IntersectionNode>();
-    private Map<IState, Map<IBuchiNode, Map<Integer, IntersectionNode>>> nodeMap
-            = new HashMap<IState, Map<IBuchiNode, Map<Integer, IntersectionNode>>>();
+    private Set<IntersectionNode<S>> nodes = new HashSet<IntersectionNode<S>>();
+    private Map<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>> nodeMap
+            = new HashMap<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>>();
 
-    public IntersectionAutomata(IPredicateUtils predicates, IBuchiAutomata buchi) {
+    public IntersectionAutomata(IPredicateUtils<S> predicates, IBuchiAutomata buchi) {
         if (buchi == null) {
             throw new IllegalArgumentException("Buchi automata can't be null");
         }
@@ -39,33 +39,33 @@ public class IntersectionAutomata {
         return buchiAutomata;
     }
 
-    public IntersectionNode getNode(IState state, IBuchiNode node, int acceptSet) {
-        Map<IBuchiNode, Map<Integer, IntersectionNode>> buchiMap = nodeMap.get(state);
+    public IntersectionNode<S> getNode(S state, IBuchiNode node, int acceptSet) {
+        Map<IBuchiNode, Map<Integer, IntersectionNode<S>>> buchiMap = nodeMap.get(state);
         if (buchiMap == null) {
-            buchiMap = new HashMap<IBuchiNode, Map<Integer, IntersectionNode>>();
+            buchiMap = new HashMap<IBuchiNode, Map<Integer, IntersectionNode<S>>>();
             nodeMap.put(state, buchiMap);
         }
 
-        Map<Integer, IntersectionNode> acceptMap = buchiMap.get(node);
+        Map<Integer, IntersectionNode<S>> acceptMap = buchiMap.get(node);
         if (acceptMap == null) {
-            acceptMap = new HashMap<Integer, IntersectionNode>();
+            acceptMap = new HashMap<Integer, IntersectionNode<S>>();
             buchiMap.put(node, acceptMap);
         }
 
-        IntersectionNode res = acceptMap.get(acceptSet);
+        IntersectionNode<S> res = acceptMap.get(acceptSet);
         if (res == null) {
-            res = new IntersectionNode(this, state, node, acceptSet);
+            res = new IntersectionNode<S>(this, state, node, acceptSet);
             acceptMap.put(acceptSet, res);
             nodes.add(res);
         }
         return res;
     }
 
-    public Set<IntersectionNode> getNodes() {
+    public Set<IntersectionNode<S>> getNodes() {
         return Collections.unmodifiableSet(nodes);
     }
 
-    public IPredicateUtils getPredicates() {
+    public IPredicateUtils<S> getPredicates() {
         return predicates;
     }
 }

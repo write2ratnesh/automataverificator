@@ -16,7 +16,7 @@ import ru.ifmo.verifier.automata.tree.ITreeNode;
  */
 public interface IComplexStateFactory<S extends IState> {
 
-    S getInitialState(IStateMashine<IState> stateMashine);
+//    S getInitialState(IStateMashine<IState> stateMashine);
 
-    S getState(ITree<IState> tree);
+    ComplexState<S> getState(ITree<S> tree);
 }
