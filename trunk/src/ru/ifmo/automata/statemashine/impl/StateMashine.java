@@ -29,7 +29,7 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
     private IStateMashine<S> parentStateMashine;
     private S parentState;
 
-    private Set<IStateMashine<S>> nestedStateMashines;
+    private Set<IStateMashine<S>> nestedStateMashines = new LinkedHashSet<IStateMashine<S>>();
 
     public StateMashine(String name) {
         this.name = name;
@@ -79,8 +79,8 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
         this.parentState = parentState;
     }
 
-    public void addNestedStateMashine(IStateMashine<State> stateMashine) {
-        //TODO:
+    public void addNestedStateMashine(IStateMashine<S> stateMashine) {
+        nestedStateMashines.add(stateMashine);
     }
 
     public boolean isNested() {

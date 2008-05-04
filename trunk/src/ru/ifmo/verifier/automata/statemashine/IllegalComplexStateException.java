@@ -1,5 +1,5 @@
 /*
- * Developed by eVelopers Corporation - 30.04.2008
+ * IllegalStateException.java, 30.04.2008
  */
 package ru.ifmo.verifier.automata.statemashine;
 

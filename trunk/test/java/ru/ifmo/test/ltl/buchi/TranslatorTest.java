@@ -121,7 +121,7 @@ public class TranslatorTest extends TestCase {
         return translator.translate(t);
     }
 
-    private class SimplePredicateUtils implements IPredicateUtils {
+    private class SimplePredicateUtils implements IPredicateUtils<IState> {
         @Predicate
         public boolean p1() {
             return true;

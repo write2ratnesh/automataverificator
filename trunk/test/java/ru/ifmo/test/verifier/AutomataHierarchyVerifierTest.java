@@ -1,22 +1,39 @@
 /**
- * VerifierTest2.java, 26.04.2008
+ * AutomataHierarchyTest.java, 01.05.2008
  */
 package ru.ifmo.test.verifier;
 
-import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.ltl.LtlParseException;
+import ru.ifmo.verifier.IInterNode;
 
 import java.util.List;
 
 /**
- * Verify A3 automata of GameModel
+ * TODO: add comment
  *
  * @author: Kirill Egorov
  */
-public class VerifierTest2 extends AbstractSingleAutomataVerifierTest {
+public class AutomataHierarchyVerifierTest extends AbstractAutomataHierarhyVerifierTest {
+    public AutomataHierarchyVerifierTest() {
+        super("GameA1.xml", "A1");
+    }
 
-    public VerifierTest2() {
-        super("GameA1.xml", "A3");
+    public void testGlobalIsInState() throws LtlParseException {
+        List<IInterNode> stack = verifier.verify("G(!isInState(A1, A1.s2))", predicates);
+        printStack(stack);
+        assertFalse(stack.isEmpty());
+    }
+
+    public void testGlobalCameToFinalState() throws LtlParseException {
+        List<IInterNode> stack = verifier.verify("G(!cameToFinalState())", predicates);
+        printStack(stack);
+        assertFalse(stack.isEmpty());
+    }
+
+    public void testGlobalWasEvent() throws LtlParseException {
+        List<IInterNode> stack = verifier.verify("G(!wasEvent(p2.e4))", predicates);
+        printStack(stack);
+        assertFalse(stack.isEmpty());
     }
 
     public void testGlobalWasEvent1() throws LtlParseException {
@@ -28,19 +45,19 @@ public class VerifierTest2 extends AbstractSingleAutomataVerifierTest {
     public void testGlobalWasEvent2() throws LtlParseException {
         List<IInterNode> stack = verifier.verify("G(isInState(A3, A3.s1) || X(wasEvent(p3.e82)))", predicates);
         printStack(stack);
-        assertTrue(stack.isEmpty());
+        assertFalse(stack.isEmpty());
     }
 
     public void testGlobalWasEvent3() throws LtlParseException {
         List<IInterNode> stack = verifier.verify("G(wasInState(A3, A3.s1) || wasEvent(p3.e82))", predicates);
         printStack(stack);
-        assertTrue(stack.isEmpty());
+        assertFalse(stack.isEmpty());
     }
 
     public void testGlobalWasEvent4() throws LtlParseException {
         List<IInterNode> stack = verifier.verify("G(wasInState(A3, A3.s1) || G(wasEvent(p3.e82)))", predicates);
         printStack(stack);
-        assertTrue(stack.isEmpty());
+        assertFalse(stack.isEmpty());
     }
 
     public void testReleaseWasAction() throws LtlParseException {

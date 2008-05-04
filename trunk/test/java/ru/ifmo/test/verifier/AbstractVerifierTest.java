@@ -6,14 +6,15 @@ package ru.ifmo.test.verifier;
 import junit.framework.TestCase;
 import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.IVerifier;
-import ru.ifmo.verifier.impl.SimpleVerifier;
-import ru.ifmo.ltl.grammar.predicate.PredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
 import ru.ifmo.automata.statemashine.impl.UnimodXmlReader;
 import ru.ifmo.automata.statemashine.IAutomataContext;
+import ru.ifmo.automata.statemashine.IState;
+import ru.ifmo.automata.statemashine.IStateMashine;
 
 import java.util.List;
 import java.io.IOException;
@@ -23,28 +24,35 @@ import java.io.IOException;
  *
  * @author: Kirill Egorov
  */
-public abstract class AbstractVerifierTest extends TestCase {
-    private String xmlFileName;
-    private String stateMashineName;
+public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
+    protected String xmlFileName;
+    protected String stateMashineName;
 
-    protected IVerifier verifier;
-    protected PredicateUtils predicates;
+    protected IVerifier<S> verifier;
+    protected IPredicateUtils<S> predicates;
 
     protected AbstractVerifierTest(String xmlFileName, String stateMashineName) {
+        super();
         this.xmlFileName = xmlFileName;
         this.stateMashineName = stateMashineName;
     }
 
     protected void setUp() throws IOException, AutomataFormatException {
-        predicates = new PredicateUtils();
+        predicates = createPredicateUtils();
         IAutomataContext context = new AutomataContext(new UnimodXmlReader(xmlFileName));
         ILtlParser parser = new LtlParser(context, predicates);
-        verifier = new SimpleVerifier(context.getStateMashine(stateMashineName), parser);
+        verifier = createVerifier(context.getStateMashine(stateMashineName), parser);
     }
+
+    protected abstract IVerifier<S> createVerifier(IStateMashine<? extends IState> stateMashine, ILtlParser parser);
+
+    protected abstract IPredicateUtils<S> createPredicateUtils();
 
     protected void printStack(List<IInterNode> stack) {
         if (stack.isEmpty()) {
             System.out.println("Stack is empty");
+        } else {
+            System.out.println("DFS 1 stack:");
         }
         final int MAX_LEN = 80;
         int len = 0;

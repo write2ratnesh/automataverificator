@@ -18,19 +18,20 @@ import java.util.*;
  *
  * @author: Kirill Egorov
  */
-public class IntersectionNode implements INode<IntersectionTransition>, IInterNode {
-    private IntersectionAutomata automata;
-    private final IState state;
+public class IntersectionNode<S extends IState>
+        implements INode<IntersectionTransition>, IInterNode {
+    private IntersectionAutomata<S> automata;
+    private final S state;
     private final IBuchiNode node;
     private final int acceptSet;
     private final int nextAcceptSet;
     private final boolean terminal;
 
-    Iterator<IntersectionNode> iterator;
+    Iterator<IntersectionNode<S>> iterator;
 
     private Set<IntersectionTransition> transitions = new LinkedHashSet<IntersectionTransition>();
 
-    public IntersectionNode(IntersectionAutomata automata, IState state, IBuchiNode node, int acceptSet) {
+    public IntersectionNode(IntersectionAutomata<S> automata, S state, IBuchiNode node, int acceptSet) {
         if (state == null) {
             throw new IllegalArgumentException("Automata state can't be null");
         }
@@ -108,13 +109,13 @@ public class IntersectionNode implements INode<IntersectionTransition>, IInterNo
         return String.format("[\"%s\", %d, %d]", state.getName(), node.getID(), acceptSet);
     }
 
-    private class NodeIterator implements Iterator<IntersectionNode> {
+    private class NodeIterator implements Iterator<IntersectionNode<S>> {
 
         private Iterator<IStateTransition> stateIter;
         private Iterator<Map.Entry<ITransitionCondition, IBuchiNode>> nodeIter;
 
         private IStateTransition nextStateTransition;
-        private IntersectionNode next;
+        private IntersectionNode<S> next;
 
         private NodeIterator() {
             stateIter = state.getOutcomingTransitions().iterator();
@@ -135,7 +136,7 @@ public class IntersectionNode implements INode<IntersectionTransition>, IInterNo
                 if (nodeIter.hasNext()) {
                     nextBuchiTransition = nodeIter.next();
                     if (nextBuchiTransition.getKey().getValue()) {
-                        next = automata.getNode(nextStateTransition.getTarget(),
+                        next = automata.getNode((S) nextStateTransition.getTarget(),
                                                 nextBuchiTransition.getValue(), nextAcceptSet);
                         return true;
                     }
@@ -150,11 +151,11 @@ public class IntersectionNode implements INode<IntersectionTransition>, IInterNo
             }
         }
 
-        public IntersectionNode next() {
+        public IntersectionNode<S> next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            IntersectionNode res = next;
+            IntersectionNode<S> res = next;
             next = null;
             return res;
         }

@@ -6,7 +6,8 @@ package ru.ifmo.verifier.automata.tree;
 import ru.ifmo.automata.statemashine.IStateMashine;
 import ru.ifmo.automata.statemashine.IState;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Collection;
 
 /**
  * TODO: add comment
@@ -24,5 +25,7 @@ public interface ITreeNode<S extends IState> {
      * Get modifiable set of children
      * @return set of children nodes
      */
-    Set<ITreeNode<S>> getChildren();
+    Collection<ITreeNode<S>> getChildren();
+
+    ITreeNode<S> getChild(IStateMashine<S> stateMashine);
 }

@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author: Kirill Egorov
  */
-public class VerifierTest extends AbstractVerifierTest {
+public class VerifierTest extends AbstractSingleAutomataVerifierTest {
 
     public VerifierTest() {
         super("CarA1.xml", "A1");

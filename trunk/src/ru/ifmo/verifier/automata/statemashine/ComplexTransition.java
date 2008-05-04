@@ -27,7 +27,7 @@ public class ComplexTransition implements IStateTransition {
         this.target = target;
     }
 
-    public IState getTarget() {
+    public ComplexState getTarget() {
         target.setActiveState(transition.getTarget());
         return target;
     }

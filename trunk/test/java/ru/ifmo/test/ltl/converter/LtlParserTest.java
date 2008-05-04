@@ -19,8 +19,6 @@ import ru.ifmo.automata.statemashine.IAutomataContext;
 
 import java.io.IOException;
 
-import org.junit.Test;
-
 /**
  * Test LtlParser
  *
