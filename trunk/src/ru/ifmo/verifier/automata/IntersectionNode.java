@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class IntersectionNode<S extends IState>
         implements INode<IntersectionTransition>, IInterNode {
-    private IntersectionAutomata<S> automata;
+    private IIntersectionAutomata<S> automata;
     private final S state;
     private final IBuchiNode node;
     private final int acceptSet;
@@ -31,7 +31,7 @@ public class IntersectionNode<S extends IState>
 
     private Set<IntersectionTransition> transitions = new LinkedHashSet<IntersectionTransition>();
 
-    public IntersectionNode(IntersectionAutomata<S> automata, S state, IBuchiNode node, int acceptSet) {
+    public IntersectionNode(IIntersectionAutomata<S> automata, S state, IBuchiNode node, int acceptSet) {
         if (state == null) {
             throw new IllegalArgumentException("Automata state can't be null");
         }

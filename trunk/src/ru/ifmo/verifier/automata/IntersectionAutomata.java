@@ -15,7 +15,7 @@ import java.util.*;
  *
  * @author: Kirill Egorov
  */
-public class IntersectionAutomata<S extends IState> {
+public class IntersectionAutomata<S extends IState> implements IIntersectionAutomata<S> {
 
     private IPredicateUtils<S> predicates;
     private IBuchiAutomata buchiAutomata;
@@ -25,11 +25,8 @@ public class IntersectionAutomata<S extends IState> {
             = new HashMap<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>>();
 
     public IntersectionAutomata(IPredicateUtils<S> predicates, IBuchiAutomata buchi) {
-        if (buchi == null) {
-            throw new IllegalArgumentException("Buchi automata can't be null");
-        }
-        if (predicates == null) {
-            throw new IllegalArgumentException("predicates can't be null");
+        if (buchi == null || predicates == null) {
+            throw new IllegalArgumentException();
         }
         this.predicates = predicates;
         this.buchiAutomata = buchi;
