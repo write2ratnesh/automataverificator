@@ -4,12 +4,13 @@
 package ru.ifmo.test.verifier;
 
 import ru.ifmo.verifier.IVerifier;
-import ru.ifmo.verifier.impl.SimpleVerifier;
+import ru.ifmo.verifier.concurrent.MultiThreadVerifier;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IStateMashine;
 import ru.ifmo.ltl.converter.ILtlParser;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
-import ru.ifmo.ltl.grammar.predicate.PredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.PredicateFactory;
+import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 
 /**
  * TODO: add comment
@@ -22,10 +23,12 @@ public abstract class AbstractSingleAutomataVerifierTest extends AbstractVerifie
     }
 
     protected IVerifier<IState> createVerifier(IStateMashine<? extends IState> stateMashine, ILtlParser parser) {
-        return new SimpleVerifier<IState>(stateMashine.getInitialState(), parser);
+//        return new SimpleVerifier<IState>(stateMashine.getInitialState(), parser);
+        return new MultiThreadVerifier<IState>(stateMashine.getInitialState(), parser, stateMashine.getStates().size());
     }
 
-    protected IPredicateUtils<IState> createPredicateUtils() {
-        return new PredicateUtils<IState>();
+    protected IPredicateFactory<IState> createPredicateUtils() {
+        return new MultiThreadPredicateFactory<IState>(new PredicateFactory<IState>());
+//        return new PredicateFactory<IState>();
     }
 }

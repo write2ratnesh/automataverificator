@@ -6,7 +6,7 @@ package ru.ifmo.test.verifier;
 import junit.framework.TestCase;
 import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.IVerifier;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
@@ -29,7 +29,7 @@ public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
     protected String stateMashineName;
 
     protected IVerifier<S> verifier;
-    protected IPredicateUtils<S> predicates;
+    protected IPredicateFactory<S> predicates;
 
     protected AbstractVerifierTest(String xmlFileName, String stateMashineName) {
         super();
@@ -46,7 +46,7 @@ public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
 
     protected abstract IVerifier<S> createVerifier(IStateMashine<? extends IState> stateMashine, ILtlParser parser);
 
-    protected abstract IPredicateUtils<S> createPredicateUtils();
+    protected abstract IPredicateFactory<S> createPredicateUtils();
 
     protected void printStack(List<IInterNode> stack) {
         if (stack.isEmpty()) {

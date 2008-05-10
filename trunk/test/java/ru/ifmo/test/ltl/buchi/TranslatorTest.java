@@ -5,7 +5,7 @@ package ru.ifmo.test.ltl.buchi;
 
 import junit.framework.TestCase;
 import ru.ifmo.ltl.grammar.LtlNode;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
@@ -18,9 +18,7 @@ import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
 import ru.ifmo.automata.statemashine.impl.UnimodXmlReader;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
-import ru.ifmo.automata.statemashine.IAutomataContext;
-import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateTransition;
+import ru.ifmo.automata.statemashine.*;
 
 import java.io.IOException;
 import java.util.Map;
@@ -37,7 +35,7 @@ public class TranslatorTest extends TestCase {
     private ILtlParser parser;
 
     protected void setUp() throws IOException, AutomataFormatException {
-        SimplePredicateUtils predicates = new SimplePredicateUtils();
+        SimplePredicateFactory predicates = new SimplePredicateFactory();
         IAutomataContext context = new AutomataContext(new UnimodXmlReader("CarA1.xml"));
         parser = new LtlParser(context, predicates);
     }
@@ -121,7 +119,7 @@ public class TranslatorTest extends TestCase {
         return translator.translate(t);
     }
 
-    private class SimplePredicateUtils implements IPredicateUtils<IState> {
+    private class SimplePredicateFactory implements IPredicateFactory<IState> {
         @Predicate
         public boolean p1() {
             return true;
@@ -133,6 +131,38 @@ public class TranslatorTest extends TestCase {
         }
 
         public void setAutomataState(IState state, IStateTransition transition) {
+            throw new NotImplementedException();
+        }
+
+        public Boolean wasEvent(IEvent e) {
+            throw new NotImplementedException();
+        }
+
+        public boolean isInState(IStateMashine<? extends IState> a, IState s) {
+            throw new NotImplementedException();
+        }
+
+        public boolean wasInState(IStateMashine<? extends IState> a, IState s) {
+            throw new NotImplementedException();
+        }
+
+        public boolean cameToFinalState() {
+            throw new NotImplementedException();
+        }
+
+        public Boolean wasAction(IAction z) {
+            throw new NotImplementedException();
+        }
+
+        public boolean wasFirstAction(IAction z) {
+            throw new NotImplementedException();
+        }
+
+        public boolean wasTrue(ICondition cond) {
+            throw new NotImplementedException();
+        }
+
+        public boolean wasFalse(ICondition cond) {
             throw new NotImplementedException();
         }
     }

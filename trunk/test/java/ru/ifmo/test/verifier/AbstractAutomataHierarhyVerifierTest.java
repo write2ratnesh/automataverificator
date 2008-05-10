@@ -10,8 +10,8 @@ import ru.ifmo.verifier.impl.SimpleVerifier;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IStateMashine;
 import ru.ifmo.ltl.converter.ILtlParser;
-import ru.ifmo.ltl.grammar.predicate.ComplexPredicateUtils;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.ComplexPredicateFactory;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 
 /**
  * TODO: add comment
@@ -28,7 +28,7 @@ public abstract class AbstractAutomataHierarhyVerifierTest extends AbstractVerif
         return new SimpleVerifier<ComplexState>(ComplexStateFactory.createInitialState(stateMashine), parser);
     }
 
-    protected IPredicateUtils<ComplexState> createPredicateUtils() {
-        return new ComplexPredicateUtils();
+    protected IPredicateFactory<ComplexState> createPredicateUtils() {
+        return new ComplexPredicateFactory();
     }
 }

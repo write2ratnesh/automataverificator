@@ -5,7 +5,7 @@ package ru.ifmo.test.ltl.converter;
 
 import junit.framework.TestCase;
 import ru.ifmo.ltl.grammar.*;
-import ru.ifmo.ltl.grammar.predicate.PredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.PredicateFactory;
 import ru.ifmo.ltl.grammar.exception.UnexpectedOperatorException;
 import ru.ifmo.ltl.grammar.exception.UnexpectedMethodException;
 import ru.ifmo.ltl.grammar.exception.UnexpectedParameterException;
@@ -29,7 +29,7 @@ public class LtlParserTest extends TestCase {
     private ILtlParser parser;
 
     protected void setUp() throws IOException, AutomataFormatException {
-        PredicateUtils predicates = new PredicateUtils();
+        PredicateFactory predicates = new PredicateFactory();
         IAutomataContext context = new AutomataContext(new UnimodXmlReader("CarA1.xml"));
         parser = new LtlParser(context, predicates);
     }

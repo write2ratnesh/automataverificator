@@ -14,15 +14,7 @@ import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
  *
  * @author: Kirill Egorov
  */
-public class PredicateUtils<S extends IState> implements IPredicateUtils<S> {
-
-    protected S state;
-    protected IStateTransition transition;
-
-    public void setAutomataState(S state, IStateTransition transition) {
-        this.state = state;
-        this.transition = transition;
-    }
+public class PredicateFactory<S extends IState> extends AbstractPredicateFactory<S> {
 
     @Predicate
     public Boolean wasEvent(IEvent e) {

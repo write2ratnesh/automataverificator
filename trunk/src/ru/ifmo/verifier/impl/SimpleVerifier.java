@@ -13,7 +13,7 @@ import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
 import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.ltl.grammar.LtlUtils;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.ltl.converter.ILtlParser;
 
@@ -55,7 +55,7 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
         this.parser = parser;
     }
 
-    public List<IInterNode> verify(String ltlFormula, IPredicateUtils<S> predicates) throws LtlParseException {
+    public List<IInterNode> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException {
         if (parser == null) {
             throw new UnsupportedOperationException("Can't verify LTL formula without LTL parser."
                     + "Define it first or use List<IStateTransition> verify(IBuchiAutomata buchi) method instead");
@@ -72,11 +72,11 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
         return verify(buchi, predicates);
     }
 
-    public List<IInterNode> verify(IBuchiAutomata buchi, IPredicateUtils<S> predicates) {
+    public List<IInterNode> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
         IntersectionAutomata<S> automata = new IntersectionAutomata<S>(predicates, buchi);
         IntersectionNode initial = automata.getNode(initState, buchi.getStartNode(), 0);
 
-        Deque<? extends IInterNode> stack = new Dfs1().dfs(initial);
+        Deque<? extends IInterNode> stack = new MainDfs(new HashSet<IntersectionNode>(), 0).dfs(initial);
 
         List<IInterNode> res = new ArrayList<IInterNode>(stack.size());
 
@@ -84,63 +84,5 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
             res.add(iter.next());
         }
         return res;
-    }
-
-    private class Dfs1 extends AbstractDfs<Deque<IntersectionNode>> {
-        private Dfs1() {
-            setResult(getStack());
-        }
-
-        protected boolean leaveNode(IntersectionNode node) {
-            if (node.isTerminal()) {
-                AbstractDfs<Boolean> dfs2 = new Dfs2(getStack());
-                if (dfs2.dfs(node)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
-    private class Dfs2 extends AbstractDfs<Boolean> {
-        private Deque<IntersectionNode> dfsStack;
-
-        private Dfs2(Deque<IntersectionNode> dfsStack) {
-            this.dfsStack = dfsStack;
-            setResult(false);
-        }
-
-        protected void enterNode(IntersectionNode node) {
-            node.resetIterator();
-        }
-
-        protected boolean visitNode(IntersectionNode node) {
-            if (dfsStack.contains(node)) {
-                setResult(true);
-
-                //TODO: del stack print  ------------------------
-
-                if (getStack().isEmpty()) {
-                    System.out.println("Stack is empty");
-                } else {
-                    System.out.println("DFS 2 stack:");
-                }
-                final int MAX_LEN = 80;
-                int len = 0;
-                for (IInterNode n: getStack()) {
-                    String tmp = n.toString();
-                    len += tmp.length();
-                    if (len > MAX_LEN) {
-                        len = tmp.length();
-                        System.out.println();
-                    }
-                    System.out.print("-->" + tmp);
-                }
-                System.out.println("-->" + node);
-                //-----------------------------------------------
-                return true;
-            }
-            return false;
-        }
     }
 }

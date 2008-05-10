@@ -3,13 +3,13 @@ package ru.ifmo.verifier.automata;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.ltl.buchi.IBuchiNode;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 
 public interface IIntersectionAutomata<S extends IState> {
 
     IBuchiAutomata getBuchiAutomata();
 
-    IPredicateUtils<S> getPredicates();
+    IPredicateFactory<S> getPredicates();
 
     IntersectionNode<S> getNode(S state, IBuchiNode node, int acceptSet);
 }

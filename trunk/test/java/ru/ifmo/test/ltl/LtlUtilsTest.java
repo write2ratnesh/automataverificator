@@ -9,7 +9,7 @@ import ru.ifmo.automata.statemashine.impl.UnimodXmlReader;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.IAutomataContext;
 import ru.ifmo.ltl.grammar.*;
-import ru.ifmo.ltl.grammar.predicate.PredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.PredicateFactory;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
 import ru.ifmo.ltl.LtlParseException;
@@ -26,7 +26,7 @@ public class LtlUtilsTest extends TestCase {
     private ILtlParser parser;
 
     protected void setUp() throws IOException, AutomataFormatException {
-        PredicateUtils predicates = new PredicateUtils();
+        PredicateFactory predicates = new PredicateFactory();
         IAutomataContext context = new AutomataContext(new UnimodXmlReader("CarA1.xml"));
         parser = new LtlParser(context, predicates);
     }

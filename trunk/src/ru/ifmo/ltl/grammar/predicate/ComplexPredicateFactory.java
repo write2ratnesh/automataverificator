@@ -3,9 +3,7 @@
  */
 package ru.ifmo.ltl.grammar.predicate;
 
-import ru.ifmo.verifier.automata.statemashine.ComplexTransition;
 import ru.ifmo.verifier.automata.statemashine.ComplexState;
-import ru.ifmo.automata.statemashine.IStateTransition;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IStateMashine;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
@@ -15,7 +13,7 @@ import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
  *
  * @author: Kirill Egorov
  */
-public class ComplexPredicateUtils extends PredicateUtils<ComplexState> {
+public class ComplexPredicateFactory extends PredicateFactory<ComplexState> {
 
     @Predicate
     public boolean isInState(IStateMashine<? extends IState> a, IState s) {
