@@ -6,7 +6,7 @@ package ru.ifmo.verifier.automata;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.ltl.buchi.IBuchiNode;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 
 import java.util.*;
 
@@ -17,14 +17,14 @@ import java.util.*;
  */
 public class IntersectionAutomata<S extends IState> implements IIntersectionAutomata<S> {
 
-    private IPredicateUtils<S> predicates;
+    private IPredicateFactory<S> predicates;
     private IBuchiAutomata buchiAutomata;
 
     private Set<IntersectionNode<S>> nodes = new HashSet<IntersectionNode<S>>();
     private Map<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>> nodeMap
             = new HashMap<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>>();
 
-    public IntersectionAutomata(IPredicateUtils<S> predicates, IBuchiAutomata buchi) {
+    public IntersectionAutomata(IPredicateFactory<S> predicates, IBuchiAutomata buchi) {
         if (buchi == null || predicates == null) {
             throw new IllegalArgumentException();
         }
@@ -62,7 +62,7 @@ public class IntersectionAutomata<S extends IState> implements IIntersectionAuto
         return Collections.unmodifiableSet(nodes);
     }
 
-    public IPredicateUtils<S> getPredicates() {
+    public IPredicateFactory<S> getPredicates() {
         return predicates;
     }
 }

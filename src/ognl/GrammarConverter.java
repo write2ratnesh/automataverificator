@@ -5,7 +5,7 @@ package ognl;
 
 import ru.ifmo.ltl.grammar.*;
 import ru.ifmo.ltl.grammar.LtlNode;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.exception.NotPredicateException;
 import ru.ifmo.ltl.grammar.exception.UnexpectedMethodException;
 import ru.ifmo.ltl.grammar.exception.UnexpectedOperatorException;
@@ -34,7 +34,7 @@ public class GrammarConverter {
     private Object predicatesObj;
     private Map<String, Method> predicates = new HashMap<String, Method>();
 
-    public GrammarConverter(IAutomataContext context, IPredicateUtils predicatesObj) {
+    public GrammarConverter(IAutomataContext context, IPredicateFactory predicatesObj) {
         if (context == null) {
             throw new IllegalArgumentException("AutomataContext shouldn't be null");
         }

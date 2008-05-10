@@ -5,7 +5,7 @@ package ru.ifmo.ltl.converter;
 
 import ru.ifmo.automata.statemashine.IAutomataContext;
 import ru.ifmo.ltl.grammar.LtlNode;
-import ru.ifmo.ltl.grammar.predicate.IPredicateUtils;
+import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.LtlParseException;
 import ognl.GrammarConverter;
 import ognl.Node;
@@ -21,7 +21,7 @@ public class LtlParser implements ILtlParser {
 
     private GrammarConverter converter;
 
-    public LtlParser(IAutomataContext context, IPredicateUtils predicatesObj) {
+    public LtlParser(IAutomataContext context, IPredicateFactory predicatesObj) {
         converter = new GrammarConverter(context, predicatesObj);
     }
 
