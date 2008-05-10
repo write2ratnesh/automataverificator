@@ -12,6 +12,7 @@ import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
+import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
 import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.ltl.grammar.LtlUtils;
 import ru.ifmo.ltl.LtlParseException;
@@ -120,6 +121,11 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
     }
 
     public List<IInterNode> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
+        if (!(predicates instanceof MultiThreadPredicateFactory)) {
+            throw new IllegalArgumentException("Unexpected predicates class: "
+                    + predicates.getClass() + ". Expected instance of "
+                    + MultiThreadPredicateFactory.class);
+        }
         int initialCapacity = stateCount * buchi.size();
         ConcurrentIntersectionAutomata<S> automata = new ConcurrentIntersectionAutomata<S>(
                 predicates, buchi, initialCapacity, threadNumber);
@@ -131,6 +137,8 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
             threads.add(new DfsThread(null, visited));
         }
         automata.setThreads(threads);
+        ((MultiThreadPredicateFactory) predicates).init(threads);
+
         IntersectionNode initial = automata.getNode(initState, buchi.getStartNode(), 0);
 
         for (DfsThread t: threads) {

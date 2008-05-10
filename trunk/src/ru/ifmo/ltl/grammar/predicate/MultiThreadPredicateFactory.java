@@ -6,34 +6,38 @@ package ru.ifmo.ltl.grammar.predicate;
 import ru.ifmo.automata.statemashine.*;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * TODO: add comment
+ * The IPredicateFactory implementation that delegate to AbstractPredicateFactory instance.
+ * For each thread different instance of AbstractPredicateFactory is used.
+ * Call {@link #init(java.util.Collection)} before predicates invocations.
  *
  * @author: Kirill Egorov
  */
 public class MultiThreadPredicateFactory<S extends IState> implements IPredicateFactory<S> {
     private AbstractPredicateFactory<S> predicates;
-    ConcurrentMap<Thread, IPredicateFactory<S>> predicateMap = new ConcurrentHashMap<Thread, IPredicateFactory<S>>();
+    Map<Thread, IPredicateFactory<S>> predicateMap;
 
     public MultiThreadPredicateFactory(AbstractPredicateFactory<S> predicates) {
         this.predicates = predicates;
     }
 
-    protected IPredicateFactory<S> getPredicate() {
-        Thread t = Thread.currentThread();
-        IPredicateFactory<S> p = predicateMap.get(t);
-        if (p == null) {
+    public void init(Collection<? extends Thread> threads) {
+        predicateMap = new HashMap<Thread, IPredicateFactory<S>>();
+        for (Thread t: threads) {
             try {
-                p = predicates.clone();
-                predicateMap.put(t, p);
+                predicateMap.put(t, predicates.clone());
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
         }
-        return p;
+    }
+
+    protected IPredicateFactory<S> getPredicate() {
+        return predicateMap.get(Thread.currentThread());
     }
 
     public void setAutomataState(S state, IStateTransition transition) {
