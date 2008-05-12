@@ -25,8 +25,8 @@ import java.io.IOException;
  * @author: Kirill Egorov
  */
 public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
-    protected String xmlFileName;
-    protected String stateMashineName;
+    protected final String xmlFileName;
+    protected final String stateMashineName;
 
     protected IVerifier<S> verifier;
     protected IPredicateFactory<S> predicates;
