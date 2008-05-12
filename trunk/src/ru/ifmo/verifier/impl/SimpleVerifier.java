@@ -27,7 +27,7 @@ import java.util.*;
 public class SimpleVerifier<S extends IState> implements IVerifier<S> {
     private S initState;
     private ILtlParser parser;
-    private ITranslator translator = new SimpleTranslator();
+    private ITranslator translator;
 
     public SimpleVerifier(S initState) {
         this(initState, null);
