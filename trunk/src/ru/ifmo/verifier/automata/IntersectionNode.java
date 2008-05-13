@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class IntersectionNode<S extends IState>
         implements INode<IntersectionTransition>, IInterNode {
-    private IIntersectionAutomata<S> automata;
+    private final IIntersectionAutomata<S> automata;
     private final S state;
     private final IBuchiNode node;
     private final int acceptSet;
