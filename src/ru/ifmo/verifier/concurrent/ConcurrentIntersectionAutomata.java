@@ -12,6 +12,7 @@ import ru.ifmo.verifier.automata.IIntersectionAutomata;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,7 +27,7 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
     private IBuchiAutomata buchiAutomata;
 
     private Map<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>> nodeMap;
-    private Map<S, Map<IBuchiNode, Lock>> lockMap;
+    private Map<S, ConcurrentMap<IBuchiNode, Lock>> lockMap;
     private Collection<? extends Thread> threads;
 
     public ConcurrentIntersectionAutomata(IPredicateFactory<S> predicates, IBuchiAutomata buchi, int initialCapacity, int threadNumber) {
@@ -39,10 +40,13 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
 
         nodeMap = new ConcurrentHashMap<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>>(
                 initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
-        lockMap = new ConcurrentHashMap<S, Map<IBuchiNode, Lock>>(initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
+        lockMap = new ConcurrentHashMap<S, ConcurrentMap<IBuchiNode, Lock>>(initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
     }
 
     public void setThreads(Collection<? extends Thread> threads) {
+        if (threads == null || threads.size() != threadNumber) {
+            throw new IllegalArgumentException();
+        }
         this.threads = threads;
     }
 
@@ -103,7 +107,7 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
     }
 
     protected Lock getLock(S state, IBuchiNode node) {
-        Map<IBuchiNode, Lock> buchiMap = lockMap.get(state);
+        ConcurrentMap<IBuchiNode, Lock> buchiMap = lockMap.get(state);
         if (buchiMap == null) {
             synchronized (state) {
                 buchiMap = lockMap.get(state);
@@ -111,17 +115,18 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
                     buchiMap = new ConcurrentHashMap<IBuchiNode, Lock>(buchiAutomata.size(),
                             DEFAULT_LOAD_FACTOR, threadNumber);
                     lockMap.put(state, buchiMap);
+
+                    buchiMap.put(node, new ReentrantLock());
                 }
             }
         }
 
         Lock lock = buchiMap.get(node);
         if (lock == null) {
-            lock = new ReentrantLock();
-            buchiMap.put(node, lock);
+            buchiMap.putIfAbsent(node, new ReentrantLock());
         }
 
-        return lock;
+        return buchiMap.get(node);
     }
 
     public IPredicateFactory<S> getPredicates() {

@@ -106,10 +106,30 @@ public class CompareTest extends TestCase {
         assertFalse(stack.isEmpty());
     }
 
+    public void testOneThread3() throws LtlParseException {
+        String ltlFormula = "G(!isInState(A2, A2[\"PoliceCrash\"]) || R(wasEvent(p3.e81), "
+                + "(isInState(A3, A3.s1) || isInState(A3, A3.stateP) || isInState(A3, A3.stateQ))))";
+
+        IBuchiAutomata buchi = parse(parser, ltlFormula);
+        List<IInterNode> stack = verify(verifier, buchi, predicates);
+
+        assertTrue(stack.isEmpty());
+    }
+
+    public void testMultiThread3() throws LtlParseException {
+        String ltlFormula = "G(!isInState(A2, A2[\"PoliceCrash\"]) || R(wasEvent(p3.e81), "
+                + "(isInState(A3, A3.s1) || isInState(A3, A3.stateP) || isInState(A3, A3.stateQ))))";
+
+        IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
+        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+
+        assertTrue(stack.isEmpty());
+    }
+
     protected List<IInterNode> verify(IVerifier<ComplexState> verifier, IBuchiAutomata buchi, IPredicateFactory<ComplexState> predicates) {
         long time = System.currentTimeMillis();
         List<IInterNode> stack = verifier.verify(buchi, predicates);
-        System.out.println("MultiThread verifier: " + (System.currentTimeMillis() - time));
+        System.out.println("Time: " + (System.currentTimeMillis() - time));
         return stack;
     }
 
