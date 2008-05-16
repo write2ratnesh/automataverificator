@@ -5,6 +5,7 @@ package ru.ifmo.verifier.impl;
 
 import ru.ifmo.verifier.IVerifier;
 import ru.ifmo.verifier.IInterNode;
+import ru.ifmo.verifier.concurrent.SharedData;
 import ru.ifmo.verifier.automata.IntersectionAutomata;
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.automata.statemashine.IState;
@@ -75,8 +76,8 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
     public List<IInterNode> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
         IntersectionAutomata<S> automata = new IntersectionAutomata<S>(predicates, buchi);
         IntersectionNode initial = automata.getNode(initState, buchi.getStartNode(), 0);
-
-        Deque<? extends IInterNode> stack = new MainDfs(new HashSet<IntersectionNode>(), 0).dfs(initial);
+        SharedData sharedData = new SharedData(new HashSet<IntersectionNode>());
+        Deque<? extends IInterNode> stack = new MainDfs(sharedData, 0).dfs(initial);
 
         List<IInterNode> res = new ArrayList<IInterNode>(stack.size());
 

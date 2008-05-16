@@ -16,16 +16,16 @@ import java.util.Set;
  */
 public class DfsThread extends Thread {
 
-    private Set<IntersectionNode> visited;
     private IntersectionNode initial;
     private Deque<IntersectionNode> result;
+    private SharedData sharedData;
 
-    public DfsThread(IntersectionNode initial, Set<IntersectionNode> visited) {
+    public DfsThread(IntersectionNode initial, SharedData sharedData) {
         super();
-        if (visited == null) {
+        if (sharedData == null) {
             throw new IllegalArgumentException();
         }
-        this.visited = visited;
+        this.sharedData = sharedData;
         this.initial = initial;
     }
 
@@ -41,6 +41,6 @@ public class DfsThread extends Thread {
         if (initial == null) {
             throw new RuntimeException("Initial node hasn't been initialized yet");
         }
-        result = new MainDfs(visited, getId()).dfs(initial);
+        result = new MainDfs(sharedData, getId()).dfs(initial);
     }
 }

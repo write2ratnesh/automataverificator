@@ -5,6 +5,7 @@ package ru.ifmo.verifier.impl;
 
 import ru.ifmo.verifier.AbstractDfs;
 import ru.ifmo.verifier.IInterNode;
+import ru.ifmo.verifier.concurrent.SharedData;
 import ru.ifmo.verifier.automata.IntersectionNode;
 
 import java.util.Deque;
@@ -16,11 +17,11 @@ import java.util.Set;
  * @author: Kirill Egorov
  */
 public class SecondDfs extends AbstractDfs<Boolean> {
-    private Deque<IntersectionNode> dfsStack;
+    private Deque<IntersectionNode> mainDfsStack;
 
-    public SecondDfs(Deque<IntersectionNode> dfsStack, Set<IntersectionNode> visited, long threadId) {
-        super(visited, threadId);
-        this.dfsStack = dfsStack;
+    public SecondDfs(SharedData sharedData, Set<IntersectionNode> visited, Deque<IntersectionNode> mainDfsStack,  long threadId) {
+        super(sharedData, visited, threadId);
+        this.mainDfsStack = mainDfsStack;
         setResult(false);
     }
 
@@ -29,7 +30,8 @@ public class SecondDfs extends AbstractDfs<Boolean> {
     }
 
     protected boolean visitNode(IntersectionNode node) {
-        if (dfsStack.contains(node)) {
+        if (mainDfsStack.contains(node)) {
+            sharedData.contraryInstance = mainDfsStack;
             setResult(true);
 
             //TODO: delete stack print  ------------------------

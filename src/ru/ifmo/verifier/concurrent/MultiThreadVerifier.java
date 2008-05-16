@@ -16,9 +16,10 @@ import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
 import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.ltl.grammar.LtlUtils;
 import ru.ifmo.ltl.LtlParseException;
+import ru.ifmo.util.CollectionUtils;
+import ru.ifmo.util.concurrent.ConcurrentHashSet;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
     private int threadNumber;
@@ -129,12 +130,12 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         int initialCapacity = stateCount * buchi.size();
         ConcurrentIntersectionAutomata<S> automata = new ConcurrentIntersectionAutomata<S>(
                 predicates, buchi, initialCapacity, threadNumber);
-        Set<IntersectionNode> visited = new ConcurrentHashSet<IntersectionNode>(initialCapacity);
+        SharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(initialCapacity, threadNumber));
 
         //create threadNumber threads and start them
         List<DfsThread> threads = new ArrayList<DfsThread>(threadNumber);
         for (int i = 0; i < threadNumber; i++) {
-            threads.add(new DfsThread(null, visited));
+            threads.add(new DfsThread(null, sharedData));
         }
         automata.setThreads(threads);
         ((MultiThreadPredicateFactory) predicates).init(threads);
@@ -154,14 +155,9 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         }
 
         //check results
-        Deque<IntersectionNode> stack = new LinkedList<IntersectionNode>();
-        for (DfsThread t: threads) {
-            if (!t.getResult().isEmpty()) {
-                stack = t.getResult();
-                break;
-            }
-        }
-
+        Deque<IntersectionNode> stack = (sharedData.contraryInstance == null)
+                ? CollectionUtils.<IntersectionNode>emptyDeque()
+                : sharedData.contraryInstance;
         List<IInterNode> res = new ArrayList<IInterNode>(stack.size());
 
         for (Iterator<? extends IInterNode> iter = stack.descendingIterator(); iter.hasNext();) {
@@ -170,58 +166,4 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         return res;
     }
 
-    private class ConcurrentHashSet<E> extends AbstractSet<E> {
-        ConcurrentHashMap<E, Object> map;
-
-        private ConcurrentHashSet(int initialCapacity) {
-            if (initialCapacity <= 0) {
-                throw new IllegalArgumentException();
-            }
-            map = new ConcurrentHashMap<E, Object>(initialCapacity, threadNumber);
-        }
-
-        public int size() {
-            return map.size();
-        }
-
-        public boolean isEmpty() {
-            return map.isEmpty();
-        }
-
-        public boolean contains(Object o) {
-            return map.containsKey(o);
-        }
-
-        public Iterator<E> iterator() {
-            return map.keySet().iterator();
-        }
-
-        public boolean add(E e) {
-            return map.putIfAbsent(e, Boolean.TRUE) == null;
-        }
-
-        public boolean remove(Object o) {
-            return map.remove(o, Boolean.TRUE);
-        }
-
-        public boolean containsAll(Collection<?> c) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean addAll(Collection<? extends E> c) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean retainAll(Collection<?> c) {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean removeAll(Collection<?> c) {
-            throw new UnsupportedOperationException();
-        }
-
-        public void clear() {
-            map.clear();
-        }
-    }
 }

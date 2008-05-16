@@ -4,6 +4,7 @@
 package ru.ifmo.verifier;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.concurrent.SharedData;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -15,14 +16,17 @@ import java.util.Set;
  * @author: Kirill Egorov
  */
 public abstract class AbstractDfs<R> {
-
+    //TODO: change deque to something implemented Deque and Set
     private Deque<IntersectionNode> stack = new LinkedList<IntersectionNode>();
+    
     private Set<IntersectionNode> visited;
     private R result;
 
+    protected SharedData sharedData;
     protected long threadId;
 
-    public AbstractDfs(Set<IntersectionNode> visited, long threadId) {
+    public AbstractDfs(SharedData sharedData, Set<IntersectionNode> visited, long threadId) {
+        this.sharedData = sharedData;
         this.visited = visited;
         this.threadId = threadId;
     }
@@ -52,7 +56,7 @@ public abstract class AbstractDfs<R> {
         enterNode(node);
         visited.add(node);
         stack.push(node);
-        while (!stack.isEmpty()) {
+        while (!stack.isEmpty() && sharedData.contraryInstance == null) {
             IntersectionNode n = stack.getFirst();
             IntersectionNode child = n.next(threadId);
             if (child != null) {
