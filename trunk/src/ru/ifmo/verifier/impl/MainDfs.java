@@ -17,7 +17,7 @@ import java.util.HashSet;
  * @author: Kirill Egorov
  */
 public class MainDfs extends AbstractDfs<Deque<IntersectionNode>> {
-    private long curThreadId;
+    private final long curThreadId;
     
     public MainDfs(SharedData sharedData, long curThreadId) {
         super(sharedData, sharedData.visited, 0);
@@ -28,7 +28,7 @@ public class MainDfs extends AbstractDfs<Deque<IntersectionNode>> {
     protected boolean leaveNode(IntersectionNode node) {
         assert node.next(threadId) == null;
         if (node.isTerminal()) {
-            AbstractDfs<Boolean> dfs2 = new SecondDfs(sharedData, new HashSet<IntersectionNode>(), getStack(), curThreadId);
+            AbstractDfs<Boolean> dfs2 = new SecondDfs(sharedData, getStack(), curThreadId);
             if (dfs2.dfs(node)) {
                 setResult(getStack());
                 return true;

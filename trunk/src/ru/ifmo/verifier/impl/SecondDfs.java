@@ -6,10 +6,11 @@ package ru.ifmo.verifier.impl;
 import ru.ifmo.verifier.AbstractDfs;
 import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.concurrent.SharedData;
+import ru.ifmo.verifier.concurrent.DfsThread;
 import ru.ifmo.verifier.automata.IntersectionNode;
 
 import java.util.Deque;
-import java.util.Set;
+import java.util.HashSet;
 
 /**
  * TODO: add comment
@@ -19,8 +20,8 @@ import java.util.Set;
 public class SecondDfs extends AbstractDfs<Boolean> {
     private Deque<IntersectionNode> mainDfsStack;
 
-    public SecondDfs(SharedData sharedData, Set<IntersectionNode> visited, Deque<IntersectionNode> mainDfsStack,  long threadId) {
-        super(sharedData, visited, threadId);
+    public SecondDfs(SharedData sharedData, Deque<IntersectionNode> mainDfsStack,  long threadId) {
+        super(sharedData, new HashSet<IntersectionNode>(), threadId);
         this.mainDfsStack = mainDfsStack;
         setResult(false);
     }
@@ -32,6 +33,8 @@ public class SecondDfs extends AbstractDfs<Boolean> {
     protected boolean visitNode(IntersectionNode node) {
         if (mainDfsStack.contains(node)) {
             sharedData.contraryInstance = mainDfsStack;
+            notifyAllUnoccupiedThreads();
+            
             setResult(true);
 
             //TODO: delete stack print  ------------------------
@@ -58,5 +61,13 @@ public class SecondDfs extends AbstractDfs<Boolean> {
             return true;
         }
         return false;
+    }
+
+    protected void notifyAllUnoccupiedThreads() {
+        for (DfsThread t = sharedData.getUnoccupiedThread(); t != null;) {
+            synchronized (t) {
+                t.notifyAll();
+            }
+        }
     }
 }
