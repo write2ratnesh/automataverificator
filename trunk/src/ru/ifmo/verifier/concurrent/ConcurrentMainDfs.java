@@ -42,11 +42,11 @@ public class ConcurrentMainDfs implements IDfs<Void> {
             cloneStack.addAll(stack);
             IntersectionNode n = cloneStack.pop();
             assert n == node;
-            t.setInitial(node);
-            t.setInitialStack(cloneStack);
 
             synchronized (t) {
-                t.notify();
+                t.setInitial(node);
+                t.setInitialStack(cloneStack);
+                t.notifyAll();
             }
         }
     }
@@ -71,7 +71,7 @@ public class ConcurrentMainDfs implements IDfs<Void> {
         visited.add(node);
         while (!stack.isEmpty() && sharedData.contraryInstance == null) {
             IntersectionNode n = stack.getFirst();
-            IntersectionNode child = n.next(threadId);
+            IntersectionNode child = n.next(0);
             if (child != null) {
                 if (!visited.contains(child)) {
                     if (visited.add(child)) {

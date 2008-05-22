@@ -33,7 +33,7 @@ public class SecondDfs extends AbstractDfs<Boolean> {
     protected boolean visitNode(IntersectionNode node) {
         if (mainDfsStack.contains(node)) {
             sharedData.contraryInstance = mainDfsStack;
-            notifyAllUnoccupiedThreads();
+            sharedData.notifyAllUnoccupiedThreads();
             
             setResult(true);
 
@@ -61,13 +61,5 @@ public class SecondDfs extends AbstractDfs<Boolean> {
             return true;
         }
         return false;
-    }
-
-    protected void notifyAllUnoccupiedThreads() {
-        for (DfsThread t = sharedData.getUnoccupiedThread(); t != null;) {
-            synchronized (t) {
-                t.notifyAll();
-            }
-        }
     }
 }
