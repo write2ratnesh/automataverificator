@@ -4,11 +4,10 @@
 package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
-import ru.ifmo.verifier.impl.MainDfs;
 import ru.ifmo.util.DequeSet;
+import ru.ifmo.util.CollectionUtils;
 
 import java.util.Deque;
-import java.util.Set;
 
 /**
  * TODO: add comment
@@ -17,7 +16,7 @@ import java.util.Set;
  */
 public class DfsThread extends Thread {
 
-    private IntersectionNode initial;
+    private volatile IntersectionNode initial;
     private Deque<IntersectionNode> stack = new DequeSet<IntersectionNode>();
     private SharedData sharedData;
 
@@ -51,7 +50,11 @@ public class DfsThread extends Thread {
             if (sharedData.contraryInstance == null) {
                 initial = null;
                 stack = null;
-                sharedData.addUnoccupiedThread(this);
+                if (!sharedData.offerUnoccupiedThread(this)) {
+                    sharedData.contraryInstance = CollectionUtils.emptyDeque();
+                    sharedData.notifyAllUnoccupiedThreads();
+                    return;
+                }
                 synchronized (this) {
                     while (initial == null && sharedData.contraryInstance == null) {
                         try {

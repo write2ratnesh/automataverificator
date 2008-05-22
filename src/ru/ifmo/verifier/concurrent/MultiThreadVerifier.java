@@ -130,7 +130,8 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         int initialCapacity = stateCount * buchi.size();
         ConcurrentIntersectionAutomata<S> automata = new ConcurrentIntersectionAutomata<S>(
                 predicates, buchi, initialCapacity, threadNumber);
-        SharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(initialCapacity, threadNumber));
+        SharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(initialCapacity, threadNumber),
+                                               threadNumber);
 
         //create threadNumber threads and start them
         List<DfsThread> threads = new ArrayList<DfsThread>(threadNumber);
@@ -155,12 +156,10 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         }
 
         //check results
-        Deque<IntersectionNode> stack = (sharedData.contraryInstance == null)
-                ? CollectionUtils.<IntersectionNode>emptyDeque()
-                : sharedData.contraryInstance;
-        List<IInterNode> res = new ArrayList<IInterNode>(stack.size());
+        List<IInterNode> res = new ArrayList<IInterNode>(sharedData.contraryInstance.size());
 
-        for (Iterator<? extends IInterNode> iter = stack.descendingIterator(); iter.hasNext();) {
+        for (Iterator<? extends IInterNode> iter = sharedData.contraryInstance.descendingIterator();
+                iter.hasNext();) {
             res.add(iter.next());
         }
         return res;
