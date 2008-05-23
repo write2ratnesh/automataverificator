@@ -5,6 +5,7 @@ package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.IVerifier;
 import ru.ifmo.verifier.IInterNode;
+import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.ltl.converter.ILtlParser;
@@ -16,7 +17,6 @@ import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
 import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.ltl.grammar.LtlUtils;
 import ru.ifmo.ltl.LtlParseException;
-import ru.ifmo.util.CollectionUtils;
 import ru.ifmo.util.concurrent.ConcurrentHashSet;
 
 import java.util.*;
@@ -130,7 +130,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         int initialCapacity = stateCount * buchi.size();
         ConcurrentIntersectionAutomata<S> automata = new ConcurrentIntersectionAutomata<S>(
                 predicates, buchi, initialCapacity, threadNumber);
-        SharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(initialCapacity, threadNumber),
+        ISharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(initialCapacity, threadNumber),
                                                threadNumber);
 
         //create threadNumber threads and start them
@@ -156,9 +156,9 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         }
 
         //check results
-        List<IInterNode> res = new ArrayList<IInterNode>(sharedData.contraryInstance.size());
+        List<IInterNode> res = new ArrayList<IInterNode>(sharedData.getContraryInstance().size());
 
-        for (Iterator<? extends IInterNode> iter = sharedData.contraryInstance.descendingIterator();
+        for (Iterator<? extends IInterNode> iter = sharedData.getContraryInstance().descendingIterator();
                 iter.hasNext();) {
             res.add(iter.next());
         }

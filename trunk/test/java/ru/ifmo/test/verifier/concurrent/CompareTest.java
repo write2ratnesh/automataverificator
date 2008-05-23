@@ -11,7 +11,6 @@ import ru.ifmo.verifier.automata.statemashine.ComplexStateFactory;
 import ru.ifmo.verifier.concurrent.MultiThreadVerifier;
 import ru.ifmo.verifier.impl.SimpleVerifier;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
-import ru.ifmo.ltl.grammar.predicate.PredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.ComplexPredicateFactory;
 import ru.ifmo.ltl.grammar.LtlNode;
@@ -33,7 +32,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * TODO: add comment
+ * Compare one thread verifier and multi thread
  *
  * @author: Kirill Egorov
  */
@@ -129,7 +128,7 @@ public class CompareTest extends TestCase {
     protected List<IInterNode> verify(IVerifier<ComplexState> verifier, IBuchiAutomata buchi, IPredicateFactory<ComplexState> predicates) {
         long time = System.currentTimeMillis();
         List<IInterNode> stack = verifier.verify(buchi, predicates);
-        System.out.println("Time: " + (System.currentTimeMillis() - time));
+        System.out.println(getName() + " time = " + (System.currentTimeMillis() - time));
         return stack;
     }
 

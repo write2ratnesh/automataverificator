@@ -6,6 +6,7 @@ package ru.ifmo.verifier.concurrent;
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.IDfs;
 import ru.ifmo.verifier.AbstractDfs;
+import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.verifier.impl.SecondDfs;
 import ru.ifmo.util.DequeSet;
 
@@ -16,16 +17,16 @@ public class ConcurrentMainDfs implements IDfs<Void> {
 
     private final Set<IntersectionNode> visited;
 
-    private final SharedData sharedData;
+    private final ISharedData sharedData;
     private final long threadId;
 
-    public ConcurrentMainDfs(SharedData sharedData, long threadId) {
+    public ConcurrentMainDfs(ISharedData sharedData, long threadId) {
         this(sharedData, new DequeSet<IntersectionNode>(), threadId);
     }
 
-    public ConcurrentMainDfs(SharedData sharedData, Deque<IntersectionNode> stack, long threadId) {
+    public ConcurrentMainDfs(ISharedData sharedData, Deque<IntersectionNode> stack, long threadId) {
         this.sharedData = sharedData;
-        this.visited = sharedData.visited;
+        this.visited = sharedData.getVisited();
         this.threadId = threadId;
         this.stack = stack;
     }
@@ -33,20 +34,29 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     protected void enterNode(IntersectionNode node) {
         DfsThread t = sharedData.getUnoccupiedThread();
         if (t != null) {
-            /*
-             * 1. Clone stack for waiting thread.
-             * 2. Set cloned thread to waiting thread and change initial state.
-             * 3. Notify waiting thread.
-             */
-            Deque<IntersectionNode> cloneStack = new DequeSet<IntersectionNode>(stack.size() * 2);
-            cloneStack.addAll(stack);
-            IntersectionNode n = cloneStack.pop();
-            assert n == node;
+            Deque<IntersectionNode> subStack = new DequeSet<IntersectionNode>(stack.size());
+            IntersectionNode initial = null;
 
-            synchronized (t) {
-                t.setInitial(node);
-                t.setInitialStack(cloneStack);
-                t.notifyAll();
+            // Clone stack part without children.
+            for (IntersectionNode n: stack) {
+                subStack.add(n);
+                IntersectionNode child = n.next(0);
+                if (child != null && !visited.contains(child)) {
+                    initial = child;
+                    break;
+                }
+            }
+            if (initial != null) {
+                // Notify waiting thread
+                synchronized (t) {
+                    t.setInitial(initial);
+                    t.setInitialStack(subStack);
+                    t.notifyAll();
+                }
+            } else {
+                if (!sharedData.offerUnoccupiedThread(t)) {
+                    throw new RuntimeException("Unextpected count of waiting threads");
+                }
             }
         }
     }
@@ -69,7 +79,7 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     public Void dfs(IntersectionNode node) {
         stack.push(node);
         visited.add(node);
-        while (!stack.isEmpty() && sharedData.contraryInstance == null) {
+        while (!stack.isEmpty() && sharedData.getContraryInstance() == null) {
             IntersectionNode n = stack.getFirst();
             IntersectionNode child = n.next(0);
             if (child != null) {

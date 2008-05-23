@@ -5,11 +5,10 @@ package ru.ifmo.verifier.impl;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.AbstractDfs;
-import ru.ifmo.verifier.concurrent.SharedData;
+import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.util.CollectionUtils;
 
 import java.util.Deque;
-import java.util.HashSet;
 
 /**
  * TODO: add comment
@@ -19,8 +18,8 @@ import java.util.HashSet;
 public class MainDfs extends AbstractDfs<Deque<IntersectionNode>> {
     private final long curThreadId;
     
-    public MainDfs(SharedData sharedData, long curThreadId) {
-        super(sharedData, sharedData.visited, 0);
+    public MainDfs(ISharedData sharedData, long curThreadId) {
+        super(sharedData, sharedData.getVisited(), 0);
         setResult(CollectionUtils.<IntersectionNode>emptyDeque());
         this.curThreadId = curThreadId;
     }
