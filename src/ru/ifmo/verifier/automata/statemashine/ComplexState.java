@@ -9,6 +9,8 @@ import ru.ifmo.verifier.automata.tree.ITreeNode;
 import ru.ifmo.verifier.automata.tree.StateTree;
 
 import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * TODO: add comment
@@ -24,6 +26,8 @@ public class ComplexState<S extends IState> implements IState {
     private Set<IStateTransition> transitions;
 
     private IState activeState;
+
+    private ReadWriteLock transLock = new ReentrantReadWriteLock();
 
     public ComplexState(ITree<S> tree, IComplexStateFactory<S> factory) {
         if (tree == null) {
@@ -71,10 +75,23 @@ public class ComplexState<S extends IState> implements IState {
 
     public Collection<IStateTransition> getOutcomingTransitions() {
         if (transitions == null) {
-            transitions = new LinkedHashSet<IStateTransition>();
-            addIfActive(tree.getRoot());
+            if (transLock.writeLock().tryLock()) {
+                try {
+                    if (transitions == null) {
+                        transitions = new LinkedHashSet<IStateTransition>();
+                        addIfActive(tree.getRoot());
+                    }
+                } finally {
+                    transLock.writeLock().unlock();
+                }
+            }
         }
-        return transitions;
+        transLock.readLock().lock();
+        try {
+            return transitions;
+        } finally {
+            transLock.readLock().unlock();
+        }
     }
 
     public S getStateMashineState(IStateMashine<S> stateMashine) {
