@@ -8,7 +8,7 @@ import ru.ifmo.automata.statemashine.IStateTransition;
 
 /**
  * Predicate provider.
- * User @Predicate annotation, to mark method as predicate;
+ * Use @Predicate annotation, to mark method as predicate;
  *
  * @author: Kirill Egorov
  */
