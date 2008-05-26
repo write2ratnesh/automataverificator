@@ -86,6 +86,15 @@ public class Predicate extends LtlNode implements IExpression<Boolean> {
         return buf.toString();
     }
 
+    public String getUniqueName() {
+        StringBuilder buf = new StringBuilder();
+        buf.append(method.getName());
+        for (Object o: args) {
+            buf.append(o);
+        }
+        return buf.toString();
+    }
+
     public <R, D> R accept(INodeVisitor<R, D> visitor, D data) {
         return visitor.visitPredicate(this, data);
     }

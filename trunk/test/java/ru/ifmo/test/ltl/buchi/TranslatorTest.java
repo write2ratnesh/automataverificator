@@ -3,43 +3,22 @@
  */
 package ru.ifmo.test.ltl.buchi;
 
-import junit.framework.TestCase;
-import ru.ifmo.ltl.grammar.LtlNode;
-import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
-import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
-import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.IBuchiNode;
 import ru.ifmo.ltl.buchi.ITransitionCondition;
+import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
-import ru.ifmo.ltl.converter.LtlParser;
-import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.LtlParseException;
-import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.impl.UnimodXmlReader;
-import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
-import ru.ifmo.automata.statemashine.*;
+import ru.ifmo.ltl.grammar.LtlNode;
 
-import java.io.IOException;
 import java.util.Map;
-
-import org.apache.commons.lang.NotImplementedException;
 
 /**
  * Test translatin from ltl to buchi
  *
  * @author: Kirill Egorov
  */
-public class TranslatorTest extends TestCase {
-
-    private ILtlParser parser;
-
-    protected void setUp() throws IOException, AutomataFormatException {
-        SimplePredicateFactory predicates = new SimplePredicateFactory();
-        IAutomataContext context = new AutomataContext(new UnimodXmlReader("CarA1.xml"));
-        parser = new LtlParser(context, predicates);
-    }
-
+public class TranslatorTest extends AbstractTranslatorTest {
 
     public void testTranslationUntil() throws LtlParseException {
         IBuchiAutomata buchi = extractBuchi(" U(p1(), p2())");
@@ -112,58 +91,10 @@ public class TranslatorTest extends TestCase {
         Map<ITransitionCondition, IBuchiNode> transitons = start.getTransitions();
         assertEquals(4, transitons.size());
     }
-    
-    private IBuchiAutomata extractBuchi(String expr) throws LtlParseException {
+
+    protected IBuchiAutomata extractBuchi(String expr) throws LtlParseException {
         LtlNode t = parser.parse(expr);
         ITranslator translator = new SimpleTranslator();
         return translator.translate(t);
-    }
-
-    private class SimplePredicateFactory implements IPredicateFactory<IState> {
-        @Predicate
-        public boolean p1() {
-            return true;
-        }
-
-        @Predicate
-        public boolean p2() {
-            return false;
-        }
-
-        public void setAutomataState(IState state, IStateTransition transition) {
-            throw new NotImplementedException();
-        }
-
-        public Boolean wasEvent(IEvent e) {
-            throw new NotImplementedException();
-        }
-
-        public boolean isInState(IStateMashine<? extends IState> a, IState s) {
-            throw new NotImplementedException();
-        }
-
-        public boolean wasInState(IStateMashine<? extends IState> a, IState s) {
-            throw new NotImplementedException();
-        }
-
-        public boolean cameToFinalState() {
-            throw new NotImplementedException();
-        }
-
-        public Boolean wasAction(IAction z) {
-            throw new NotImplementedException();
-        }
-
-        public boolean wasFirstAction(IAction z) {
-            throw new NotImplementedException();
-        }
-
-        public boolean wasTrue(ICondition cond) {
-            throw new NotImplementedException();
-        }
-
-        public boolean wasFalse(ICondition cond) {
-            throw new NotImplementedException();
-        }
     }
 }

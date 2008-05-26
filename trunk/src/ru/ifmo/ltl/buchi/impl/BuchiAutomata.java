@@ -17,7 +17,7 @@ public class BuchiAutomata implements IBuchiAutomata {
 
     private IBuchiNode startNode;
     private Set<IBuchiNode> nodes = new HashSet<IBuchiNode>();
-    private Map<Integer, Set<IBuchiNode>> accept = new HashMap<Integer, Set<IBuchiNode>>();
+    private Map<Integer, Set<? extends IBuchiNode>> accept = new HashMap<Integer, Set<? extends IBuchiNode>>();
     private int acceptSetsCount = 0;
 
     public IBuchiNode getStartNode() {
@@ -32,7 +32,7 @@ public class BuchiAutomata implements IBuchiAutomata {
         return Collections.unmodifiableSet(nodes);
     }
 
-    public Set<IBuchiNode> getAcceptSet(int i) {
+    public Set<? extends IBuchiNode> getAcceptSet(int i) {
         if ((i < 0) || (i >= acceptSetsCount)) {
             throw new IndexOutOfBoundsException("Should be 0 <= i < acceptSetsCount");
         }
@@ -43,7 +43,7 @@ public class BuchiAutomata implements IBuchiAutomata {
         return acceptSetsCount;
     }
 
-    public void addAcceptSet(Set<IBuchiNode> acceptSet) {
+    public void addAcceptSet(Set<? extends IBuchiNode> acceptSet) {
         if (acceptSet == null || acceptSet.isEmpty()) {
             throw new IllegalArgumentException("acceptSet can't be null or emty");
         }
@@ -73,7 +73,7 @@ public class BuchiAutomata implements IBuchiAutomata {
         for (IBuchiNode n: nodes) {
             buf.append(n);
         }
-        for (Map.Entry<Integer, Set<IBuchiNode>> entry: accept.entrySet()) {
+        for (Map.Entry<Integer, Set<? extends IBuchiNode>> entry: accept.entrySet()) {
             buf.append(String.format("Accept set %d [", entry.getKey()));
             for (IBuchiNode node: entry.getValue()) {
                 buf.append(node.getID()).append(", ");
