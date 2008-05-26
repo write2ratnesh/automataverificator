@@ -16,7 +16,7 @@ public interface IBuchiAutomata {
 
     Set<IBuchiNode> getNodes();
 
-    Set<IBuchiNode> getAcceptSet(int i);
+    Set<? extends IBuchiNode> getAcceptSet(int i);
 
     int getAcceptSetsCount();
 
