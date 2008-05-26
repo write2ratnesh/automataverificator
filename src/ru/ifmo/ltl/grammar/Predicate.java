@@ -82,7 +82,11 @@ public class Predicate extends LtlNode implements IExpression<Boolean> {
         for (Object obj: args) {
             buf.append(obj).append(", ");
         }
-        buf.replace(buf.length() - 2, buf.length(), ")");
+        if (args.length > 0) {
+            buf.replace(buf.length() - 2, buf.length(), ")");
+        } else {
+            buf.append(")");
+        }
         return buf.toString();
     }
 

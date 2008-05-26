@@ -31,6 +31,9 @@ public class Ltl2baTranslator implements ITranslator {
             String formula = getFormula(root);
             String automata = executeLlt2ba(formula);
 
+            //TODO: remove next line
+            System.out.println(automata);
+
             return extractBuchi(automata);
         } catch (Exception e) {
             throw new TranslationException(e);
@@ -45,17 +48,27 @@ public class Ltl2baTranslator implements ITranslator {
         int idSeq = 0;
 
         Map<String, BuchiNode> map = new HashMap<String, BuchiNode>();
-        map.put(extractName(init), new BuchiNode(idSeq++));
+        Set<BuchiNode> acceptSet = new HashSet<BuchiNode>();
+        BuchiNode initNode = new BuchiNode(idSeq++);
+
+        map.put(extractName(init), initNode);
+        if (init.startsWith("accept")) {
+            //init state is accept state
+            accept.remove(0);
+            acceptSet.add(initNode);
+        }
         for (String str: states) {
             map.put(extractName(str), new BuchiNode(idSeq++));
         }
-        Set<BuchiNode> acceptSet = new HashSet<BuchiNode>();
+
         for (String str: accept) {
             BuchiNode bNode = new BuchiNode(idSeq++);
             map.put(extractName(str), bNode);
             acceptSet.add(bNode);
         }
-        map.put(ACCEPT_ALL, new BuchiNode(idSeq++));
+        BuchiNode acceptAll = new BuchiNode(idSeq++);
+        map.put(ACCEPT_ALL, acceptAll);
+        acceptSet.add(acceptAll);
 
         buchi.setStartNode(map.get(extractName(init)));
         buchi.addNodes(map.values());
@@ -73,7 +86,6 @@ public class Ltl2baTranslator implements ITranslator {
         //create transition from accept_all to accept_all
         TransitionCondition cond = new TransitionCondition();
         cond.addExpression(BooleanNode.TRUE);
-        BuchiNode acceptAll = map.get(ACCEPT_ALL);
         acceptAll.addTransition(cond, acceptAll);
 
         return buchi;
@@ -85,14 +97,15 @@ public class Ltl2baTranslator implements ITranslator {
         Matcher m = Pattern.compile("::.*").matcher(state);
         List<String> trans = findAll(m, state);
         for (String t: trans) {
-            m = Pattern.compile("(.*)").matcher(t);
-            if (m.find()) {
-                ITransitionCondition cond = extractCondition(t.substring(m.start() + 1, m.end() - 1));
-                int i = t.indexOf(GOTO);
+            int i = t.indexOf('(');
+            int j = t.indexOf(')');
+            if (i >= 0 && j >= 0) {
+                ITransitionCondition cond = extractCondition(t.substring(i + 1, j));
+                i = t.indexOf(GOTO);
                 if (i < 0) {
                     throw new TranslationException("Unexpected transition format: " + t);
                 } else {
-                    String stateName = t.substring(i + GOTO.length());
+                    String stateName = t.substring(i + GOTO.length() + 1);
                     node.addTransition(cond, map.get(stateName));
                 }
             } else {
@@ -103,9 +116,13 @@ public class Ltl2baTranslator implements ITranslator {
 
     protected ITransitionCondition extractCondition(String condStr) {
         TransitionCondition cond = new TransitionCondition();
+        if (condStr.equals("1")) {
+            return cond;
+        }
         String[] arr = condStr.split("&&");
 
         for (String c: arr) {
+            c = c.trim();
             if (c.charAt(0) == '!') {
                 cond.addNegExpression(expr.get(c.substring(1)));
             } else {
@@ -120,7 +137,7 @@ public class Ltl2baTranslator implements ITranslator {
     }
 
     protected String getInitState(String automata) {
-        Matcher m = Pattern.compile("T0_init:\\s+if(\\s+::.*)+\\s+fi;").matcher(automata);
+        Matcher m = Pattern.compile("\\w+_init:\\s+if(\\s+::.*)+\\s+fi;").matcher(automata);
         return (m.find()) ? automata.substring(m.start(), m.end()) : null;
     }
 

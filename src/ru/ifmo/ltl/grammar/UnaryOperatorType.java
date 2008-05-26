@@ -26,7 +26,7 @@ public enum UnaryOperatorType implements IOperatorType {
     },
     GLOBAL("G") {
         public <R, D> R accept(UnaryOperator op, INodeVisitor<R, D> visitor, D data) {
-            return visitor.visitNext(op, data);
+            return visitor.visitGlobal(op, data);
         }
     };
 

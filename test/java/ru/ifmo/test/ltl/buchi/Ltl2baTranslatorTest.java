@@ -10,9 +10,6 @@ import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.ltl.grammar.LtlNode;
 
 import java.io.IOException;
-import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 public class Ltl2baTranslatorTest extends AbstractTranslatorTest {
 
@@ -21,7 +18,7 @@ public class Ltl2baTranslatorTest extends AbstractTranslatorTest {
         LtlNode t = parser.parse("F(p1())");
         String f = translator.getFormula(t);
 
-        assertEquals("F(p1)", f);
+        assertEquals("<>(p1)", f);
     }
 
     public void testGetFormula2() throws LtlParseException {
@@ -37,7 +34,7 @@ public class Ltl2baTranslatorTest extends AbstractTranslatorTest {
         LtlNode t = parser.parse("R(true, X(p1()))");
         String f = translator.getFormula(t);
 
-        assertEquals("(true)R(X(p1))", f);
+        assertEquals("(true)V(X(p1))", f);
     }
 
     public void testGetFormula4() throws LtlParseException {
@@ -55,23 +52,40 @@ public class Ltl2baTranslatorTest extends AbstractTranslatorTest {
         System.out.println(res);
     }
 
-    public void testN() throws IOException, InterruptedException {
-        Ltl2baTranslator translator = new Ltl2baTranslator();
-        String res = translator.executeLlt2ba("(a U b) || (Xa) && (d U e)");
-        System.out.println(res);
-
-        Matcher m = Pattern.compile("T\\d+_S\\d+:\\s+if(\\s+::.*)+\\s+fi;").matcher(res);
-        m.find();
-        String state = res.substring(m.start(), m.end());
-        Matcher m2 = Pattern.compile("::.*").matcher(state);
-        m2.find();
-        System.out.println(state.substring(m2.start(), m2.end()));
-
-
-        String[] arr = "a && b && !c".split("&&");
-        System.out.println(arr.length);
+    public void testTranslateU() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("U(p1(), p2())");
+        System.out.println(buchi);
     }
 
+    public void testTranslateR() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("R(p1(), p2())");
+        System.out.println(buchi);
+    }
+
+    public void testTranslateF() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("F(p1())");
+        System.out.println(buchi);
+    }
+
+    public void testTranslateG() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("G(p1())");
+        System.out.println(buchi);
+    }
+
+    public void testTranslateX() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("X(p1())");
+        System.out.println(buchi);
+    }
+
+    public void testTranslateAnd() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("p1() && p2()");
+        System.out.println(buchi);
+    }
+
+    public void testTranslateOr() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("p1() || p2()");
+        System.out.println(buchi);
+    }
 
     protected IBuchiAutomata extractBuchi(String expr) throws LtlParseException {
         LtlNode t = parser.parse(expr);
