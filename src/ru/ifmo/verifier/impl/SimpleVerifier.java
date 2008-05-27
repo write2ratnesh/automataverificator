@@ -13,6 +13,7 @@ import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
+import ru.ifmo.ltl.buchi.translator.Ltl2baTranslator;
 import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.ltl.grammar.LtlUtils;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
@@ -37,7 +38,8 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
     }
 
     public SimpleVerifier(S initState, ILtlParser parser) {
-        this(initState, parser, new SimpleTranslator());
+//        this(initState, parser, new SimpleTranslator());
+        this(initState, parser, new Ltl2baTranslator());
     }
 
     public SimpleVerifier(S initState, ILtlParser parser, ITranslator translator) {

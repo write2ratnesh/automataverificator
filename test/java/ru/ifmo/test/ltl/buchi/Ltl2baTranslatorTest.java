@@ -82,6 +82,21 @@ public class Ltl2baTranslatorTest extends AbstractTranslatorTest {
         System.out.println(buchi);
     }
 
+    public void testTranslateNeg() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("!p1()");
+        System.out.println(buchi);
+    }
+
+    public void testTranslateNeg2() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("U(!p1(), p2())");
+        System.out.println(buchi);
+    }
+
+    public void testTranslateTrue() throws IOException, InterruptedException, LtlParseException {
+        IBuchiAutomata buchi = extractBuchi("true");
+        System.out.println(buchi);
+    }
+
     public void testTranslateOr() throws IOException, InterruptedException, LtlParseException {
         IBuchiAutomata buchi = extractBuchi("p1() || p2()");
         System.out.println(buchi);

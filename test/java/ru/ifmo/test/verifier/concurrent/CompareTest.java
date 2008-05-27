@@ -20,6 +20,7 @@ import ru.ifmo.ltl.converter.LtlParser;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
+import ru.ifmo.ltl.buchi.translator.Ltl2baTranslator;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IAutomataContext;
@@ -48,7 +49,7 @@ public class CompareTest extends TestCase {
 
     protected ILtlParser parser;
     protected ILtlParser parserMultiThread;
-    protected ITranslator translator = new SimpleTranslator();
+    protected ITranslator translator = new Ltl2baTranslator();
 
     protected void setUp() throws IOException, AutomataFormatException {
         predicates = new ComplexPredicateFactory();

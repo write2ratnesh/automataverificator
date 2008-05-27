@@ -96,7 +96,7 @@ public class Predicate extends LtlNode implements IExpression<Boolean> {
         for (Object o: args) {
             buf.append(o);
         }
-        return buf.toString();
+        return buf.toString().replace(' ', '_');
     }
 
     public <R, D> R accept(INodeVisitor<R, D> visitor, D data) {

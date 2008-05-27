@@ -9,6 +9,7 @@ import ru.ifmo.ltl.buchi.ITransitionCondition;
 import ru.ifmo.ltl.buchi.impl.BuchiNode;
 import ru.ifmo.ltl.buchi.impl.BuchiAutomata;
 import ru.ifmo.ltl.buchi.impl.TransitionCondition;
+import ru.ifmo.ltl.buchi.impl.OgnlTransitionCondition;
 import ru.ifmo.ltl.grammar.*;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ognl.OgnlException;
 
 public class Ltl2baTranslator implements ITranslator {
     private static final String PATH = "bin/ltl2ba.exe";
@@ -66,6 +69,8 @@ public class Ltl2baTranslator implements ITranslator {
             map.put(extractName(str), bNode);
             acceptSet.add(bNode);
         }
+
+        //TODO: check contains automata accept_all state or not
         BuchiNode acceptAll = new BuchiNode(idSeq++);
         map.put(ACCEPT_ALL, acceptAll);
         acceptSet.add(acceptAll);
@@ -97,15 +102,14 @@ public class Ltl2baTranslator implements ITranslator {
         Matcher m = Pattern.compile("::.*").matcher(state);
         List<String> trans = findAll(m, state);
         for (String t: trans) {
-            int i = t.indexOf('(');
-            int j = t.indexOf(')');
+            int i = t.lastIndexOf("::");
+            int j = t.indexOf(GOTO);
             if (i >= 0 && j >= 0) {
-                ITransitionCondition cond = extractCondition(t.substring(i + 1, j));
-                i = t.indexOf(GOTO);
-                if (i < 0) {
+                ITransitionCondition cond = extractCondition(t.substring(i + 2, j));
+                if (j < 0) {
                     throw new TranslationException("Unexpected transition format: " + t);
                 } else {
-                    String stateName = t.substring(i + GOTO.length() + 1);
+                    String stateName = t.substring(j + GOTO.length() + 1);
                     node.addTransition(cond, map.get(stateName));
                 }
             } else {
@@ -115,21 +119,26 @@ public class Ltl2baTranslator implements ITranslator {
     }
 
     protected ITransitionCondition extractCondition(String condStr) {
-        TransitionCondition cond = new TransitionCondition();
-        if (condStr.equals("1")) {
-            return cond;
+//        TransitionCondition cond = new TransitionCondition();
+        if (condStr.trim().equals("(1)")) {
+            return new TransitionCondition();
         }
-        String[] arr = condStr.split("&&");
-
-        for (String c: arr) {
-            c = c.trim();
-            if (c.charAt(0) == '!') {
-                cond.addNegExpression(expr.get(c.substring(1)));
-            } else {
-                cond.addExpression(expr.get(c));
-            }
+        try {
+            return new OgnlTransitionCondition(condStr, expr);
+        } catch (OgnlException e) {
+            throw new TranslationException("Unexpected transition condition: " + condStr, e);
         }
-        return cond;
+//        String[] arr = condStr.split("&&");
+//
+//        for (String c: arr) {
+//            c = c.trim();
+//            if (c.charAt(0) == '!') {
+//                cond.addNegExpression(expr.get(c.substring(1)));
+//            } else {
+//                cond.addExpression(expr.get(c));
+//            }
+//        }
+//        return cond;
     }
 
     protected String extractName(String state) {
