@@ -15,8 +15,10 @@ import java.util.Set;
  */
 public interface ITransitionCondition {
 
+    @Deprecated
     public Set<IExpression<Boolean>> getExpressions();
 
+    @Deprecated
     public Set<IExpression<Boolean>> getNegExpressions();
 
     public boolean getValue();

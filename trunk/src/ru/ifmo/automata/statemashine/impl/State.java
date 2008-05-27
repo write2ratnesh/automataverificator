@@ -62,6 +62,6 @@ public class State implements IState {
     }
 
     public String toString() {
-        return name + " [" + type + "]";
+        return name;
     }
 }
