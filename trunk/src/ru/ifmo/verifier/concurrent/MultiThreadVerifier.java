@@ -49,7 +49,6 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
      */
     public MultiThreadVerifier(S initState, int stateCount, int threadNumber) {
         this(initState, null, stateCount, threadNumber);
-
     }
 
     /**
