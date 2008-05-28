@@ -24,12 +24,12 @@ public abstract class AbstractSingleAutomataVerifierTest extends AbstractVerifie
     }
 
     protected IVerifier<IState> createVerifier(IStateMashine<? extends IState> stateMashine, ILtlParser parser) {
-        return new SimpleVerifier<IState>(stateMashine.getInitialState(), parser);
-//        return new MultiThreadVerifier<IState>(stateMashine.getInitialState(), parser, stateMashine.getStates().size());
+//        return new SimpleVerifier<IState>(stateMashine.getInitialState(), parser);
+        return new MultiThreadVerifier<IState>(stateMashine.getInitialState(), parser, stateMashine.getStates().size());
     }
 
     protected IPredicateFactory<IState> createPredicateUtils() {
-//        return new MultiThreadPredicateFactory<IState>(new PredicateFactory<IState>());
-        return new PredicateFactory<IState>();
+        return new MultiThreadPredicateFactory<IState>(new PredicateFactory<IState>());
+//        return new PredicateFactory<IState>();
     }
 }

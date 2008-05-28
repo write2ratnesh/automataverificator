@@ -9,40 +9,45 @@ import ru.ifmo.ltl.grammar.IExpression;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
-import java.lang.reflect.Member;
 
-import ognl.Ognl;
-import ognl.OgnlException;
-import ognl.TypeConverter;
+import ognl.*;
 import org.apache.commons.lang.BooleanUtils;
 
 public class OgnlTransitionCondition implements ITransitionCondition {
 
+    static {
+        OgnlRuntime.setNullHandler(ExpressionMap.class, new NullHandler() {
+            public Object nullMethodResult(Map context, Object target, String methodName, Object[] args) {
+                return null;
+            }
+
+            public Object nullPropertyValue(Map context, Object target, Object property) {
+                throw new NullExpressionException();
+            }
+        });
+        OgnlRuntime.setPropertyAccessor(ExpressionMap.class, new MapPropertyAccessor() {
+            public Object getProperty(Map context, Object target, Object name) throws OgnlException {
+                Object res = super.getProperty(context, target, name);
+                if (res instanceof IExpression) {
+                    return ((IExpression) res).getValue();
+                }
+                return res;
+            }
+
+            public void setProperty(Map context, Object target, Object name, Object value) throws OgnlException {
+                throw new UnsupportedOperationException();
+            }
+        });
+    }
+
     private String cond;
     private Object tree;
     private Map root = new HashMap();
-    private Map context;
 
-    public OgnlTransitionCondition(String cond, Map<String, IExpression<Boolean>> exprs) throws OgnlException {
+    public OgnlTransitionCondition(String cond, ExpressionMap exprs) throws OgnlException {
         this.cond = cond.trim();
         tree = Ognl.parseExpression(this.cond);
         this.root = exprs;
-
-        context = Ognl.createDefaultContext(root);
-        Ognl.setTypeConverter(context, new TypeConverter() {
-            public Object convertValue(Map context, Object target, Member member, String propertyName, Object value, Class toType) {
-                if (toType.equals(boolean.class) || toType.equals(Boolean.class)) {
-                    if (value instanceof IExpression) {
-                        return ((IExpression) value).getValue();
-                    } else if (value instanceof Number) {
-                        return ((Number) value).intValue() == 1;
-                    } else if (value instanceof Boolean) {
-                        return value;
-                    }
-                }
-                return null;
-            }
-        });
     }
 
     @Deprecated
@@ -57,10 +62,12 @@ public class OgnlTransitionCondition implements ITransitionCondition {
 
     public boolean getValue() {
         try {
-            Boolean res = (Boolean) Ognl.getValue(tree, context, root, Boolean.class);
+            Boolean res = (Boolean) Ognl.getValue(tree, (Object) root, Boolean.class);
             return BooleanUtils.isTrue(res);
         } catch (OgnlException e) {
             throw new RuntimeException(e);
+        } catch (NullExpressionException e) {
+            return false;
         }
     }
 
