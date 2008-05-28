@@ -6,10 +6,7 @@ package ru.ifmo.ltl.buchi.translator;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.ITransitionCondition;
-import ru.ifmo.ltl.buchi.impl.BuchiNode;
-import ru.ifmo.ltl.buchi.impl.BuchiAutomata;
-import ru.ifmo.ltl.buchi.impl.TransitionCondition;
-import ru.ifmo.ltl.buchi.impl.OgnlTransitionCondition;
+import ru.ifmo.ltl.buchi.impl.*;
 import ru.ifmo.ltl.grammar.*;
 
 import java.io.IOException;
@@ -26,7 +23,7 @@ public class Ltl2baTranslator implements ITranslator {
     private static final String ACCEPT_ALL = "accept_all";
     private static final String GOTO = "-> goto";
 
-    private Map<String, IExpression<Boolean>> expr = new HashMap<String, IExpression<Boolean>>();
+    private ExpressionMap expr = new ExpressionMap();
     private VisitorImpl visitor = new VisitorImpl();
 
     public IBuchiAutomata translate(LtlNode root) {
