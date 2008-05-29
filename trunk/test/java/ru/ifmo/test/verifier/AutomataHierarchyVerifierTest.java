@@ -67,4 +67,16 @@ public class AutomataHierarchyVerifierTest extends AbstractAutomataHierarhyVerif
         printStack(stack);
         assertTrue(stack.isEmpty());
     }
+
+    public void testFutureStart() throws LtlParseException {
+        List<IInterNode> stack = verifier.verify("G(!isInState(A1, A1.Pause) || F(isInState(A1, A1.Start) || isInState(A1, A1.s2)))", predicates);
+        printStack(stack);
+        assertTrue(stack.isEmpty());
+    }
+
+    public void testGlobalIsInState2() throws LtlParseException {
+        List<IInterNode> stack = verifier.verify("G(!wasInState(A3, A3.stateP) || X(wasEvent(p3.e82)))", predicates);
+        printStack(stack);
+        assertFalse(stack.isEmpty());
+    }
 }

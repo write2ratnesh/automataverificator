@@ -30,4 +30,9 @@ public abstract class AbstractPredicateFactory<S extends IState> implements IPre
     public AbstractPredicateFactory<S> clone() throws CloneNotSupportedException {
         return (AbstractPredicateFactory<S>) super.clone();
     }
+
+    protected boolean wasTransition() {
+        return !(transition.getEvent() == null && transition.getCondition() == null
+                && transition.getTarget() == state);
+    }
 }

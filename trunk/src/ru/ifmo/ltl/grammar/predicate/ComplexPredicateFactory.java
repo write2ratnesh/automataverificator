@@ -16,13 +16,16 @@ import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 public class ComplexPredicateFactory extends PredicateFactory<ComplexState> {
 
     @Predicate
-    public boolean isInState(IStateMashine<? extends IState> a, IState s) {
+    public Boolean isInState(IStateMashine<? extends IState> a, IState s) {
+        if (!wasTransition()) {
+            return null;
+        }
         ComplexState cs = (ComplexState) transition.getTarget();
         return cs.getStateMashineState(a).equals(s);
     }
 
     @Predicate
-    public boolean wasInState(IStateMashine<? extends IState> a, IState s) {
-        return state.getStateMashineState(a).equals(s);
+    public Boolean wasInState(IStateMashine<? extends IState> a, IState s) {
+        return (wasTransition()) ? state.getStateMashineState(a).equals(s): null;
     }
 }

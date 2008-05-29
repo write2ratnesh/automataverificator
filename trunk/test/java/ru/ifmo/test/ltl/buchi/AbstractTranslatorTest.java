@@ -50,12 +50,12 @@ public abstract class AbstractTranslatorTest extends TestCase {
             throw new NotImplementedException();
         }
 
-        public boolean isInState(IStateMashine<? extends IState> a, IState s) {
+        public Boolean isInState(IStateMashine<? extends IState> a, IState s) {
             throw new NotImplementedException();
         }
 
         @Predicate
-        public boolean wasInState(IStateMashine<? extends IState> a, IState s) {
+        public Boolean wasInState(IStateMashine<? extends IState> a, IState s) {
             throw new NotImplementedException();
         }
 
@@ -70,7 +70,7 @@ public abstract class AbstractTranslatorTest extends TestCase {
         }
 
         @Predicate
-        public boolean wasFirstAction(IAction z) {
+        public Boolean wasFirstAction(IAction z) {
             throw new NotImplementedException();
         }
 

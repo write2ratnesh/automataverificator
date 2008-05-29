@@ -19,10 +19,10 @@ public interface IPredicateFactory<S extends IState> {
     Boolean wasEvent(IEvent e);
 
     @Predicate
-    boolean isInState(IStateMashine<? extends IState> a, IState s);
+    Boolean isInState(IStateMashine<? extends IState> a, IState s);
 
     @Predicate
-    boolean wasInState(IStateMashine<? extends IState> a, IState s);
+    Boolean wasInState(IStateMashine<? extends IState> a, IState s);
 
     @Predicate
     boolean cameToFinalState();
@@ -31,7 +31,7 @@ public interface IPredicateFactory<S extends IState> {
     Boolean wasAction(IAction z);
 
     @Predicate
-    boolean wasFirstAction(IAction z);
+    Boolean wasFirstAction(IAction z);
 
     @Predicate
     boolean wasTrue(ICondition cond);

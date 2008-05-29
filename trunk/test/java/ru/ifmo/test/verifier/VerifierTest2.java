@@ -43,6 +43,12 @@ public class VerifierTest2 extends AbstractSingleAutomataVerifierTest {
         assertTrue(stack.isEmpty());
     }
 
+    public void testGlobalIsInState() throws LtlParseException {
+        List<IInterNode> stack = verifier.verify("G(!wasInState(A3, A3.stateP) || X(wasEvent(p3.e82)))", predicates);
+        printStack(stack);
+        assertTrue(stack.isEmpty());
+    }
+
     public void testReleaseWasAction() throws LtlParseException {
         List<IInterNode> stack = verifier.verify("G(wasInState(A3, A3.s1) "
                 + "|| (!isInState(A3, A3.stateP) || R(wasAction(o2.z11), wasAction(o2.z10))) "

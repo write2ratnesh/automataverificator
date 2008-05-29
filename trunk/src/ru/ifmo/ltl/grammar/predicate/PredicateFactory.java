@@ -18,21 +18,17 @@ public class PredicateFactory<S extends IState> extends AbstractPredicateFactory
 
     @Predicate
     public Boolean wasEvent(IEvent e) {
-        if (transition.getEvent() == null && transition.getCondition() == null
-                && transition.getTarget() == state) {
-            return null;
-        }
-        return e.equals(transition.getEvent());
+        return (wasTransition()) ? e.equals(transition.getEvent()) : null;
     }
 
     @Predicate
-    public boolean isInState(IStateMashine<? extends IState> a, IState s) {
-        return transition.getTarget().equals(s);
+    public Boolean isInState(IStateMashine<? extends IState> a, IState s) {
+        return (wasTransition()) ? transition.getTarget().equals(s) : null;
     }
 
     @Predicate
-    public boolean wasInState(IStateMashine<? extends IState> a, IState s) {
-        return state.equals(s);
+    public Boolean wasInState(IStateMashine<? extends IState> a, IState s) {
+        return (wasTransition()) ? state.equals(s): null;
     }
 
     @Predicate
@@ -42,15 +38,16 @@ public class PredicateFactory<S extends IState> extends AbstractPredicateFactory
 
     @Predicate
     public Boolean wasAction(IAction z) {
-        if (transition.getEvent() == null && transition.getCondition() == null
-                && transition.getTarget() == state) {
-            return null;
-        }
-        return transition.getActions().contains(z) || transition.getTarget().getActions().contains(z);
+        return (wasTransition())
+                ? transition.getActions().contains(z) || transition.getTarget().getActions().contains(z)
+                : null;
     }
 
     @Predicate
-    public boolean wasFirstAction(IAction z) {
+    public Boolean wasFirstAction(IAction z) {
+        if (!wasTransition()) {
+            return null;
+        }
         if (transition.getActions().isEmpty()) {
             return false;
         } else {

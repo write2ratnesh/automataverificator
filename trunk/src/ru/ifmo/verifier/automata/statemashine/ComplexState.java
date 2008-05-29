@@ -107,9 +107,9 @@ public class ComplexState<S extends IState> implements IState {
                 transitions.add(createTransition(node, trans));
             }
             for (ITreeNode<S> child: node.getChildren()) {
-                assert child.isActive() == child.getStateMashine().getParentState().equals(node.getState())
-                        : String.format("Child: %s, stateMahine parent state:%s, parentState: %s",
-                                        child, child.getStateMashine().getParentState(), node);
+                assert child.isActive() == child.getStateMashine().getParentStates().containsKey(node.getState())
+                        : String.format("Child: %s, stateMahine parent state:%s, parentStates: %s",
+                                        child, child.getStateMashine().getParentStates(), node);
                 addIfActive(child);
             }
         }
