@@ -16,7 +16,7 @@ import java.util.List;
 public class VerifierTest extends AbstractSingleAutomataVerifierTest {
 
     public VerifierTest() {
-        super("CarA1.xml", "A1");
+        super("CarA2.xml", "A1");
     }
 
     public void testIsInStatePredicate1() throws LtlParseException {
@@ -96,6 +96,22 @@ public class VerifierTest extends AbstractSingleAutomataVerifierTest {
                 "|| isInState(A1, A1[\"crash\"]) || isInState(A1, A1[\"s1\"]))" +
                 "|| R(wasEvent(p1.e5), wasEvent(p1.e101)) " +
                 "|| R(wasEvent(p1.e3), wasEvent(p1.e101)))",
+                predicates);
+        printStack(stack);
+        assertFalse(stack.isEmpty());
+    }
+
+    public void testFutureIsInState() throws LtlParseException {
+        List<IInterNode> stack = verifier.verify("G(!isInState(A1, A1[\"crash\"])" +
+                "|| F(isInState(A1, A1[\"move to player\"])))",
+                predicates);
+        printStack(stack);
+        assertTrue(stack.isEmpty());
+    }
+
+    public void testFutureIsInState2() throws LtlParseException {
+        List<IInterNode> stack = verifier.verify("G(!isInState(A1, A1[\"do maneuver\"])" +
+                "|| F(isInState(A1, A1[\"move to player\"])))",
                 predicates);
         printStack(stack);
         assertFalse(stack.isEmpty());

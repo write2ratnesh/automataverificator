@@ -20,7 +20,7 @@ public interface IStateMashine<S extends IState> {
 
     Set<IStateMashine<S>> getNestedStateMashines();
 
-    S getParentState();
+    Map<S, IStateMashine<S>> getParentStates();
 
     boolean isNested();
 

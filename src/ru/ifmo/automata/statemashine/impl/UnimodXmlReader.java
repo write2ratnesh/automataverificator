@@ -48,6 +48,7 @@ public class UnimodXmlReader implements IAutomataReader {
     private static final String ATTR_EVENT = "event";
     private static final String ATTR_COND = "guard";
     private static final String ATTR_SUPPLIER_ROLE = "supplierRole";
+    private static final String ANY_EVENT = "*";
 
     private Document document;
 
@@ -373,6 +374,9 @@ public class UnimodXmlReader implements IAutomataReader {
             if (event != null) {
                 return event;
             }
+            if (ANY_EVENT.equals(eventAttr)) {
+                return null;    
+            }
         } else {
             return null;
         }
@@ -387,6 +391,7 @@ public class UnimodXmlReader implements IAutomataReader {
                 return event;
             }
         }
-        return findEventByName(m.getParentStateMashine(), eventName);
+        IStateMashine<? extends IState> parent = m.getParentStateMashine();
+        return (parent != null) ? findEventByName(parent, eventName) : null;
     }
 }

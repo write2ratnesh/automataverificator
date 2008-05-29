@@ -8,8 +8,6 @@ import ru.ifmo.automata.statemashine.IStateTransition;
 import ru.ifmo.automata.statemashine.IStateMashine;
 
 import java.util.Iterator;
-import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  * TODO: add comment
@@ -67,7 +65,7 @@ public class StateTree<S extends IState> implements ITree<S> {
     }
 
     protected ITreeNode<S> copyTransSubnode(ITreeNode<S> parent, ITreeNode<S> node) {
-        boolean active = parent.getState().equals(node.getStateMashine().getParentState());
+        boolean active = node.getStateMashine().getParentStates().containsKey(parent.getState());
         TreeNode<S> newNode = new TreeNode<S>(node.getState(), node.getStateMashine(), active);
 
         for (ITreeNode<S> child: node.getChildren()) {
