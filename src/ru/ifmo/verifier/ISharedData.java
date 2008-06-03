@@ -2,19 +2,23 @@ package ru.ifmo.verifier;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.concurrent.DfsThread;
+import ru.ifmo.util.concurrent.DfsStackTreeNode;
 
 import java.util.Deque;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public interface ISharedData {
-    Deque<IntersectionNode> getContraryInstance();
+    DfsStackTreeNode<IntersectionNode> getContraryInstance();
 
-    void setContraryInstance(Deque<IntersectionNode> contraryInstance);
+    /**
+     * Set contrary instance
+     * @param contraryInstance contrary instance
+     * @return false if contrary instance has been already set.
+     */
+    boolean setContraryInstance(DfsStackTreeNode<IntersectionNode> contraryInstance);
 
     Set<IntersectionNode> getVisited();
-
-    void setMinStackDepth(int minStackDepth, AtomicBoolean allowStartThreads);
 
     /**
      * Insert thread into queue

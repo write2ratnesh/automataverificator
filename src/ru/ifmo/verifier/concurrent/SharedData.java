@@ -5,12 +5,13 @@ package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.ISharedData;
+import ru.ifmo.util.concurrent.DfsStackTreeNode;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Shared data for all simultaneous threads
@@ -18,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author: Kirill Egorov
  */
 public class SharedData implements ISharedData {
+
     /**
      * Threads that finished their work and waiting for new one
      */
@@ -32,19 +34,13 @@ public class SharedData implements ISharedData {
      * Thread checked not emptytness of automatas intersection,
      * write his cotrary instance stack and other threads can terminate their execution.
      */
-    private volatile Deque<IntersectionNode> contraryInstance = null;
+    private AtomicReference<DfsStackTreeNode<IntersectionNode>> contraryInstance =
+            new AtomicReference<DfsStackTreeNode<IntersectionNode>>();
 
     /**
      * Visited nodes. Sould be concurrent or synchronized set when is used sumultaneusly.
      */
     private final Set<IntersectionNode> visited;
-
-    /**
-     * Minimum stack depth where node has next child
-     */
-    private int minStackDepth = Integer.MAX_VALUE;
-
-    private AtomicBoolean allowStartThreads = new AtomicBoolean();
 
     public SharedData(Set<IntersectionNode> visited, int threadNumber) {
         if (visited == null) {
@@ -54,26 +50,16 @@ public class SharedData implements ISharedData {
         this.threadNumber = threadNumber;
     }
 
-    public Deque<IntersectionNode> getContraryInstance() {
-        return contraryInstance;
+    public DfsStackTreeNode<IntersectionNode> getContraryInstance() {
+        return contraryInstance.get();
     }
 
-    public void setContraryInstance(Deque<IntersectionNode> contraryInstance) {
-        this.contraryInstance = contraryInstance;
+    public boolean setContraryInstance(DfsStackTreeNode<IntersectionNode> contraryInstance) {
+        return this.contraryInstance.compareAndSet(null, contraryInstance);
     }
 
     public Set<IntersectionNode> getVisited() {
         return visited;
-    }
-
-    public void setMinStackDepth(int minStackDepth, AtomicBoolean allowStartThreads) {
-        if (this.minStackDepth > minStackDepth) {
-            this.minStackDepth = minStackDepth;
-            this.allowStartThreads.set(false);
-            this.allowStartThreads = allowStartThreads;
-            this.allowStartThreads.set(true);
-        }
-
     }
 
     public boolean offerUnoccupiedThread(DfsThread t) {

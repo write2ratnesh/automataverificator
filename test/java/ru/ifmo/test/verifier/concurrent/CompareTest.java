@@ -49,7 +49,7 @@ public class CompareTest extends TestCase {
 
     protected ILtlParser parser;
     protected ILtlParser parserMultiThread;
-    protected ITranslator translator = new Ltl2baTranslator();
+    protected ITranslator translator = new SimpleTranslator();
 
     protected void setUp() throws IOException, AutomataFormatException {
         predicates = new ComplexPredicateFactory();
@@ -61,12 +61,13 @@ public class CompareTest extends TestCase {
         IStateMashine<? extends IState> stateMashine = context.getStateMashine(stateMashineName);
 
         ComplexState initState = ComplexStateFactory.createInitialState(stateMashine);
-        verifier = new SimpleVerifier<ComplexState>(initState, parser);
+
+        verifier = new SimpleVerifier<ComplexState>(initState, parser, translator);
         verifierMultiThread = new MultiThreadVerifier<ComplexState>(initState,
-                parserMultiThread, stateMashine.getStates().size());
+                parserMultiThread, translator, stateMashine.getStates().size());
     }
 
-    public void testOneThread() throws LtlParseException {
+    public void testOneThread1() throws LtlParseException {
         String ltlFormula = "G(wasInState(A3, A3.s1) "
                 + "|| (!isInState(A3, A3.stateP) || R(wasAction(o2.z11), wasAction(o2.z10))) "
                 + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))";
@@ -77,7 +78,7 @@ public class CompareTest extends TestCase {
         assertTrue(stack.isEmpty());
     }
 
-    public void testMultiThread() throws LtlParseException {
+    public void testMultiThread1() throws LtlParseException {
         String ltlFormula = "G(wasInState(A3, A3.s1) "
                 + "|| (!isInState(A3, A3.stateP) || R(wasAction(o2.z11), wasAction(o2.z10))) "
                 + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))";
@@ -126,10 +127,53 @@ public class CompareTest extends TestCase {
         assertTrue(stack.isEmpty());
     }
 
+    public void testOneThread4() throws LtlParseException {
+        String ltlFormula = "G(!wasInState(A2, A2.PoliceCrash) || R(wasEvent(p3.e81), wasInState(A2, A2.PoliceCrash)))";
+        IBuchiAutomata buchi = parse(parser, ltlFormula);
+        List<IInterNode> stack = verify(verifier, buchi, predicates);
+
+        assertTrue(stack.isEmpty());
+    }
+
+    public void testMultiThread4() throws LtlParseException {
+        String ltlFormula = "G(!wasInState(A2, A2.PoliceCrash) || R(wasEvent(p3.e81), wasInState(A2, A2.PoliceCrash)))";
+        IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
+        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+
+        assertTrue(stack.isEmpty());
+    }
+
+    public void testOneThread5() throws LtlParseException {
+        String ltlFormula = "G(!wasInState(A2, A2.PoliceCrash) || R(wasEvent(p3.e81), wasInState(A2, A2.PoliceCrash))) &&" +
+                "G(!isInState(A2, A2.PoliceCrash) " +
+                "|| R(wasEvent(p3.e81), (isInState(A3, A3.s1) || isInState(A3, A3.stateP) || isInState(A3, A3.stateQ)))) &&" +
+                "G(wasInState(A3, A3.s1) "
+                + "|| (!isInState(A3, A3.stateP) || R(wasAction(o2.z11), wasAction(o2.z10))) "
+                + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))";
+        IBuchiAutomata buchi = parse(parser, ltlFormula);
+        List<IInterNode> stack = verify(verifier, buchi, predicates);
+
+        assertTrue(stack.isEmpty());
+    }
+
+    public void testMultiThread5() throws LtlParseException {
+        String ltlFormula = "G(!wasInState(A2, A2.PoliceCrash) || R(wasEvent(p3.e81), wasInState(A2, A2.PoliceCrash))) &&" +
+                "G(!isInState(A2, A2.PoliceCrash) " +
+                "|| R(wasEvent(p3.e81), (isInState(A3, A3.s1) || isInState(A3, A3.stateP) || isInState(A3, A3.stateQ)))) &&" +
+                "G(wasInState(A3, A3.s1) "
+                + "|| (!isInState(A3, A3.stateP) || R(wasAction(o2.z11), wasAction(o2.z10))) "
+                + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))";
+        IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
+        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+
+        assertTrue(stack.isEmpty());
+    }
+
     protected List<IInterNode> verify(IVerifier<ComplexState> verifier, IBuchiAutomata buchi, IPredicateFactory<ComplexState> predicates) {
         long time = System.currentTimeMillis();
         List<IInterNode> stack = verifier.verify(buchi, predicates);
-        System.out.println(getName() + " time = " + (System.currentTimeMillis() - time));
+        time = System.currentTimeMillis() - time;
+        System.out.println(getName() + " time = " + time);
         return stack;
     }
 

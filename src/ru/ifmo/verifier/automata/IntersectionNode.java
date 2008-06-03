@@ -57,8 +57,7 @@ public class IntersectionNode<S extends IState>
 
         iterator = new NodeIterator();
 
-        threadIterators = new HashMap<Long, NodeIterator>(
-                (int) (Math.floor(threads.size() * 0.75) + 1));
+        threadIterators = new HashMap<Long, NodeIterator>((threads.size() * 4) / 3);
         for (Thread t: threads) {
             threadIterators.put(t.getId(), new NodeIterator());
         }
