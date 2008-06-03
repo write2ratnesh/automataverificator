@@ -7,64 +7,29 @@ import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.IDfs;
 import ru.ifmo.verifier.AbstractDfs;
 import ru.ifmo.verifier.ISharedData;
-import ru.ifmo.verifier.impl.SecondDfs;
-import ru.ifmo.util.DequeSet;
+import ru.ifmo.util.concurrent.DfsStackTreeNode;
 
 import java.util.*;
 
 public class ConcurrentMainDfs implements IDfs<Void> {
-    private final Deque<IntersectionNode> stack;
+    private DfsStackTreeNode<IntersectionNode> stackTreeNode;
 
     private final Set<IntersectionNode> visited;
 
     private final ISharedData sharedData;
     private final long threadId;
 
-    public ConcurrentMainDfs(ISharedData sharedData, long threadId) {
-        this(sharedData, new DequeSet<IntersectionNode>(), threadId);
-    }
-
-    public ConcurrentMainDfs(ISharedData sharedData, Deque<IntersectionNode> stack, long threadId) {
+    public ConcurrentMainDfs(ISharedData sharedData, DfsStackTreeNode<IntersectionNode> stackTreeNode, long threadId) {
         this.sharedData = sharedData;
         this.visited = sharedData.getVisited();
         this.threadId = threadId;
-        this.stack = stack;
+        this.stackTreeNode = stackTreeNode;
     }
 
-    protected void enterNode(IntersectionNode node) {
-        DfsThread t = sharedData.getUnoccupiedThread();
-        if (t != null) {
-            Deque<IntersectionNode> subStack = new DequeSet<IntersectionNode>(stack.size());
-            IntersectionNode initial = null;
-
-            // Clone stack part without children.
-            for (IntersectionNode n: stack) {
-                subStack.add(n);
-                IntersectionNode child = n.next(0);
-                if (child != null && !visited.contains(child)) {
-                    initial = child;
-                    break;
-                }
-            }
-            if (initial != null) {
-                // Notify waiting thread
-                synchronized (t) {
-                    t.setInitial(initial);
-                    t.setInitialStack(subStack);
-                    t.notifyAll();
-                }
-            } else {
-                if (!sharedData.offerUnoccupiedThread(t)) {
-                    throw new RuntimeException("Unextpected count of waiting threads");
-                }
-            }
-        }
-    }
-
-    protected boolean leaveNode(IntersectionNode node) {
-        assert node.next(0) == null;
-        if (node.isTerminal()) {
-            AbstractDfs<Boolean> dfs2 = new SecondDfs(sharedData, getStack(), threadId);
+    protected boolean leaveNode() {
+        IntersectionNode node = stackTreeNode.getItem();
+        if (stackTreeNode.visited.compareAndSet(false, true) && node.isTerminal()) {
+            AbstractDfs<Boolean> dfs2 = new ConcurrentSecondDfs(sharedData, stackTreeNode, threadId);
             if (dfs2.dfs(node)) {
                 return true;
             }
@@ -72,28 +37,34 @@ public class ConcurrentMainDfs implements IDfs<Void> {
         return false;
     }
 
-    public Deque<IntersectionNode> getStack() {
-        return stack;
-    }
-
     public Void dfs(IntersectionNode node) {
-        stack.push(node);
         visited.add(node);
-        while (!stack.isEmpty() && sharedData.getContraryInstance() == null) {
-            IntersectionNode n = stack.getFirst();
-            IntersectionNode child = n.next(0);
+        while (stackTreeNode != null && sharedData.getContraryInstance() == null) {
+            IntersectionNode child = stackTreeNode.getItem().next(0);
             if (child != null) {
                 if (!visited.contains(child)) {
                     if (visited.add(child)) {
-                        stack.push(child);
-                        enterNode(child);
+                        stackTreeNode = stackTreeNode.addChild(child);
                     }
                 }
             } else {
-                if (leaveNode(n)) {
-                    break;
+                boolean flag = true;
+                if (stackTreeNode.hasChildren()) {
+                    for (DfsStackTreeNode<IntersectionNode> childNode: stackTreeNode.getChildren()) {
+                        if (!childNode.visited.get()) {
+                            flag = false;
+                            stackTreeNode = childNode;
+                            break;
+                        }
+                    }
                 }
-                stack.pop();
+                if (flag) {
+                    if (leaveNode()) {
+                        break;
+                    }
+                    stackTreeNode.tryRemove();
+                    stackTreeNode = stackTreeNode.getParent();
+                }
             }
         }
         return null;

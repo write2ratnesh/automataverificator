@@ -7,6 +7,7 @@ import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.util.DequeSet;
 import ru.ifmo.util.CollectionUtils;
+import ru.ifmo.util.concurrent.DfsStackTreeNode;
 
 import java.util.Deque;
 import java.util.Map;
@@ -19,57 +20,29 @@ import java.io.PrintStream;
  */
 public class DfsThread extends Thread {
 
-    private volatile IntersectionNode initial;
-    private Deque<IntersectionNode> stack = new DequeSet<IntersectionNode>();
+    private DfsStackTreeNode<IntersectionNode> stackTreeNode;
     private ISharedData sharedData;
 
-    public DfsThread(IntersectionNode initial, ISharedData sharedData) {
+    public DfsThread(DfsStackTreeNode<IntersectionNode> initial, ISharedData sharedData) {
         super();
         if (sharedData == null) {
             throw new IllegalArgumentException();
         }
         this.sharedData = sharedData;
-        this.initial = initial;
+        this.stackTreeNode = initial;
     }
 
-    public void setInitial(IntersectionNode initial) {
-        this.initial = initial;
-    }
-
-    public void setInitialStack(Deque<IntersectionNode> stack) {
-        if (stack == null) {
-            throw new IllegalArgumentException();
-        }
-        this.stack = stack;
+    public void setInitial(DfsStackTreeNode<IntersectionNode> initial) {
+        this.stackTreeNode = initial;
     }
 
     public void run() {
-        if (initial == null) {
-            throw new RuntimeException("Initial node hasn't been initialized yet");
+        if (stackTreeNode == null) {
+            throw new RuntimeException("Initial stack tree node hasn't been initialized yet");
         }
         try {
-            for (ConcurrentMainDfs dfs = new ConcurrentMainDfs(sharedData, stack, getId());
-                    dfs.getStack().isEmpty() && (sharedData.getContraryInstance() == null);) {
-                dfs.dfs(initial);
-                if (sharedData.getContraryInstance() == null) {
-                    initial = null;
-                    stack = null;
-                    if (!sharedData.offerUnoccupiedThread(this)) {
-                        sharedData.setContraryInstance(CollectionUtils.<IntersectionNode>emptyDeque());
-                        sharedData.notifyAllUnoccupiedThreads();
-                        return;
-                    }
-                    synchronized (this) {
-                        while (initial == null && sharedData.getContraryInstance() == null) {
-                            try {
-                                wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
+            ConcurrentMainDfs dfs = new ConcurrentMainDfs(sharedData, stackTreeNode, getId());
+            dfs.dfs(stackTreeNode.getItem());
         } catch (Throwable t) {
             printAllStacks(System.err);
             t.printStackTrace();

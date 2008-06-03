@@ -31,8 +31,8 @@ public class SecondDfs extends AbstractDfs<Boolean> {
 
     protected boolean visitNode(IntersectionNode node) {
         if (mainDfsStack.contains(node)) {
-            sharedData.setContraryInstance(mainDfsStack);
-            sharedData.notifyAllUnoccupiedThreads();
+//            sharedData.setContraryInstance(mainDfsStack);
+//            sharedData.notifyAllUnoccupiedThreads();
             
             setResult(true);
 

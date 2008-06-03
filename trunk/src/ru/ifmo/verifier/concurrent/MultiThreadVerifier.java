@@ -11,7 +11,6 @@ import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
-import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
 import ru.ifmo.ltl.buchi.translator.Ltl2baTranslator;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
@@ -19,6 +18,7 @@ import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.ltl.grammar.LtlUtils;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.util.concurrent.ConcurrentHashSet;
+import ru.ifmo.util.concurrent.DfsStackTreeNode;
 
 import java.util.*;
 
@@ -60,6 +60,10 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
      */
     public MultiThreadVerifier(S initState, ILtlParser parser, int stateCount) {
         this(initState, parser, new Ltl2baTranslator(), stateCount, 0);
+    }
+
+    public MultiThreadVerifier(S initState, ILtlParser parser, ITranslator translator, int stateCount) {
+        this(initState, parser, translator, stateCount, 0);
     }
 
     public MultiThreadVerifier(S initState, ILtlParser parser, int stateCount, int threadNumber) {
@@ -131,7 +135,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         ConcurrentIntersectionAutomata<S> automata = new ConcurrentIntersectionAutomata<S>(
                 predicates, buchi, initialCapacity, threadNumber);
         ISharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(initialCapacity, threadNumber),
-                                               threadNumber);
+                                                threadNumber);
 
         //create threadNumber threads and start them
         List<DfsThread> threads = new ArrayList<DfsThread>(threadNumber);
@@ -142,9 +146,10 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         ((MultiThreadPredicateFactory) predicates).init(threads);
 
         IntersectionNode initial = automata.getNode(initState, buchi.getStartNode(), 0);
+        DfsStackTreeNode<IntersectionNode> root = new DfsStackTreeNode<IntersectionNode>(initial, threadNumber);
 
         for (DfsThread t: threads) {
-            t.setInitial(initial);
+            t.setInitial(root);
             t.start();
         }
         for (Thread t: threads) {
@@ -156,11 +161,10 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         }
 
         //check results
-        List<IInterNode> res = new ArrayList<IInterNode>(sharedData.getContraryInstance().size());
-
-        for (Iterator<? extends IInterNode> iter = sharedData.getContraryInstance().descendingIterator();
-                iter.hasNext();) {
-            res.add(iter.next());
+        LinkedList<IInterNode> res = new LinkedList<IInterNode>();
+        for (DfsStackTreeNode<IntersectionNode> node = sharedData.getContraryInstance();
+                node != null; node = node.getParent()) {
+            res.addFirst(node.getItem());
         }
         return res;
     }
