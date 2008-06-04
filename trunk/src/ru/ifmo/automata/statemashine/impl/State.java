@@ -53,6 +53,10 @@ public class State implements IState {
         return nestedStateMashines;
     }
 
+    public String getUniqueName() {
+        return name + '@' + Integer.toHexString(super.hashCode());
+    }
+
     public void addOutcomingTransition(IStateTransition t) {
         outTransitions.add(t);
     }

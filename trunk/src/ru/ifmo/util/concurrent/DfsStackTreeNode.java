@@ -1,5 +1,5 @@
 /*
- * Developed by eVelopers Corporation - 28.05.2008
+ * DfsStackTreeNode.java, 28.05.2008
  */
 package ru.ifmo.util.concurrent;
 
@@ -10,31 +10,41 @@ import java.util.Collection;
 
 public class DfsStackTreeNode<E> {
 
-    private int threadNumber;
     private E item;
     private ConcurrentMap<E, DfsStackTreeNode<E>> children;
 
     private DfsStackTreeNode<E> parent;
 
-    public final AtomicBoolean visited = new AtomicBoolean(false);
+    public final AtomicBoolean wasLeft = new AtomicBoolean(false);
 
+    /**
+     * Create new root stack node (with parent == <code>null</code>)
+     * @param x item
+     * @param threadNumber number of threads
+     */
     public DfsStackTreeNode(E x, int threadNumber) {
         this(x, null, threadNumber);
     }
 
+    /**
+     * Create child node for <code>parent</code> node.
+     * @param item child node item
+     * @param parent parent node
+     * @param threadNumber number of threads
+     */
     protected DfsStackTreeNode(E item, DfsStackTreeNode<E> parent, int threadNumber) {
         this.item = item;
         this.parent = parent;
-        this.threadNumber = threadNumber;
         children = new ConcurrentHashMap<E, DfsStackTreeNode<E>>((threadNumber * 4) / 3, 0.75f, threadNumber);
     }
 
     /**
      * Add children with item <code>item</code>
      * @param item item
+     * @param threadNumber number of threads
      * @return children
      */
-    public DfsStackTreeNode<E> addChild(E item) {
+    public DfsStackTreeNode<E> addChild(E item, int threadNumber) {
         DfsStackTreeNode<E> child = new DfsStackTreeNode<E>(item, this, threadNumber);
         DfsStackTreeNode<E> res = children.putIfAbsent(item, child);
         return (res == null) ? child : res;
@@ -57,13 +67,13 @@ public class DfsStackTreeNode<E> {
     }
 
     /**
-     * Try to remove node. If children have been visited, than remove node
-     * @return true, if node was successfuly removed
+     * Remove node from parents set of children. Node should be removed after it has been left.
      */
-    public boolean tryRemove() {
-        if (parent != null && children.isEmpty()) {
-            return parent.children.remove(item) != null;
+    public void remove() {
+        assert wasLeft.get();
+        
+        if (parent != null) {
+            parent.children.remove(item);
         }
-        return false;
     }
 }

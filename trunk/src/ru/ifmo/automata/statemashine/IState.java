@@ -22,4 +22,6 @@ public interface IState extends INode<IStateTransition> {
     List<IAction> getActions();
 
     Set<IStateMashine<? extends IState>> getNestedStateMashines();
+
+    String getUniqueName();
 }

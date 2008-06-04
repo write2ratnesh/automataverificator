@@ -64,6 +64,11 @@ public class ComplexState<S extends IState> implements IState {
         return Collections.emptySet();
     }
 
+    public String getUniqueName() {
+        // if automata can't have states with same names, it will be unique name;
+        return getName();
+    }
+
     public boolean isTerminal() throws IllegalStateException {
         checkActiveState();
         return activeState.isTerminal();

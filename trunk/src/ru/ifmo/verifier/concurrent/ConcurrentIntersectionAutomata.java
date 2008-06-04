@@ -1,5 +1,5 @@
 /*
- * Developed by eVelopers Corporation - 08.05.2008
+ * ConcurrentIntersectionAutomata.java, 08.05.2008
  */
 package ru.ifmo.verifier.concurrent;
 
@@ -13,8 +13,6 @@ import ru.ifmo.verifier.automata.IIntersectionAutomata;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ConcurrentIntersectionAutomata<S extends IState> implements IIntersectionAutomata<S> {
     /**
@@ -26,11 +24,15 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
     private IPredicateFactory<S> predicates;
     private IBuchiAutomata buchiAutomata;
 
-    private Map<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>> nodeMap;
-    private Map<S, ConcurrentMap<IBuchiNode, Lock>> lockMap;
+    private ConcurrentMap<String, IntersectionNode<S>> nodeMap;
+    private ConcurrentMap<String, Object> lockMap;
+
+//    private Map<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>> nodeMap;
+//    private Map<S, ConcurrentMap<IBuchiNode, Lock>> lockMap;
     private Collection<? extends Thread> threads;
 
-    public ConcurrentIntersectionAutomata(IPredicateFactory<S> predicates, IBuchiAutomata buchi, int initialCapacity, int threadNumber) {
+    public ConcurrentIntersectionAutomata(IPredicateFactory<S> predicates, IBuchiAutomata buchi,
+                                          int initialCapacity, int threadNumber) {
         if (buchi == null || predicates == null || initialCapacity < 0 || threadNumber <= 0) {
             throw new IllegalArgumentException();
         }
@@ -38,9 +40,12 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
         this.buchiAutomata = buchi;
         this.threadNumber = threadNumber;
 
-        nodeMap = new ConcurrentHashMap<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>>(
-                initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
-        lockMap = new ConcurrentHashMap<S, ConcurrentMap<IBuchiNode, Lock>>(initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
+        nodeMap = new ConcurrentHashMap<String, IntersectionNode<S>>(initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
+        lockMap = new ConcurrentHashMap<String, Object>(initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
+//        nodeMap = new ConcurrentHashMap<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>>(
+//                initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
+//        lockMap = new ConcurrentHashMap<S, ConcurrentMap<IBuchiNode, Lock>>(
+//                initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
     }
 
     public void setThreads(Collection<? extends Thread> threads) {
@@ -55,7 +60,27 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
     }
 
     public IntersectionNode<S> getNode(S state, IBuchiNode node, int acceptSet) {
-        Map<IBuchiNode, Map<Integer, IntersectionNode<S>>> buchiMap = nodeMap.get(state);
+        String key = getUniqueKey(state, node, acceptSet);
+
+        Object lockObj = lockMap.get(key);
+        if (lockObj == null) {
+            lockMap.putIfAbsent(key, new Object());
+        }
+        lockObj = lockMap.get(key);
+
+        IntersectionNode<S> res = nodeMap.get(key);
+        if (res == null) {
+            synchronized(lockObj) {
+                res = nodeMap.get(key);
+                if (res == null) {
+                    res = new IntersectionNode<S>(this, state, node, acceptSet, threads);
+                    nodeMap.put(key, res);
+                }
+            }
+        }
+        return res;
+
+        /*Map<IBuchiNode, Map<Integer, IntersectionNode<S>>> buchiMap = nodeMap.get(state);
         if (buchiMap == null) {
             synchronized (state) {
                 buchiMap = nodeMap.get(state);
@@ -103,10 +128,10 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
                 lock.unlock();
             }
         }
-        return res;
+        return res;*/
     }
 
-    protected Lock getLock(S state, IBuchiNode node) {
+    /*protected Lock getLock(S state, IBuchiNode node) {
         ConcurrentMap<IBuchiNode, Lock> buchiMap = lockMap.get(state);
         if (buchiMap == null) {
             synchronized (state) {
@@ -127,9 +152,13 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
         }
 
         return buchiMap.get(node);
-    }
+    }*/
 
     public IPredicateFactory<S> getPredicates() {
         return predicates;
+    }
+
+    protected String getUniqueKey(IState state, IBuchiNode node, int acceptSet) {
+        return state.getUniqueName() + "_" + node.getID() + "_" + acceptSet;
     }
 }
