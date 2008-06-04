@@ -10,6 +10,7 @@ import ru.ifmo.ltl.buchi.IBuchiNode;
 import ru.ifmo.ltl.buchi.ITransitionCondition;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.verifier.IInterNode;
+import ru.ifmo.util.CollectionUtils;
 
 import java.util.*;
 
@@ -57,7 +58,7 @@ public class IntersectionNode<S extends IState>
 
         iterator = new NodeIterator();
 
-        threadIterators = new HashMap<Long, NodeIterator>((threads.size() * 4) / 3);
+        threadIterators = new HashMap<Long, NodeIterator>(CollectionUtils.defaultInitialCapacity(threads.size()));
         for (Thread t: threads) {
             threadIterators.put(t.getId(), new NodeIterator());
         }

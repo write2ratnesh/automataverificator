@@ -3,6 +3,8 @@
  */
 package ru.ifmo.util.concurrent;
 
+import ru.ifmo.util.CollectionUtils;
+
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Collection;
@@ -14,16 +16,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author: Kirill Egorov
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> {
-    /**
-     * The default load factor, used when not
-     * otherwise specified in a constructor.
-     */
-    static final float DEFAULT_LOAD_FACTOR = 0.75f;
-
     private ConcurrentHashMap<E, Object> map;
 
-    public ConcurrentHashSet(int initialCapacity, int threadNumber) {
-        this(initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
+    public ConcurrentHashSet(int entryNumber, int threadNumber) {
+        this(CollectionUtils.defaultInitialCapacity(entryNumber),
+                CollectionUtils.DEFAULT_LOAD_FACTOR, threadNumber);
     }
 
     public ConcurrentHashSet(int initialCapacity, float loadFactor, int threadNumber) {

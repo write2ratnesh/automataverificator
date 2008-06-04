@@ -132,10 +132,10 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
                     + predicates.getClass() + ". Expected instance of "
                     + MultiThreadPredicateFactory.class);
         }
-        int initialCapacity = stateCount * buchi.size();
+        int entryCount = stateCount * buchi.size() * buchi.getAcceptSetsCount();
         ConcurrentIntersectionAutomata<S> automata = new ConcurrentIntersectionAutomata<S>(
-                predicates, buchi, initialCapacity, threadNumber);
-        ISharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(initialCapacity, threadNumber),
+                predicates, buchi, entryCount, threadNumber);
+        ISharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(entryCount, threadNumber),
                                                 threadNumber);
 
         //create threads

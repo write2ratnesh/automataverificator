@@ -12,10 +12,19 @@ import java.io.Serializable;
  * @author: Kirill Egorov
  */
 public class CollectionUtils {
+    /**
+     * The default load factor for map.
+     */
+    public static final float DEFAULT_LOAD_FACTOR = 0.75f;
+
     public static final Deque EMPTY_DEQUE= new EmptyDeque();
 
     public static <T> Deque<T> emptyDeque() {
 	    return (Deque<T>) EMPTY_DEQUE;
+    }
+
+    public static int defaultInitialCapacity(int entryNumber) {
+        return (entryNumber * 4) / 3 + 1;
     }
 
     private static class EmptyDeque extends AbstractList<Object>
