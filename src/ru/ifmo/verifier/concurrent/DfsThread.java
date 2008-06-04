@@ -5,11 +5,8 @@ package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.ISharedData;
-import ru.ifmo.util.DequeSet;
-import ru.ifmo.util.CollectionUtils;
-import ru.ifmo.util.concurrent.DfsStackTreeNode;
+import ru.ifmo.util.concurrent.DfsStackTree;
 
-import java.util.Deque;
 import java.util.Map;
 import java.io.PrintStream;
 
@@ -20,29 +17,29 @@ import java.io.PrintStream;
  */
 public class DfsThread extends Thread {
 
-    private DfsStackTreeNode<IntersectionNode> stackTreeNode;
+    private DfsStackTree<IntersectionNode> stackTree;
     private ISharedData sharedData;
 
-    public DfsThread(DfsStackTreeNode<IntersectionNode> initial, ISharedData sharedData) {
+    public DfsThread(DfsStackTree<IntersectionNode> stackTree, ISharedData sharedData) {
         super();
         if (sharedData == null) {
             throw new IllegalArgumentException();
         }
         this.sharedData = sharedData;
-        this.stackTreeNode = initial;
+        this.stackTree = stackTree;
     }
 
-    public void setInitial(DfsStackTreeNode<IntersectionNode> initial) {
-        this.stackTreeNode = initial;
+    public void setDfsStackTree(DfsStackTree<IntersectionNode> stackTree) {
+        this.stackTree = stackTree;
     }
 
     public void run() {
-        if (stackTreeNode == null) {
+        if (stackTree == null) {
             throw new RuntimeException("Initial stack tree node hasn't been initialized yet");
         }
         try {
-            ConcurrentMainDfs dfs = new ConcurrentMainDfs(sharedData, stackTreeNode, getId());
-            dfs.dfs(stackTreeNode.getItem());
+            ConcurrentMainDfs dfs = new ConcurrentMainDfs(sharedData, stackTree, getId());
+            dfs.dfs(stackTree.getRoot().getItem());
         } catch (Throwable t) {
             printAllStacks(System.err);
             t.printStackTrace();

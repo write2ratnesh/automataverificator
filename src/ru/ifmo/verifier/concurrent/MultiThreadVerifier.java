@@ -19,6 +19,7 @@ import ru.ifmo.ltl.grammar.LtlUtils;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.util.concurrent.ConcurrentHashSet;
 import ru.ifmo.util.concurrent.DfsStackTreeNode;
+import ru.ifmo.util.concurrent.DfsStackTree;
 
 import java.util.*;
 
@@ -137,7 +138,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         ISharedData sharedData = new SharedData(new ConcurrentHashSet<IntersectionNode>(initialCapacity, threadNumber),
                                                 threadNumber);
 
-        //create threadNumber threads and start them
+        //create threads
         List<DfsThread> threads = new ArrayList<DfsThread>(threadNumber);
         for (int i = 0; i < threadNumber; i++) {
             threads.add(new DfsThread(null, sharedData));
@@ -146,10 +147,17 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         ((MultiThreadPredicateFactory) predicates).init(threads);
 
         IntersectionNode initial = automata.getNode(initState, buchi.getStartNode(), 0);
-        DfsStackTreeNode<IntersectionNode> root = new DfsStackTreeNode<IntersectionNode>(initial, threadNumber);
+
+        startAndWait(threads, initial);
+
+        return extractStack(sharedData.getContraryInstance());
+    }
+
+    protected void startAndWait(List<DfsThread> threads, IntersectionNode initial) {
+        DfsStackTree<IntersectionNode> stackTree = new DfsStackTree<IntersectionNode>(initial, threadNumber);
 
         for (DfsThread t: threads) {
-            t.setInitial(root);
+            t.setDfsStackTree(stackTree);
             t.start();
         }
         for (Thread t: threads) {
@@ -159,11 +167,12 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
                 e.printStackTrace();
             }
         }
+    }
 
-        //check results
+    protected List<IInterNode> extractStack(DfsStackTreeNode<IntersectionNode> node) {
         LinkedList<IInterNode> res = new LinkedList<IInterNode>();
-        for (DfsStackTreeNode<IntersectionNode> node = sharedData.getContraryInstance();
-                node != null; node = node.getParent()) {
+
+        for (; node != null; node = node.getParent()) {
             res.addFirst(node.getItem());
         }
         return res;

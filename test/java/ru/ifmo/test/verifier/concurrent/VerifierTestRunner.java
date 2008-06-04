@@ -13,11 +13,9 @@ public class VerifierTestRunner {
     public static void main(String[] args) {
         TestSuite ts = new TestSuite(CompareTest.class);
         for (int i = 0; i < ts.testCount(); i++) {
-            if (i % 2 == 1) {
-                Test t = ts.testAt(i);
-                Test repeated = new RepeatedTest(t, 5000);
-                TestRunner.run(repeated);
-            }
+            Test t = ts.testAt(i);
+            Test repeated = new RepeatedTest(t, 10);
+            TestRunner.run(repeated);
         }
     }
 }
