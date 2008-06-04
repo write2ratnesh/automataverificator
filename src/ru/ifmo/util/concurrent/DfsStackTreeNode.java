@@ -3,6 +3,8 @@
  */
 package ru.ifmo.util.concurrent;
 
+import ru.ifmo.util.CollectionUtils;
+
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,7 +37,9 @@ public class DfsStackTreeNode<E> {
     protected DfsStackTreeNode(E item, DfsStackTreeNode<E> parent, int threadNumber) {
         this.item = item;
         this.parent = parent;
-        children = new ConcurrentHashMap<E, DfsStackTreeNode<E>>((threadNumber * 4) / 3, 0.75f, threadNumber);
+        children = new ConcurrentHashMap<E, DfsStackTreeNode<E>>(
+                CollectionUtils.defaultInitialCapacity(threadNumber),
+                CollectionUtils.DEFAULT_LOAD_FACTOR, threadNumber);
     }
 
     /**

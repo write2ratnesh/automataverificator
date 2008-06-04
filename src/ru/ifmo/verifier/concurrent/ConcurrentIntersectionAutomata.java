@@ -9,17 +9,13 @@ import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.IBuchiNode;
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.automata.IIntersectionAutomata;
+import ru.ifmo.util.CollectionUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public class ConcurrentIntersectionAutomata<S extends IState> implements IIntersectionAutomata<S> {
-    /**
-     * The default load factor for nodeMap.
-     */
-    static final float DEFAULT_LOAD_FACTOR = 0.75f;
-
     private int threadNumber;
     private IPredicateFactory<S> predicates;
     private IBuchiAutomata buchiAutomata;
@@ -32,16 +28,20 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
     private Collection<? extends Thread> threads;
 
     public ConcurrentIntersectionAutomata(IPredicateFactory<S> predicates, IBuchiAutomata buchi,
-                                          int initialCapacity, int threadNumber) {
-        if (buchi == null || predicates == null || initialCapacity < 0 || threadNumber <= 0) {
+                                          int entryNumber, int threadNumber) {
+        if (buchi == null || predicates == null || entryNumber < 0 || threadNumber <= 0) {
             throw new IllegalArgumentException();
         }
         this.predicates = predicates;
         this.buchiAutomata = buchi;
         this.threadNumber = threadNumber;
 
-        nodeMap = new ConcurrentHashMap<String, IntersectionNode<S>>(initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
-        lockMap = new ConcurrentHashMap<String, Object>(initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
+        nodeMap = new ConcurrentHashMap<String, IntersectionNode<S>>(
+                CollectionUtils.defaultInitialCapacity(entryNumber),
+                CollectionUtils.DEFAULT_LOAD_FACTOR, threadNumber);
+        lockMap = new ConcurrentHashMap<String, Object>(
+                CollectionUtils.defaultInitialCapacity(entryNumber), 
+                CollectionUtils.DEFAULT_LOAD_FACTOR, threadNumber);
 //        nodeMap = new ConcurrentHashMap<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>>(
 //                initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
 //        lockMap = new ConcurrentHashMap<S, ConcurrentMap<IBuchiNode, Lock>>(
