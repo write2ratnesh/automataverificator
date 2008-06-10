@@ -31,9 +31,12 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     }
 
     protected boolean leaveNode() {
+//        System.out.println(threadId + " leave node: " + stackTreeNode.getItem());
+
         IntersectionNode node = stackTreeNode.getItem();
         if (stackTreeNode.wasLeft.compareAndSet(false, true)) {
             stackTreeNode.remove();
+//            System.out.println(threadId + " remove node: " + stackTreeNode.getItem());
 
             if (node.isTerminal()) {
                 AbstractDfs<Boolean> dfs2 = new ConcurrentSecondDfs(sharedData, stackTreeNode, threadId);
@@ -46,6 +49,7 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     }
 
     public Void dfs(IntersectionNode node) {
+//        System.out.println(threadId + ": " + stackTreeNode.getItem());
         visited.add(node);
         while (stackTreeNode != null && sharedData.getContraryInstance() == null) {
             IntersectionNode child = stackTreeNode.getItem().next(0);
@@ -53,6 +57,7 @@ public class ConcurrentMainDfs implements IDfs<Void> {
                 if (!visited.contains(child)) {
                     if (visited.add(child)) {
                         stackTreeNode = stackTree.addChild(stackTreeNode, child);
+//                        System.out.println(threadId + ": " + stackTreeNode.getItem());
                     }
                 }
             } else {
@@ -62,6 +67,7 @@ public class ConcurrentMainDfs implements IDfs<Void> {
                         if (!childNode.wasLeft.get()) {
                             flag = false;
                             stackTreeNode = childNode;
+//                            System.out.println(threadId + " child: " + stackTreeNode.getItem());
                             break;
                         }
                     }
