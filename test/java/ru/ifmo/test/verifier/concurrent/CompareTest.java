@@ -170,6 +170,7 @@ public class CompareTest extends TestCase {
     }
 
     protected List<IInterNode> verify(IVerifier<ComplexState> verifier, IBuchiAutomata buchi, IPredicateFactory<ComplexState> predicates) {
+//        System.out.println(buchi);
         long time = System.currentTimeMillis();
         List<IInterNode> stack = verifier.verify(buchi, predicates);
         time = System.currentTimeMillis() - time;

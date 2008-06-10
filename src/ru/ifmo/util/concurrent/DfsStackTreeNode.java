@@ -67,7 +67,7 @@ public class DfsStackTreeNode<E> {
     }
 
     public boolean hasChildren() {
-        return children.isEmpty();
+        return !children.isEmpty();
     }
 
     /**
