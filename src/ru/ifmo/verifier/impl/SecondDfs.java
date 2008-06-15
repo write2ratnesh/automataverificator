@@ -19,7 +19,7 @@ import java.util.HashSet;
 public class SecondDfs extends AbstractDfs<Boolean> {
     private Deque<IntersectionNode> mainDfsStack;
 
-    public SecondDfs(ISharedData sharedData, Deque<IntersectionNode> mainDfsStack,  long threadId) {
+    public SecondDfs(ISharedData sharedData, Deque<IntersectionNode> mainDfsStack,  int threadId) {
         super(sharedData, new HashSet<IntersectionNode>(), threadId);
         this.mainDfsStack = mainDfsStack;
         setResult(false);

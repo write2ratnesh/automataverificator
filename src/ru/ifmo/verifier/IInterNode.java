@@ -18,4 +18,10 @@ public interface IInterNode {
     IBuchiNode getNode();
 
     int getAcceptSet();
+
+    void addOwner(int threadId);
+
+    void removeOwner(int threadId);
+
+    boolean isOwner(int threadId);
 }

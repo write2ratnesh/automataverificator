@@ -141,7 +141,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         //create threads
         List<DfsThread> threads = new ArrayList<DfsThread>(threadNumber);
         for (int i = 0; i < threadNumber; i++) {
-            threads.add(new DfsThread(null, sharedData));
+            threads.add(new DfsThread(null, sharedData, i));
         }
         automata.setThreads(threads);
         ((MultiThreadPredicateFactory) predicates).init(threads);

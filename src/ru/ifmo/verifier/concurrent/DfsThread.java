@@ -19,14 +19,20 @@ public class DfsThread extends Thread {
 
     private DfsStackTree<IntersectionNode> stackTree;
     private ISharedData sharedData;
+    private int threadId;
 
-    public DfsThread(DfsStackTree<IntersectionNode> stackTree, ISharedData sharedData) {
+    public DfsThread(DfsStackTree<IntersectionNode> stackTree, ISharedData sharedData, int threadId) {
         super();
         if (sharedData == null) {
             throw new IllegalArgumentException();
         }
         this.sharedData = sharedData;
         this.stackTree = stackTree;
+        this.threadId = threadId;
+    }
+
+    public int getThreadId() {
+        return threadId;
     }
 
     public void setDfsStackTree(DfsStackTree<IntersectionNode> stackTree) {
@@ -38,7 +44,7 @@ public class DfsThread extends Thread {
             throw new RuntimeException("Initial stack tree node hasn't been initialized yet");
         }
         try {
-            ConcurrentMainDfs dfs = new ConcurrentMainDfs(sharedData, stackTree, getId());
+            ConcurrentMainDfs dfs = new ConcurrentMainDfs(sharedData, stackTree, threadId);
             dfs.dfs(stackTree.getRoot().getItem());
         } catch (Throwable t) {
             printAllStacks(System.err);

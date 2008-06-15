@@ -21,9 +21,9 @@ public abstract class AbstractDfs<R> implements IDfs<R> {
     private R result;
 
     protected final ISharedData sharedData;
-    protected final long threadId;
+    protected final int threadId;
 
-    public AbstractDfs(ISharedData sharedData, Set<IntersectionNode> visited, long threadId) {
+    public AbstractDfs(ISharedData sharedData, Set<IntersectionNode> visited, int threadId) {
         this.sharedData = sharedData;
         this.visited = visited;
         this.threadId = threadId;
