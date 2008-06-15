@@ -21,11 +21,11 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
     private IBuchiAutomata buchiAutomata;
 
     private ConcurrentMap<String, IntersectionNode<S>> nodeMap;
-    private ConcurrentMap<String, Object> lockMap;
+//    private ConcurrentMap<String, Object> lockMap;
 
 //    private Map<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>> nodeMap;
 //    private Map<S, ConcurrentMap<IBuchiNode, Lock>> lockMap;
-    private Collection<? extends Thread> threads;
+    private Collection<? extends DfsThread> threads;
 
     public ConcurrentIntersectionAutomata(IPredicateFactory<S> predicates, IBuchiAutomata buchi,
                                           int entryNumber, int threadNumber) {
@@ -39,16 +39,16 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
         nodeMap = new ConcurrentHashMap<String, IntersectionNode<S>>(
                 CollectionUtils.defaultInitialCapacity(entryNumber),
                 CollectionUtils.DEFAULT_LOAD_FACTOR, threadNumber);
-        lockMap = new ConcurrentHashMap<String, Object>(
-                CollectionUtils.defaultInitialCapacity(entryNumber), 
-                CollectionUtils.DEFAULT_LOAD_FACTOR, threadNumber);
+//        lockMap = new ConcurrentHashMap<String, Object>(
+//                CollectionUtils.defaultInitialCapacity(entryNumber),
+//                CollectionUtils.DEFAULT_LOAD_FACTOR, threadNumber);
 //        nodeMap = new ConcurrentHashMap<S, Map<IBuchiNode, Map<Integer, IntersectionNode<S>>>>(
 //                initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
 //        lockMap = new ConcurrentHashMap<S, ConcurrentMap<IBuchiNode, Lock>>(
 //                initialCapacity, DEFAULT_LOAD_FACTOR, threadNumber);
     }
 
-    public void setThreads(Collection<? extends Thread> threads) {
+    public void setThreads(Collection<? extends DfsThread> threads) {
         if (threads == null || threads.size() != threadNumber) {
             throw new IllegalArgumentException();
         }
@@ -62,23 +62,24 @@ public class ConcurrentIntersectionAutomata<S extends IState> implements IInters
     public IntersectionNode<S> getNode(S state, IBuchiNode node, int acceptSet) {
         String key = getUniqueKey(state, node, acceptSet);
 
-        Object lockObj = lockMap.get(key);
-        if (lockObj == null) {
-            lockMap.putIfAbsent(key, new Object());
-        }
-        lockObj = lockMap.get(key);
+//        Object lockObj = lockMap.get(key);
+//        if (lockObj == null) {
+//            lockMap.putIfAbsent(key, new Object());
+//        }
+//        lockObj = lockMap.get(key);
 
         IntersectionNode<S> res = nodeMap.get(key);
         if (res == null) {
-            synchronized(lockObj) {
-                res = nodeMap.get(key);
-                if (res == null) {
+//            synchronized(lockObj) {
+//                res = nodeMap.get(key);
+//                if (res == null) {
                     res = new IntersectionNode<S>(this, state, node, acceptSet, threads);
-                    nodeMap.put(key, res);
-                }
-            }
+                    nodeMap.putIfAbsent(key, res);
+//                }
+//            }
         }
-        return res;
+//        return res;
+        return nodeMap.get(key);
 
         /*Map<IBuchiNode, Map<Integer, IntersectionNode<S>>> buchiMap = nodeMap.get(state);
         if (buchiMap == null) {

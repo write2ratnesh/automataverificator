@@ -13,6 +13,10 @@ import ru.ifmo.util.concurrent.DfsStackTree;
 import java.util.*;
 
 public class ConcurrentMainDfs implements IDfs<Void> {
+//    private long childVisit = 0;
+//    private int childDepth = 0;
+//    private int maxChildDepth = 0;
+
     private DfsStackTree<IntersectionNode> stackTree;
     //current dfs stack tree node
     private DfsStackTreeNode<IntersectionNode> stackTreeNode;
@@ -20,9 +24,9 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     private final Set<IntersectionNode> visited;
 
     private final ISharedData sharedData;
-    private final long threadId;
+    private final int threadId;
 
-    public ConcurrentMainDfs(ISharedData sharedData, DfsStackTree<IntersectionNode> stackTree, long threadId) {
+    public ConcurrentMainDfs(ISharedData sharedData, DfsStackTree<IntersectionNode> stackTree, int threadId) {
         this.sharedData = sharedData;
         this.visited = sharedData.getVisited();
         this.threadId = threadId;
@@ -31,12 +35,9 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     }
 
     protected boolean leaveNode() {
-//        System.out.println(threadId + " leave node: " + stackTreeNode.getItem());
-
         IntersectionNode node = stackTreeNode.getItem();
         if (stackTreeNode.wasLeft.compareAndSet(false, true)) {
             stackTreeNode.remove();
-//            System.out.println(threadId + " remove node: " + stackTreeNode.getItem());
 
             if (node.isTerminal()) {
                 AbstractDfs<Boolean> dfs2 = new ConcurrentSecondDfs(sharedData, stackTreeNode, threadId);
@@ -49,15 +50,19 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     }
 
     public Void dfs(IntersectionNode node) {
-//        System.out.println(threadId + ": " + stackTreeNode.getItem());
+        if (node != stackTreeNode.getItem()) {
+            throw new IllegalArgumentException();
+        }
+
         visited.add(node);
+        node.addOwner(threadId);
         while (stackTreeNode != null && sharedData.getContraryInstance() == null) {
-            IntersectionNode child = stackTreeNode.getItem().next(0);
+            IntersectionNode child = stackTreeNode.getItem().next(-1);
             if (child != null) {
                 if (!visited.contains(child)) {
                     if (visited.add(child)) {
                         stackTreeNode = stackTree.addChild(stackTreeNode, child);
-//                        System.out.println(threadId + ": " + stackTreeNode.getItem());
+                        stackTreeNode.getItem().addOwner(threadId);
                     }
                 }
             } else {
@@ -65,9 +70,14 @@ public class ConcurrentMainDfs implements IDfs<Void> {
                 if (stackTreeNode.hasChildren()) {
                     for (DfsStackTreeNode<IntersectionNode> childNode: stackTreeNode.getChildren()) {
                         if (!childNode.wasLeft.get()) {
+                            //TODO
+//                            childVisit++;
+//                            childDepth++;
+                            //----------
+
                             flag = false;
                             stackTreeNode = childNode;
-//                            System.out.println(threadId + " child: " + stackTreeNode.getItem());
+                            stackTreeNode.getItem().addOwner(threadId);
                             break;
                         }
                     }
@@ -76,10 +86,17 @@ public class ConcurrentMainDfs implements IDfs<Void> {
                     if (leaveNode()) {
                         break;
                     }
+//                    if (childDepth > 0) {
+//                        maxChildDepth = Math.max(childDepth, maxChildDepth);
+//                        childDepth--;
+//                    }
+                    stackTreeNode.getItem().removeOwner(threadId);
                     stackTreeNode = stackTreeNode.getParent();
                 }
             }
         }
+//        System.out.println("Child visit: " + childVisit);
+//        System.out.println("Child depth: " + maxChildDepth);
         return null;
     }
 }

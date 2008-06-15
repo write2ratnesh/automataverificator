@@ -10,7 +10,7 @@ import ru.ifmo.ltl.buchi.IBuchiNode;
 import ru.ifmo.ltl.buchi.ITransitionCondition;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.verifier.IInterNode;
-import ru.ifmo.util.CollectionUtils;
+import ru.ifmo.verifier.concurrent.DfsThread;
 
 import java.util.*;
 
@@ -29,16 +29,16 @@ public class IntersectionNode<S extends IState>
     private final boolean terminal;
 
     private final NodeIterator iterator;
-    private Map<Long, NodeIterator> threadIterators;
+    private ArrayList<NodeIterator> threadIterators;
 
-//    private Set<IntersectionTransition> transitions = new LinkedHashSet<IntersectionTransition>();
+    private boolean[] owners;
 
     public IntersectionNode(IIntersectionAutomata<S> automata, S state, IBuchiNode node, int acceptSet) {
-        this(automata, state, node, acceptSet, Collections.<Thread>emptyList());
+        this(automata, state, node, acceptSet, Collections.<DfsThread>emptyList());
     }
 
     public IntersectionNode(IIntersectionAutomata<S> automata, S state, IBuchiNode node,
-                            int acceptSet, Collection<? extends Thread> threads) {
+                            int acceptSet, Collection<? extends DfsThread> threads) {
         if (state == null || node == null) {
             throw new IllegalArgumentException();
         }
@@ -58,10 +58,11 @@ public class IntersectionNode<S extends IState>
 
         iterator = new NodeIterator();
 
-        threadIterators = new HashMap<Long, NodeIterator>(CollectionUtils.defaultInitialCapacity(threads.size()));
-        for (Thread t: threads) {
-            threadIterators.put(t.getId(), new NodeIterator());
+        threadIterators = new ArrayList<NodeIterator>(threads.size());
+        for (DfsThread t: threads) {
+            threadIterators.add(new NodeIterator());
         }
+        owners = new boolean[threads.size()];
     }
 
     public IState getState() {
@@ -82,15 +83,22 @@ public class IntersectionNode<S extends IState>
 
     public Collection<IntersectionTransition> getOutcomingTransitions() {
         throw new UnsupportedOperationException("use next() method instead");
-//        return Collections.unmodifiableCollection(transitions);
     }
 
-//    protected void addTransition(IntersectionTransition transition) {
-//        transitions.add(transition);
-//    }
+    public void addOwner(int threadId) {
+        owners[threadId] = true;
+    }
 
-    public IntersectionNode next(long threadId) {
-        if (threadId <= 0) {
+    public void removeOwner(int threadId) {
+        owners[threadId] = false;
+    }
+
+    public boolean isOwner(int threadId) {
+        return owners[threadId];
+    }
+
+    public IntersectionNode next(int threadId) {
+        if (threadId < 0) {
             synchronized (iterator) {
                 return (iterator.hasNext()) ? iterator.next() : null;
             }
@@ -100,8 +108,8 @@ public class IntersectionNode<S extends IState>
         }
     }
 
-    public void resetIterator(long threadId) {
-        if (threadId <= 0) {
+    public void resetIterator(int threadId) {
+        if (threadId < 0) {
             synchronized (iterator) {
                 iterator.reset();
             }

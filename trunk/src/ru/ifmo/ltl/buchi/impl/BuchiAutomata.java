@@ -67,7 +67,7 @@ public class BuchiAutomata implements IBuchiAutomata {
     public String toString() {
         StringBuilder buf = new StringBuilder();
 
-        buf.append("start ");
+        buf.append("initial ");
         buf.append(startNode.getID());
         buf.append("\n");
         for (IBuchiNode n: nodes) {

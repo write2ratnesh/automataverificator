@@ -16,10 +16,10 @@ import java.util.Deque;
  * @author: Kirill Egorov
  */
 public class MainDfs extends AbstractDfs<Deque<IntersectionNode>> {
-    private final long curThreadId;
+    private final int curThreadId;
     
-    public MainDfs(ISharedData sharedData, long curThreadId) {
-        super(sharedData, sharedData.getVisited(), 0);
+    public MainDfs(ISharedData sharedData, int curThreadId) {
+        super(sharedData, sharedData.getVisited(), -1);
         setResult(CollectionUtils.<IntersectionNode>emptyDeque());
         this.curThreadId = curThreadId;
     }

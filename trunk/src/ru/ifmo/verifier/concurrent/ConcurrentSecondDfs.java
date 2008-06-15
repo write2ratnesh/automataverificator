@@ -14,7 +14,7 @@ import java.util.HashSet;
 public class ConcurrentSecondDfs extends AbstractDfs<Boolean> {
     private DfsStackTreeNode<IntersectionNode> mainDfsStack;
 
-    public ConcurrentSecondDfs(ISharedData sharedData, DfsStackTreeNode<IntersectionNode> mainDfsStack,  long threadId) {
+    public ConcurrentSecondDfs(ISharedData sharedData, DfsStackTreeNode<IntersectionNode> mainDfsStack,  int threadId) {
         super(sharedData, new HashSet<IntersectionNode>(), threadId);
         this.mainDfsStack = mainDfsStack;
         setResult(false);
@@ -25,7 +25,7 @@ public class ConcurrentSecondDfs extends AbstractDfs<Boolean> {
     }
 
     protected boolean visitNode(IntersectionNode node) {
-        if (mainDfsStack.getItem() == node) {
+        if (node.isOwner(threadId)) {
             if (sharedData.setContraryInstance(mainDfsStack)) {
                 setResult(true);
 
