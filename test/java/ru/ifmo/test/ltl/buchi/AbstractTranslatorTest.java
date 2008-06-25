@@ -12,7 +12,7 @@ import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.impl.UnimodXmlReader;
+import ru.ifmo.automata.statemashine.io.UnimodXmlReader;
 import ru.ifmo.automata.statemashine.*;
 
 import java.io.IOException;
