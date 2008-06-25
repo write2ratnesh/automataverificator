@@ -5,7 +5,7 @@ package ru.ifmo.test.ltl;
 
 import junit.framework.TestCase;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.impl.UnimodXmlReader;
+import ru.ifmo.automata.statemashine.io.UnimodXmlReader;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.IAutomataContext;
 import ru.ifmo.ltl.grammar.*;

@@ -1,11 +1,13 @@
 /**
  * UnimodXmlReader.java, 02.03.2008
  */
-package ru.ifmo.automata.statemashine.impl;
+package ru.ifmo.automata.statemashine.io;
 
 import ru.ifmo.automata.statemashine.*;
 import ru.ifmo.automata.statemashine.IEvent;
 import ru.ifmo.automata.statemashine.StateType;
+import ru.ifmo.automata.statemashine.impl.*;
+import ru.ifmo.automata.statemashine.io.IAutomataReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -393,5 +395,9 @@ public class UnimodXmlReader implements IAutomataReader {
         }
         IStateMashine<? extends IState> parent = m.getParentStateMashine();
         return (parent != null) ? findEventByName(parent, eventName) : null;
+    }
+
+    public void close() throws IOException {
+        //do nothing
     }
 }

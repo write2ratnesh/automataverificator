@@ -21,7 +21,7 @@ public class State implements IState {
             new ArrayList<IStateTransition>();
     private Set<IStateMashine<? extends IState>> nestedStateMashines = new LinkedHashSet<IStateMashine<? extends IState>>();
 
-    protected State(String name, StateType type, List<IAction> actions) {
+    public State(String name, StateType type, List<IAction> actions) {
         this.name = name;
         this.type = type;
         this.actions = actions;
