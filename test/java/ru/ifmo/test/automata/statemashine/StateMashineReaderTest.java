@@ -5,7 +5,7 @@ package ru.ifmo.test.automata.statemashine;
 
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.io.IAutomataReader;
-import ru.ifmo.automata.statemashine.io.StateMashineXmlReader1;
+import ru.ifmo.automata.statemashine.io.StateMashineReader;
 import ru.ifmo.automata.statemashine.*;
 
 import java.io.IOException;
@@ -15,9 +15,9 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-public class StateMashineXmlReaderTest1 extends TestCase {
+public class StateMashineReaderTest extends TestCase {
      public void testReadRootStateMashine() throws IOException, AutomataFormatException {
-        IAutomataReader reader = new StateMashineXmlReader1("CarA1.xml");
+        IAutomataReader reader = new StateMashineReader("CarA1.xml");
         try {
             IStateMashine<? extends IState> m = reader.readRootStateMashine();
             assertEquals(6, m.getStates().size());
@@ -33,7 +33,7 @@ public class StateMashineXmlReaderTest1 extends TestCase {
     }
 
     public void testReadCtrlObjects() throws IOException, AutomataFormatException {
-        IAutomataReader reader = new StateMashineXmlReader1("CarA1.xml");
+        IAutomataReader reader = new StateMashineReader("CarA1.xml");
         try {
             Map<String, IControlledObject> ctrls = reader.readControlledObjects();
 
@@ -47,7 +47,7 @@ public class StateMashineXmlReaderTest1 extends TestCase {
     }
 
     public void testReadEventProviders1() throws IOException, AutomataFormatException {
-        IAutomataReader reader = new StateMashineXmlReader1("CarA1.xml");
+        IAutomataReader reader = new StateMashineReader("CarA1.xml");
 
 
         Map<String, ? extends IStateMashine<? extends IState>> stateMashines = reader.readStateMashines();
@@ -61,7 +61,7 @@ public class StateMashineXmlReaderTest1 extends TestCase {
     }
 
     public void testReadEventProviders2() throws IOException, AutomataFormatException {
-        IAutomataReader reader = new StateMashineXmlReader1("GameA1.xml");
+        IAutomataReader reader = new StateMashineReader("GameA1.xml");
 
 
         Map<String, ? extends IStateMashine<? extends IState>> stateMashines = reader.readStateMashines();
