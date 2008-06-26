@@ -7,7 +7,6 @@ import ru.ifmo.automata.statemashine.*;
 import ru.ifmo.automata.statemashine.IEvent;
 import ru.ifmo.automata.statemashine.StateType;
 import ru.ifmo.automata.statemashine.impl.*;
-import ru.ifmo.automata.statemashine.io.IAutomataReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,32 +24,14 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import org.apache.commons.lang.StringUtils;
 
+import static ru.ifmo.automata.statemashine.StateMashineUtils.*;
+
 /**
  * Xml unimod model reader
  *
  * @author: Kirill Egorov
  */
 public class UnimodXmlReader implements IAutomataReader {
-
-    private static final String STATE_MASHINE = "stateMachine";
-    private static final String ROOT_STATE_MASHINE = "rootStateMachine";
-    private static final String CTRL_OBJECT = "controlledObject";
-    private static final String EVENT_PROVIDER = "eventProvider";
-    private static final String ASSOCIATION = "association";
-    private static final String STATE = "state";
-    private static final String OUT_ACTION = "outputAction";
-    private static final String TRANSITION = "transition";
-    private static final String STATE_MASHINE_REF = "stateMachineRef";
-    private static final String ATTR_NAME = "name";
-    private static final String ATTR_TYPE = "type";
-    private static final String ATTR_CLASS = "class";
-    private static final String ATTR_TARGET = "targetRef";
-    private static final String ATTR_SOURCE = "sourceRef";
-    private static final String ATTR_ACTION = "ident";
-    private static final String ATTR_EVENT = "event";
-    private static final String ATTR_COND = "guard";
-    private static final String ATTR_SUPPLIER_ROLE = "supplierRole";
-    private static final String ANY_EVENT = "*";
 
     private Document document;
 
@@ -311,7 +292,7 @@ public class UnimodXmlReader implements IAutomataReader {
         State stateSource = m.getState(source);
         State stateTarget = m.getState(target);
 
-        IEvent event = parseEvent(m, eventFullName);
+        IEvent event = StateMashineUtils.parseEvent(m, eventProviders, eventFullName);
         Transition t = new Transition(event, new Condition(condExpr), stateTarget);
 
         NodeList list = e.getElementsByTagName(OUT_ACTION);
@@ -331,70 +312,8 @@ public class UnimodXmlReader implements IAutomataReader {
      */
     private IAction parseAction(StateMashine<State> m, Element node) throws AutomataFormatException {
         String actionFullName = node.getAttribute(ATTR_ACTION);
-        if (!actionFullName.matches(StateMashine.METHOD_PATTERN)) {
-            throw new AutomataFormatException("Wrong output action format: " + actionFullName);
-        }
-        int pointIndx = actionFullName.indexOf('.');
-        String ctrlName = actionFullName.substring(0, pointIndx);
-        String actionName = actionFullName.substring(pointIndx + 1);
-        IControlledObject ctrlObj = m.getControlledObject(ctrlName);
-        if (ctrlObj == null) {
-            throw new AutomataFormatException("Unknown controlled object: "+ ctrlName);
-        }
-        IAction action = ctrlObj.getAction(actionName);
-        if (action == null) {
-            throw new AutomataFormatException("Unknown action name: "+ actionName);
-        }
-        return action;
-    }
-
-    /**
-     * Extract event provider name and event name from eventAttr.
-     * @param m state mashine
-     * @param eventAttr event full qualifier
-     * @return IEvent instance or null if event Attr is blank
-     * @throws AutomataFormatException
-     */
-    private IEvent parseEvent(StateMashine<State> m, String eventAttr) throws AutomataFormatException {
-        String[] a = eventAttr.split("\\.");
-        if (a.length > 2) {
-            throw new AutomataFormatException("Wrong event format: " + eventAttr);
-        }
-        IEvent event;
-        if (a.length == 2) {
-            IEventProvider provider = eventProviders.get(a[0]);
-            if (provider == null) {
-                throw new AutomataFormatException("Unknown event provider: " + a[0]);
-            }
-            event = provider.getEvent(a[1]);
-            if (event == null) {
-                throw new AutomataFormatException("Unknown event name: " + a[1]);
-            }
-        } else if (StringUtils.isNotBlank(eventAttr)) {
-            //try to find event in state mashine's event providers set
-            event = findEventByName(m, eventAttr);
-            if (event != null) {
-                return event;
-            }
-            if (ANY_EVENT.equals(eventAttr)) {
-                return null;    
-            }
-        } else {
-            return null;
-        }
         
-        throw new AutomataFormatException(String.format("Unknown event %s in state mashine %s", eventAttr, m.getName()));
-    }
-
-    private <M extends IStateMashine<? extends IState>> IEvent findEventByName(M m, String eventName) {
-        for (IEventProvider p: m.getEventProviders()) {
-            IEvent event = p.getEvent(eventName);
-            if (event != null) {
-                return event;
-            }
-        }
-        IStateMashine<? extends IState> parent = m.getParentStateMashine();
-        return (parent != null) ? findEventByName(parent, eventName) : null;
+        return StateMashineUtils.extractAction(actionFullName, m);
     }
 
     public void close() throws IOException {
