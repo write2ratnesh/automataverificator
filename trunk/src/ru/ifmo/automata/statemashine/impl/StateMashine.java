@@ -15,7 +15,6 @@ import java.util.regex.Matcher;
  * @author: Kirill Egorov
  */
 public class StateMashine<S extends IState> implements IStateMashine<S> {
-    public static final String METHOD_PATTERN = "\\p{Alpha}\\w*\\.\\p{Alpha}\\w*";
 
     private String name;
     private S initialState;
@@ -194,7 +193,7 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
             return Collections.emptySet();
         }
         Set<String> invocations = new HashSet<String>();
-        Pattern p = Pattern.compile(METHOD_PATTERN);
+        Pattern p = Pattern.compile(StateMashineUtils.METHOD_PATTERN);
         Matcher m = p.matcher(expr);
         while (m.find()) {
             invocations.add(expr.substring(m.start(), m.end()));
