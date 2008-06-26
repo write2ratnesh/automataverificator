@@ -22,7 +22,7 @@ import java.net.URL;
 
 import static ru.ifmo.automata.statemashine.StateMashineUtils.*;
 
-public class StateMashineXmlReader1 implements IAutomataReader {
+public class StateMashineReader implements IAutomataReader {
 
     private StateMashine<State> rootStateMashine;
     private Map<String, StateMashine<State>> stateMashines;
@@ -31,7 +31,7 @@ public class StateMashineXmlReader1 implements IAutomataReader {
 
     private XMLStreamReader reader;
 
-    public StateMashineXmlReader1(String fileLocation) throws IOException {
+    public StateMashineReader(String fileLocation) throws IOException {
         URLClassLoader urlLoader = (URLClassLoader) getClass().getClassLoader();
         URL fileLoc = urlLoader.findResource(fileLocation);
 
@@ -46,7 +46,7 @@ public class StateMashineXmlReader1 implements IAutomataReader {
         }
     }
 
-    public StateMashineXmlReader1(File file) throws IOException {
+    public StateMashineReader(File file) throws IOException {
         try {
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             inputFactory.setProperty(XMLInputFactory.IS_VALIDATING, false);
