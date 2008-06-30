@@ -64,6 +64,9 @@ public class StateMashineUtils {
     public static IEvent parseEvent(IStateMashine<? extends IState> m,
                                     Map<String, IEventProvider> eventProviders,
                                     String eventAttr) throws AutomataFormatException {
+        if (eventAttr == null) {
+            return null;
+        }
         String[] a = eventAttr.split("\\.");
         if (a.length > 2) {
             throw new AutomataFormatException("Wrong event format: " + eventAttr);

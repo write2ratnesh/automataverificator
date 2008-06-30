@@ -12,8 +12,8 @@ import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.io.UnimodXmlReader;
 import ru.ifmo.automata.statemashine.*;
+import ru.ifmo.automata.statemashine.io.StateMashineReader;
 
 import java.io.IOException;
 
@@ -24,7 +24,7 @@ public abstract class AbstractTranslatorTest extends TestCase {
 
     protected void setUp() throws IOException, AutomataFormatException {
         SimplePredicateFactory predicates = new SimplePredicateFactory();
-        IAutomataContext context = new AutomataContext(new UnimodXmlReader("CarA1.xml"));
+        IAutomataContext context = new AutomataContext(new StateMashineReader("CarA1.xml"));
         parser = new LtlParser(context, predicates);
     }
 

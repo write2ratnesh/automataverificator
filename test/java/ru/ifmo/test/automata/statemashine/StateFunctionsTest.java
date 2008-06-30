@@ -4,10 +4,10 @@
 package ru.ifmo.test.automata.statemashine;
 
 import junit.framework.TestCase;
-import ru.ifmo.automata.statemashine.io.UnimodXmlReader;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.StateMashine;
 import ru.ifmo.automata.statemashine.io.IAutomataReader;
+import ru.ifmo.automata.statemashine.io.StateMashineReader;
 import ru.ifmo.automata.statemashine.IControlledObject;
 import ru.ifmo.automata.statemashine.IFunction;
 
@@ -24,7 +24,7 @@ public class StateFunctionsTest extends TestCase {
     private StateMashine m;
 
     protected void setUp() throws IOException, AutomataFormatException {
-        IAutomataReader reader = new UnimodXmlReader("CarA1.xml");
+        IAutomataReader reader = new StateMashineReader("CarA1.xml");
         m = (StateMashine) reader.readRootStateMashine();
         reader.close();
     }
