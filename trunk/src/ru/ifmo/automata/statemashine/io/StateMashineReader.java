@@ -156,21 +156,32 @@ public class StateMashineReader implements IAutomataReader {
         String name = reader.getAttributeValue(null, ATTR_NAME);
         StateMashine<State> sm = getStateMashine(name);
 
-        while (reader.hasNext()) {
+        int startCount = 1;
+        while (startCount > 0) {
             switch (reader.next()) {
                 case XMLStreamConstants.START_ELEMENT:
+                    startCount++;
                     String elementName = reader.getName().toString();
                     if (TRANSITION.equals(elementName)) {
                         parseTransition(sm);
+                        startCount--;
                     } else if (ASSOCIATION.equals(elementName)) {
                         parseCtrlObjAssociation(sm);
                     } else if (STATE.equals(elementName)) {
                         parseStates(sm);
+                        startCount--;
                     }
+                    break;
+                case XMLStreamConstants.END_ELEMENT:
+                    startCount--;
                     break;
                 default:
                     break;
             }
+        }
+
+        if (!STATE_MASHINE.equals(reader.getName().toString())) {
+            throw new AutomataFormatException("Unexpected end tag: " + reader.getName());
         }
     }
 
@@ -225,7 +236,7 @@ public class StateMashineReader implements IAutomataReader {
         while (startCount > 0) {
             switch (reader.next()) {
                 case XMLStreamConstants.START_ELEMENT:
-                    startCount++;
+//                    startCount++;
                     if (STATE.equals(reader.getName().toString())) {
                         parseSingleState(sm);
                     } else {
@@ -263,7 +274,7 @@ public class StateMashineReader implements IAutomataReader {
                         actions.add(StateMashineUtils.extractAction(actionFullName, sm));
                     } else if (STATE_MASHINE_REF.equals(elementName)) {
                         String smName = reader.getAttributeValue(null, ATTR_NAME);
-                        StateMashine<State> nested = stateMashines.get(smName);
+                        StateMashine<State> nested = getStateMashine(smName);
                         state.addNestedStateMashine(nested);
                         nested.setParent(sm, state);
                         sm.addNestedStateMashine(nested);

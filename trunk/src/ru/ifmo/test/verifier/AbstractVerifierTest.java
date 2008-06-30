@@ -11,7 +11,7 @@ import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.io.UnimodXmlReader;
+import ru.ifmo.automata.statemashine.io.StateMashineReader;
 import ru.ifmo.automata.statemashine.IAutomataContext;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IStateMashine;
@@ -39,7 +39,7 @@ public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
 
     protected void setUp() throws IOException, AutomataFormatException {
         predicates = createPredicateUtils();
-        IAutomataContext context = new AutomataContext(new UnimodXmlReader(xmlFileName));
+        IAutomataContext context = new AutomataContext(new StateMashineReader(xmlFileName));
         ILtlParser parser = new LtlParser(context, predicates);
         verifier = createVerifier(context.getStateMashine(stateMashineName), parser);
     }

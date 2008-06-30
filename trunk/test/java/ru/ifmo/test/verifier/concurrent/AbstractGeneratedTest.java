@@ -20,10 +20,10 @@ import ru.ifmo.verifier.concurrent.MultiThreadVerifier;
 import ru.ifmo.verifier.impl.SimpleVerifier;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.io.UnimodXmlReader;
 import ru.ifmo.automata.statemashine.IAutomataContext;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.io.StateMashineReader;
 
 import java.util.List;
 import java.io.IOException;
@@ -50,7 +50,7 @@ public abstract class AbstractGeneratedTest extends TestCase {
     protected void initSimpleVerifier(String xmlFileName, String stateMashineName) throws IOException, AutomataFormatException {
         predicates = new PredicateFactory<IState>();
 
-        context = new AutomataContext(new UnimodXmlReader(xmlFileName));
+        context = new AutomataContext(new StateMashineReader(xmlFileName));
         parser = new LtlParser(context, predicates);
 
         IStateMashine<? extends IState> stateMashine = context.getStateMashine(stateMashineName);
@@ -63,7 +63,7 @@ public abstract class AbstractGeneratedTest extends TestCase {
     protected void initMultiThreadVerifier(String xmlFileName, String stateMashineName) throws IOException, AutomataFormatException {
         predicatesMultiThread = new MultiThreadPredicateFactory<IState>(new PredicateFactory<IState>());
 
-        context = new AutomataContext(new UnimodXmlReader(xmlFileName));
+        context = new AutomataContext(new StateMashineReader(xmlFileName));
         parserMultiThread = new LtlParser(context, predicatesMultiThread);
 
         IStateMashine<? extends IState> stateMashine = context.getStateMashine(stateMashineName);
