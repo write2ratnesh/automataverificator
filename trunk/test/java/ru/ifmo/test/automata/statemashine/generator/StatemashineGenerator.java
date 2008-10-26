@@ -15,7 +15,7 @@ import java.io.IOException;
 public class StatemashineGenerator {
 
     public static void main(String[] args) throws IOException {
-        final int transitionCount = 30000;
+        final int transitionCount = 1000;
         StatemashineContext context = new StatemashineContext(TestEventProvider.class, TestControlledObject.class);
 
         State curState = context.getInitState();
