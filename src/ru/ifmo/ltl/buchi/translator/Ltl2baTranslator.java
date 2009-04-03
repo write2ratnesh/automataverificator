@@ -12,19 +12,43 @@ import ru.ifmo.ltl.grammar.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.io.File;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ognl.OgnlException;
 
+/**
+ * Ltl formula to automata Buchi translator.
+ * Used Runtime.exec() to call Ltl2ba. Than parse result to construct automata Buchi.
+ * <br>Visit <a href="http://www.lsv.ens-cachan.fr/~gastin/ltl2ba/index.php">LTL2BA site</a>
+ * for more information about this library.
+ */
 public class Ltl2baTranslator implements ITranslator {
-    private static final String PATH = "bin/ltl2ba.exe";
+    private static final String PATH_WIN = "bin" + File.separator + "ltl2ba.exe";
+    private static final String PATH_LINUX = "bin" + File.separator + "ltl2ba";
     private static final String ACCEPT_ALL = "accept_all";
     private static final String GOTO = "-> goto";
 
     private ExpressionMap expr = new ExpressionMap();
     private VisitorImpl visitor = new VisitorImpl();
+
+    private final String execPath;
+
+    public Ltl2baTranslator() {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            execPath = PATH_WIN;
+        } else if (System.getProperty("os.name").startsWith("Linux")) {
+            execPath = PATH_LINUX;
+        } else {
+            throw new RuntimeException("Unsupported OS");
+        }
+    }
+
+    public Ltl2baTranslator(String execPath) {
+        this.execPath = execPath;
+    }
 
     public IBuchiAutomata translate(LtlNode root) {
         try {
@@ -166,7 +190,7 @@ public class Ltl2baTranslator implements ITranslator {
     }
 
     public String executeLlt2ba(String formula) throws IOException, InterruptedException {
-        Process proc = Runtime.getRuntime().exec(PATH + " -f \"" + formula + "\"");
+        Process proc = Runtime.getRuntime().exec(execPath + " -f \"" + formula + "\"");
         StreamReader reader = new StreamReader(proc.getInputStream());
 
         reader.start();
