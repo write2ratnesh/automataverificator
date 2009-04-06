@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public enum TransitionGenerator {
 
