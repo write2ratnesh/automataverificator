@@ -15,7 +15,7 @@ import java.util.HashMap;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class OgnlSimpleTest extends TestCase {
 

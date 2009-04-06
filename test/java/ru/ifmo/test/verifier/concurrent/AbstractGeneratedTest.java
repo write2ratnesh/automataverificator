@@ -33,7 +33,7 @@ import junit.framework.TestCase;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public abstract class AbstractGeneratedTest extends TestCase {
     private IAutomataContext context;

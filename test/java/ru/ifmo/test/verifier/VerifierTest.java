@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Verify A1 automate of CarModel1
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class VerifierTest extends AbstractSingleAutomataVerifierTest {
 

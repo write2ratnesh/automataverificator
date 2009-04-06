@@ -8,7 +8,7 @@ import java.io.*;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class StatemashineWriter {
     private static final String START = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><!DOCTYPE model PUBLIC \"-//eVelopers Corp.//DTD State machine model V1.0//EN\" \"http://www.evelopers.com/dtd/unimod/statemachine.dtd\">\n" +

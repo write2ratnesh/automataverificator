@@ -10,7 +10,7 @@ import com.evelopers.common.exception.CommonException;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class TestEventProvider implements EventProvider {
 

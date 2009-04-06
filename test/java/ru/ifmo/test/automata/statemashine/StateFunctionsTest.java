@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * test function state's list
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class StateFunctionsTest extends TestCase {
 

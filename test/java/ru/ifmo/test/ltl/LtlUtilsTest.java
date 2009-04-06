@@ -19,7 +19,7 @@ import java.io.IOException;
 /**
  * Test LtlUtils
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class LtlUtilsTest extends TestCase {
 

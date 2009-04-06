@@ -18,7 +18,7 @@ import java.util.Set;
 /**
  * Test unimod model reader
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class UnimodXmlReaderTest extends TestCase {
 
