@@ -12,7 +12,7 @@ import ru.ifmo.ltl.grammar.LtlNode;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-public class Ltl2baTranslatorTest extends AbstractTranslatorTest {
+public class Ltl2baTranslatorTest extends AbstractLtl2baTranslatorTest {
 
     public void testGetFormula1() throws LtlParseException {
         Ltl2baTranslator translator = new Ltl2baTranslator();
@@ -53,59 +53,7 @@ public class Ltl2baTranslatorTest extends AbstractTranslatorTest {
         System.out.println(res);
     }
 
-    public void testTranslateU() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("U(p1(), p2())");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateR() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("R(p1(), p2())");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateF() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("F(p1())");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateG() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("G(p1())");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateX() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("X(p1())");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateAnd() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("p1() && p2()");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateNeg() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("!p1()");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateNeg2() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("U(!p1(), p2())");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateTrue() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("true");
-        System.out.println(buchi);
-    }
-
-    public void testTranslateOr() throws IOException, InterruptedException, LtlParseException {
-        IBuchiAutomata buchi = extractBuchi("p1() || p2()");
-        System.out.println(buchi);
-    }
-
-    protected IBuchiAutomata extractBuchi(String expr) throws LtlParseException {
-        LtlNode t = parser.parse(expr);
-        ITranslator translator = new Ltl2baTranslator();
-        return translator.translate(t);
+    protected ITranslator getTranslator() {
+        return new Ltl2baTranslator();
     }
 }

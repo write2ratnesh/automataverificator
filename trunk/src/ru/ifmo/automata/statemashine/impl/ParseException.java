@@ -6,7 +6,7 @@ package ru.ifmo.automata.statemashine.impl;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class ParseException extends RuntimeException {
 

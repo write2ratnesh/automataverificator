@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Shared data for all simultaneous threads
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class SharedData implements ISharedData {
 

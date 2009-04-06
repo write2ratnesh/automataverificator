@@ -26,7 +26,7 @@ import org.apache.commons.lang.NotImplementedException;
 /**
  * Convert from Ognl tree to LtlNode tree
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class GrammarConverter {
 

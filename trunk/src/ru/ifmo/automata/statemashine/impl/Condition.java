@@ -11,7 +11,7 @@ import ognl.OgnlException;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class Condition implements ICondition {
     private String expr;

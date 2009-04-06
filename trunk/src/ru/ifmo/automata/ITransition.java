@@ -6,7 +6,7 @@ package ru.ifmo.automata;
 /**
  * Transition between sourse node and target
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface ITransition<N extends INode> {
 

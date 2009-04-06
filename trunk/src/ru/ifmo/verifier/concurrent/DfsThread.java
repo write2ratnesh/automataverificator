@@ -13,7 +13,7 @@ import java.io.PrintStream;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class DfsThread extends Thread {
 

@@ -12,6 +12,7 @@ import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.translator.Ltl2baTranslator;
+import ru.ifmo.ltl.buchi.translator.JLtl2baTranslator;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
 import ru.ifmo.ltl.grammar.LtlNode;
@@ -28,7 +29,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
     private int stateCount;
     private S initState;
     private ILtlParser parser;
-    private ITranslator translator = new Ltl2baTranslator();
+    private ITranslator translator = new JLtl2baTranslator();
 
     /**
      * Create MultiTreadVerifier that verify automata with <code>initState</code>
@@ -60,7 +61,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
      * @param stateCount state mashine states count
      */
     public MultiThreadVerifier(S initState, ILtlParser parser, int stateCount) {
-        this(initState, parser, new Ltl2baTranslator(), stateCount, 0);
+        this(initState, parser, new JLtl2baTranslator(), stateCount, 0);
     }
 
     public MultiThreadVerifier(S initState, ILtlParser parser, ITranslator translator, int stateCount) {
@@ -68,7 +69,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
     }
 
     public MultiThreadVerifier(S initState, ILtlParser parser, int stateCount, int threadNumber) {
-        this(initState, parser, new Ltl2baTranslator(), stateCount, threadNumber);
+        this(initState, parser, new JLtl2baTranslator(), stateCount, threadNumber);
     }
 
     /**

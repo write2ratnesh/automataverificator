@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class CollectionUtils {
     /**

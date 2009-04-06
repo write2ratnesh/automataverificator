@@ -8,7 +8,7 @@ import ru.ifmo.ltl.grammar.LtlNode;
 /**
  * Translate from LTL into buchi automata.
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface ITranslator {
 

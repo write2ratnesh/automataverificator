@@ -12,7 +12,7 @@ import java.util.Collection;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface ITreeNode<S extends IState> {
     S getState();

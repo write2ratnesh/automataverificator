@@ -15,7 +15,7 @@ import java.io.Closeable;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IAutomataReader extends Closeable {
 

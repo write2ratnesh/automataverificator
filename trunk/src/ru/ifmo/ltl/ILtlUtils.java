@@ -8,7 +8,7 @@ import ru.ifmo.ltl.grammar.LtlNode;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface ILtlUtils {
 

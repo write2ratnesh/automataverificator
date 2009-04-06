@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class Predicate extends LtlNode implements IExpression<Boolean> {
     protected Object[] args;

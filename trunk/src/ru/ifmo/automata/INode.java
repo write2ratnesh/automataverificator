@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * The automata node
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface INode<T extends ITransition> {
 

@@ -6,7 +6,7 @@ package ru.ifmo.automata.statemashine;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IEvent {
 

@@ -12,7 +12,7 @@ import ru.ifmo.verifier.automata.tree.ITreeNode;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IComplexStateFactory<S extends IState> {
 

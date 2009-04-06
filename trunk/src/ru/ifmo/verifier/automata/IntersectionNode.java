@@ -17,7 +17,7 @@ import java.util.*;
 /**
  * Node received during state mashine and buchi automata intersection
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class IntersectionNode<S extends IState>
         implements INode<IntersectionTransition>, IInterNode {

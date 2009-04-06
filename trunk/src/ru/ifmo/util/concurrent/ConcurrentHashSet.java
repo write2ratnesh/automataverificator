@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class ConcurrentHashSet<E> extends AbstractSet<E> {
     private ConcurrentHashMap<E, Object> map;

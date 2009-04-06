@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * IState implementation
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class State implements IState {
     private String name;

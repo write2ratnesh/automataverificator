@@ -11,7 +11,7 @@ import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class ComplexPredicateFactory extends PredicateFactory<ComplexState> {
 

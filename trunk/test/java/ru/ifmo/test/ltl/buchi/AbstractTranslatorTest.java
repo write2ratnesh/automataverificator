@@ -7,9 +7,11 @@ import junit.framework.TestCase;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
+import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
+import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
 import ru.ifmo.automata.statemashine.*;
@@ -28,7 +30,13 @@ public abstract class AbstractTranslatorTest extends TestCase {
         parser = new LtlParser(context, predicates);
     }
 
-    protected abstract IBuchiAutomata extractBuchi(String expr) throws LtlParseException;
+    protected abstract ITranslator getTranslator();
+
+    protected IBuchiAutomata extractBuchi(String expr) throws LtlParseException {
+        LtlNode t = parser.parse(expr);
+        ITranslator translator = getTranslator();
+        return translator.translate(t);
+    }
 
     private class SimplePredicateFactory implements IPredicateFactory<IState> {
         @Predicate
@@ -39,6 +47,16 @@ public abstract class AbstractTranslatorTest extends TestCase {
         @Predicate
         public boolean p2() {
             return false;
+        }
+
+        @Predicate
+        public boolean p3() {
+            return true;
+        }
+
+        @Predicate
+        public boolean p4() {
+            return true;
         }
 
         public void setAutomataState(IState state, IStateTransition transition) {

@@ -6,7 +6,7 @@ package ru.ifmo.ltl.buchi.translator;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class IllegalFormulaException extends RuntimeException {
 

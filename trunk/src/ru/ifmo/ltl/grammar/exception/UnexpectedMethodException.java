@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class UnexpectedMethodException extends RuntimeException {
 

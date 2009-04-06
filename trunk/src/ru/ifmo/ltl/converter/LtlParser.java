@@ -15,7 +15,7 @@ import ognl.OgnlException;
 /**
  * The ILtlparser implementation that use Ognl library
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class LtlParser implements ILtlParser {
 

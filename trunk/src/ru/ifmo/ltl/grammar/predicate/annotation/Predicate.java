@@ -11,7 +11,7 @@ import java.lang.annotation.ElementType;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

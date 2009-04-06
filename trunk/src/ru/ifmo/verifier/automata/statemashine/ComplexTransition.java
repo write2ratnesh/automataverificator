@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * The transition from ComplexState to ComplexState
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class ComplexTransition implements IStateTransition {
     private IStateTransition transition;

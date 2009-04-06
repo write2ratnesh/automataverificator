@@ -13,7 +13,7 @@ import java.lang.reflect.Modifier;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class EventProvider implements IEventProvider {
     private String name;
