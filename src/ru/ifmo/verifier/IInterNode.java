@@ -9,7 +9,7 @@ import ru.ifmo.ltl.buchi.IBuchiNode;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IInterNode {
 

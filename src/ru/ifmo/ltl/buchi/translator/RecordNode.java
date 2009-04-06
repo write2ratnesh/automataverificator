@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class RecordNode {
     Set<RecordNode> incoming;

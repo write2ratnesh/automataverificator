@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public abstract class AbstractDfs<R> implements IDfs<R> {
     private final Deque<IntersectionNode> stack = new DequeSet<IntersectionNode>();

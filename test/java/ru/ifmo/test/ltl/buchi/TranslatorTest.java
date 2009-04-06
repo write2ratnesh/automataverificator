@@ -9,14 +9,13 @@ import ru.ifmo.ltl.buchi.ITransitionCondition;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
 import ru.ifmo.ltl.LtlParseException;
-import ru.ifmo.ltl.grammar.LtlNode;
 
 import java.util.Map;
 
 /**
  * Test translatin from ltl to buchi
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class TranslatorTest extends AbstractTranslatorTest {
 
@@ -92,9 +91,7 @@ public class TranslatorTest extends AbstractTranslatorTest {
         assertEquals(4, transitons.size());
     }
 
-    protected IBuchiAutomata extractBuchi(String expr) throws LtlParseException {
-        LtlNode t = parser.parse(expr);
-        ITranslator translator = new SimpleTranslator();
-        return translator.translate(t);
+    protected ITranslator getTranslator() {
+        return new SimpleTranslator();
     }
 }

@@ -14,7 +14,7 @@ import org.apache.commons.lang.BooleanUtils;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class TransitionCondition implements ITransitionCondition {
     private Set<IExpression<Boolean>> exprs;

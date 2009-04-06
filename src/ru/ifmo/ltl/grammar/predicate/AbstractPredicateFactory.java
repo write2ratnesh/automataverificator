@@ -10,7 +10,7 @@ import ru.ifmo.automata.statemashine.IStateTransition;
  * Predicate provider.
  * Use @Predicate annotation, to mark method as predicate;
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public abstract class AbstractPredicateFactory<S extends IState> implements IPredicateFactory<S>, Cloneable {
 

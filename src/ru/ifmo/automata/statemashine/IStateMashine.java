@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * State mashine
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IStateMashine<S extends IState> {
 

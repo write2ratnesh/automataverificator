@@ -29,7 +29,7 @@ import static ru.ifmo.automata.statemashine.StateMashineUtils.*;
 /**
  * Xml unimod model reader
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class UnimodXmlReader implements IAutomataReader {
 

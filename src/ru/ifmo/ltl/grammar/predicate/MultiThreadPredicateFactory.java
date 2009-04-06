@@ -15,7 +15,7 @@ import java.util.Map;
  * For each thread different instance of AbstractPredicateFactory is used.
  * Call {@link #init(java.util.Collection)} before predicates invocations.
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class MultiThreadPredicateFactory<S extends IState> implements IPredicateFactory<S> {
     private AbstractPredicateFactory<S> predicates;

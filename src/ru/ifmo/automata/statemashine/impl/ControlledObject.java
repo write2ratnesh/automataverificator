@@ -15,7 +15,7 @@ import com.evelopers.unimod.runtime.context.StateMachineContext;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class ControlledObject implements IControlledObject {
     private String name;

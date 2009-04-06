@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringUtils;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class Event implements IEvent {
     private String name;

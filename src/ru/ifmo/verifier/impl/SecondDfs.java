@@ -14,7 +14,7 @@ import java.util.HashSet;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class SecondDfs extends AbstractDfs<Boolean> {
     private Deque<IntersectionNode> mainDfsStack;

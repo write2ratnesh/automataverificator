@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Transition between two states (between source and target)
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IStateTransition extends ITransition<IState> {
 

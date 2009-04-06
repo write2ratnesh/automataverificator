@@ -12,7 +12,7 @@ import java.util.Iterator;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class StateTree<S extends IState> implements ITree<S> {
 

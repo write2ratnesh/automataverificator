@@ -13,7 +13,7 @@ import java.util.Deque;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class MainDfs extends AbstractDfs<Deque<IntersectionNode>> {
     private final int curThreadId;

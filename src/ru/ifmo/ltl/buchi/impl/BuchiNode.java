@@ -13,7 +13,7 @@ import java.util.HashMap;
 /**
  * A Buchi automata node implementation
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class BuchiNode implements IBuchiNode {
     private int id;

@@ -16,7 +16,7 @@ import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public abstract class AbstractSingleAutomataVerifierTest extends AbstractVerifierTest<IState> {
     protected AbstractSingleAutomataVerifierTest(String xmlFileName, String stateMashineName) {

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * The IStateTransition implementation
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class Transition implements IStateTransition {
     private IEvent event;

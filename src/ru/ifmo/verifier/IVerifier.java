@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IVerifier<S extends IState> {
 

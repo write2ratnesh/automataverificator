@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * The state mashine state
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IState extends INode<IStateTransition> {
 

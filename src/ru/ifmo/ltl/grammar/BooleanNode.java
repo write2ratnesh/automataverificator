@@ -6,7 +6,7 @@ package ru.ifmo.ltl.grammar;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class BooleanNode extends LtlNode implements IExpression<Boolean> {
     public static final BooleanNode TRUE = new BooleanNode("true");

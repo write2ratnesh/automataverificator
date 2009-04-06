@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 /**
  * The IStateMashine implementation
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class StateMashine<S extends IState> implements IStateMashine<S> {
 

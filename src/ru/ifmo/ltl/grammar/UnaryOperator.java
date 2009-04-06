@@ -6,7 +6,7 @@ package ru.ifmo.ltl.grammar;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class UnaryOperator extends Operator<UnaryOperatorType> {
 

@@ -9,7 +9,7 @@ import ru.ifmo.automata.statemashine.IStateMashine;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface ITree<S extends IState> {
 

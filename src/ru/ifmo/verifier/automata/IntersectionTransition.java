@@ -8,7 +8,7 @@ import ru.ifmo.automata.ITransition;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class IntersectionTransition implements ITransition<IntersectionNode> {
 

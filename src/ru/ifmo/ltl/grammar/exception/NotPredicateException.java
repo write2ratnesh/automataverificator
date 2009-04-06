@@ -6,7 +6,7 @@ package ru.ifmo.ltl.grammar.exception;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class NotPredicateException extends RuntimeException {
 

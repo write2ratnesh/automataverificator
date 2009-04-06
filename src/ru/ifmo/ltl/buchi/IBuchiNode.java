@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public interface IBuchiNode {
 

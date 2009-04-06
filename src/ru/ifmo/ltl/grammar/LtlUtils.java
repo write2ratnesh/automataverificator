@@ -9,7 +9,7 @@ import org.apache.commons.lang.NotImplementedException;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class LtlUtils implements ILtlUtils {
     private static LtlUtils instance;

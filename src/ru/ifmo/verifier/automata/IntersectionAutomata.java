@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class IntersectionAutomata<S extends IState> implements IIntersectionAutomata<S> {
 

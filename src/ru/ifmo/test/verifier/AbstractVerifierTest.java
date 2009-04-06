@@ -22,7 +22,7 @@ import java.io.IOException;
 /**
  * Abstract verifier test
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
     protected final String xmlFileName;

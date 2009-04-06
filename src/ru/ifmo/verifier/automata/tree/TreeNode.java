@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class TreeNode<S extends IState> implements ITreeNode<S> {
     private S state;
