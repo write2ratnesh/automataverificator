@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * Compare one thread verifier and multi thread
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class CompareTest extends AbstractCompareTest {
 

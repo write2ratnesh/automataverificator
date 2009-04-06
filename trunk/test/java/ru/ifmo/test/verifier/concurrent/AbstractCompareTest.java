@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public abstract class AbstractCompareTest extends TestCase {
     private IAutomataContext context;

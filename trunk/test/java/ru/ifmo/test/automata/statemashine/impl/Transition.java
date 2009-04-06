@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * TODO: add comment
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class Transition {
     private String event;

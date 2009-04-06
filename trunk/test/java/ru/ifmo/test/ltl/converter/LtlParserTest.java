@@ -22,7 +22,7 @@ import java.io.IOException;
 /**
  * Test LtlParser
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class LtlParserTest extends TestCase {
 

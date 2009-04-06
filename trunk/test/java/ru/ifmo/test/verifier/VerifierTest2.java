@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Verify A3 automata of GameModel
  *
- * @author: Kirill Egorov
+ * @author Kirill Egorov
  */
 public class VerifierTest2 extends AbstractSingleAutomataVerifierTest {
 
