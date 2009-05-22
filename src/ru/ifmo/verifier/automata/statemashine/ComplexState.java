@@ -122,8 +122,9 @@ public class ComplexState<S extends IState> implements IState {
 
     private ComplexTransition createTransition(ITreeNode<S> node, IStateTransition trans) {
         ITree<S> nextStateTree = new StateTree<S>(tree, node, trans);
-        ComplexState<S> nextState = factory.getState(nextStateTree);
-        
+        ComplexState<S> nextState = (trans.getTarget() == node.getState())
+                ? this : factory.getState(nextStateTree);
+
         return new ComplexTransition(trans, nextState);
     }
 
