@@ -31,17 +31,17 @@ public class Event implements IEvent {
         return description;
     }
 
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Action)) return false;
-//
-//        Event event = (Event) o;
-//
-//        return StringUtils.equals(name, event.name);
-//    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Action)) return false;
+
+        Event event = (Event) o;
+
+        return name.equals(event.name);
+    }
 
     public int hashCode() {
-        return (name != null) ? name.hashCode() : 0;
+        return name.hashCode();
     }
 
     public String toString() {

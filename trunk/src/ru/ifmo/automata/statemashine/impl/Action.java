@@ -31,17 +31,17 @@ public class Action implements IAction {
         return description;
     }
 
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Action)) return false;
-//
-//        Action action = (Action) o;
-//
-//        return StringUtils.equals(name, action.name);
-//    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Action)) return false;
+
+        Action action = (Action) o;
+
+        return name.equals(action.name);
+    }
 
     public int hashCode() {
-        return (name != null) ? name.hashCode() : 0;
+        return name.hashCode();
     }
 
     public String toString() {
