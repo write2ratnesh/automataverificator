@@ -22,6 +22,9 @@ public class AutomataContext implements IAutomataContext {
     private Map<String, IStateMashine<? extends IState>> stateMashines
             = new HashMap<String, IStateMashine<? extends IState>>();
 
+    public AutomataContext() {
+    }
+
     /**
      * Create new automata context instance and close <code>reader</code>.
      * @param reader

@@ -29,7 +29,7 @@ public class JLtl2baTranslator implements ITranslator {
     private VisitorImpl visitor = new VisitorImpl();
     private IFormulaFactory factory;
     private BuchiConverter  buchiConverter = new BuchiConverter();
-     private ExpressionMap expr = new ExpressionMap();
+    private ExpressionMap expr = new ExpressionMap();
 
     public IBuchiAutomata translate(LtlNode root) {
         try {

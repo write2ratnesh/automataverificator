@@ -12,6 +12,7 @@ import ru.ifmo.automata.statemashine.IStateMashine;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.grammar.predicate.ComplexPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
+import ru.ifmo.ltl.buchi.translator.JLtl2baTranslator;
 
 /**
  * TODO: add comment
@@ -25,7 +26,7 @@ public abstract class AbstractAutomataHierarhyVerifierTest extends AbstractVerif
     }
 
     protected IVerifier<ComplexState> createVerifier(IStateMashine<? extends IState> stateMashine, ILtlParser parser) {
-        return new SimpleVerifier<ComplexState>(ComplexStateFactory.createInitialState(stateMashine), parser);
+        return new SimpleVerifier<ComplexState>(ComplexStateFactory.createInitialState(stateMashine), parser, new JLtl2baTranslator());
     }
 
     protected IPredicateFactory<ComplexState> createPredicateUtils() {

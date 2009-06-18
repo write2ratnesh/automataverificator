@@ -37,7 +37,7 @@ public class SecondDfs extends AbstractDfs<Boolean> {
             setResult(true);
 
             //TODO: delete stack print  ------------------------
-            synchronized (System.out) {
+            /*synchronized (System.out) {
                 if (getStack().isEmpty()) {
                     System.out.println("Stack is empty");
                 } else {
@@ -55,7 +55,7 @@ public class SecondDfs extends AbstractDfs<Boolean> {
                     System.out.print("-->" + tmp);
                 }
                 System.out.println("-->" + node);
-            }
+            }*/
             //--------------------------------------------------
             return true;
         }
