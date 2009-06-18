@@ -23,7 +23,7 @@ import ru.ifmo.ltl.converter.ILtlParser;
 import java.util.*;
 
 /**
- * TODO: add comment
+ * Simple IVerifier implementation. Use one thread and can't be used cuncurrently.
  *
  * @author Kirill Egorov
  */
@@ -33,21 +33,13 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
     private ITranslator translator;
 
     public SimpleVerifier(S initState) {
-        this(initState, null);
+        this(initState, null, null);
 
-    }
-
-    public SimpleVerifier(S initState, ILtlParser parser) {
-//        this(initState, parser, new SimpleTranslator());
-        this(initState, parser, new JLtl2baTranslator());
     }
 
     public SimpleVerifier(S initState, ILtlParser parser, ITranslator translator) {
         if (initState == null) {
             throw new IllegalArgumentException("stateMashine can't be null");
-        }
-        if (translator == null) {
-            throw new IllegalArgumentException("translator can't be null");
         }
 
         this.initState = initState;
@@ -59,9 +51,17 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
         this.parser = parser;
     }
 
+    public void setTranslator(ITranslator translator) {
+        this.translator = translator;
+    }
+
     public List<IInterNode> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException {
         if (parser == null) {
             throw new UnsupportedOperationException("Can't verify LTL formula without LTL parser."
+                    + "Define it first or use List<IStateTransition> verify(IBuchiAutomata buchi) method instead");
+        }
+        if (translator == null) {
+            throw new UnsupportedOperationException("Can't verify LTL formula without LTL translator."
                     + "Define it first or use List<IStateTransition> verify(IBuchiAutomata buchi) method instead");
         }
         LtlNode ltl = parser.parse(ltlFormula);
