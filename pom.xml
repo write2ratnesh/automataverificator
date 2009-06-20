@@ -69,7 +69,7 @@
             <artifactId>unimod-stub</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${lib.path}/unimod/unimod-stub.jar</systemPath>
+            <systemPath>${lib.path}/unimod-stub.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.evelopers</groupId>
