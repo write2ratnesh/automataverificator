@@ -1,0 +1,31 @@
+/**
+ * ITreeNode.java, 27.04.2008
+ */
+package ru.ifmo.verifier.automata.tree;
+
+import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IState;
+
+import java.util.List;
+import java.util.Collection;
+
+/**
+ * TODO: add comment
+ *
+ * @author Kirill Egorov
+ */
+public interface ITreeNode<S extends IState> {
+    S getState();
+
+    IStateMashine<S> getStateMashine();
+
+    boolean isActive();
+
+    /**
+     * Get modifiable set of children
+     * @return set of children nodes
+     */
+    Collection<ITreeNode<S>> getChildren();
+
+    ITreeNode<S> getChild(IStateMashine<S> stateMashine);
+}
