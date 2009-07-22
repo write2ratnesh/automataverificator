@@ -4,13 +4,12 @@
 package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.util.concurrent.DfsStackTreeNode;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -34,8 +33,8 @@ public class SharedData implements ISharedData {
      * Thread checked not emptytness of automatas intersection,
      * write his cotrary instance stack and other threads can terminate their execution.
      */
-    private AtomicReference<DfsStackTreeNode<IntersectionNode>> contraryInstance =
-            new AtomicReference<DfsStackTreeNode<IntersectionNode>>();
+    private AtomicReference<DfsStackTreeNode<IIntersectionTransition>> contraryInstance =
+            new AtomicReference<DfsStackTreeNode<IIntersectionTransition>>();
 
     /**
      * Visited nodes. Sould be concurrent or synchronized set when is used sumultaneusly.
@@ -50,11 +49,11 @@ public class SharedData implements ISharedData {
         this.threadNumber = threadNumber;
     }
 
-    public DfsStackTreeNode<IntersectionNode> getContraryInstance() {
+    public DfsStackTreeNode<IIntersectionTransition> getContraryInstance() {
         return contraryInstance.get();
     }
 
-    public boolean setContraryInstance(DfsStackTreeNode<IntersectionNode> contraryInstance) {
+    public boolean setContraryInstance(DfsStackTreeNode<IIntersectionTransition> contraryInstance) {
         return this.contraryInstance.compareAndSet(null, contraryInstance);
     }
 

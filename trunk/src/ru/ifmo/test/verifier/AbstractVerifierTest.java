@@ -4,8 +4,8 @@
 package ru.ifmo.test.verifier;
 
 import junit.framework.TestCase;
-import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.IVerifier;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
@@ -48,7 +48,7 @@ public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
 
     protected abstract IPredicateFactory<S> createPredicateUtils();
 
-    protected void printStack(List<IInterNode> stack) {
+    protected void printStack(List<IIntersectionTransition> stack) {
         if (stack.isEmpty()) {
             System.out.println("Stack is empty");
         } else {
@@ -56,8 +56,8 @@ public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
         }
         final int MAX_LEN = 80;
         int len = 0;
-        for (IInterNode node: stack) {
-            String tmp = node.toString();
+        for (IIntersectionTransition trans: stack) {
+            String tmp = trans.getTarget().toString();
             len += tmp.length();
             if (len > MAX_LEN) {
                 len = tmp.length();

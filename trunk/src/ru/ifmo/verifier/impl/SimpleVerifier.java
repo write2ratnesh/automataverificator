@@ -9,11 +9,10 @@ import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.verifier.concurrent.SharedData;
 import ru.ifmo.verifier.automata.IntersectionAutomata;
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.ITranslator;
-import ru.ifmo.ltl.buchi.translator.Ltl2baTranslator;
-import ru.ifmo.ltl.buchi.translator.JLtl2baTranslator;
 import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.ltl.grammar.LtlUtils;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
@@ -55,7 +54,7 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
         this.translator = translator;
     }
 
-    public List<IInterNode> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException {
+    public List<IIntersectionTransition> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException {
         if (parser == null) {
             throw new UnsupportedOperationException("Can't verify LTL formula without LTL parser."
                     + "Define it first or use List<IStateTransition> verify(IBuchiAutomata buchi) method instead");
@@ -76,15 +75,15 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
         return verify(buchi, predicates);
     }
 
-    public List<IInterNode> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
+    public List<IIntersectionTransition> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
         IntersectionAutomata<S> automata = new IntersectionAutomata<S>(predicates, buchi);
         IntersectionNode initial = automata.getNode(initState, buchi.getStartNode(), 0);
         ISharedData sharedData = new SharedData(new HashSet<IntersectionNode>(), 0);
-        Deque<? extends IInterNode> stack = new MainDfs(sharedData, -1).dfs(initial);
+        Deque<IIntersectionTransition> stack = new MainDfs(sharedData, -1).dfs(initial);
 
-        List<IInterNode> res = new ArrayList<IInterNode>(stack.size());
+        List<IIntersectionTransition> res = new ArrayList<IIntersectionTransition>(stack.size());
 
-        for (Iterator<? extends IInterNode> iter = stack.descendingIterator(); iter.hasNext();) {
+        for (Iterator<IIntersectionTransition> iter = stack.descendingIterator(); iter.hasNext();) {
             res.add(iter.next());
         }
         return res;

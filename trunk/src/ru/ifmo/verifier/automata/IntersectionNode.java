@@ -20,7 +20,7 @@ import java.util.*;
  * @author Kirill Egorov
  */
 public class IntersectionNode<S extends IState>
-        implements INode<IntersectionTransition>, IInterNode {
+        implements INode<IIntersectionTransition>, IInterNode {
     private final IIntersectionAutomata<S> automata;
     private final S state;
     private final IBuchiNode node;
@@ -28,8 +28,8 @@ public class IntersectionNode<S extends IState>
     private final int nextAcceptSet;
     private final boolean terminal;
 
-    private final NodeIterator iterator;
-    private ArrayList<NodeIterator> threadIterators;
+    private final TransitionIterator iterator;
+    private ArrayList<TransitionIterator> threadIterators;
 
     private boolean[] owners;
 
@@ -56,11 +56,11 @@ public class IntersectionNode<S extends IState>
         nextAcceptSet = (terminal) ? (acceptSet + 1) % buchi.getAcceptSetsCount()
                                    : acceptSet;
 
-        iterator = new NodeIterator();
+        iterator = new TransitionIterator();
 
-        threadIterators = new ArrayList<NodeIterator>(threads.size());
+        threadIterators = new ArrayList<TransitionIterator>(threads.size());
         for (DfsThread t: threads) {
-            threadIterators.add(new NodeIterator());
+            threadIterators.add(new TransitionIterator());
         }
         owners = new boolean[threads.size()];
     }
@@ -81,7 +81,7 @@ public class IntersectionNode<S extends IState>
         return terminal;
     }
 
-    public Collection<IntersectionTransition> getOutcomingTransitions() {
+    public Collection<IIntersectionTransition> getOutcomingTransitions() {
         throw new UnsupportedOperationException("use next() method instead");
     }
 
@@ -97,13 +97,13 @@ public class IntersectionNode<S extends IState>
         return owners[threadId];
     }
 
-    public IntersectionNode next(int threadId) {
+    public IIntersectionTransition<S> next(int threadId) {
         if (threadId < 0) {
             synchronized (iterator) {
                 return (iterator.hasNext()) ? iterator.next() : null;
             }
         } else {
-            Iterator<IntersectionNode<S>> iter = threadIterators.get(threadId);
+            Iterator<IIntersectionTransition<S>> iter = threadIterators.get(threadId);
             return(iter.hasNext()) ? iter.next() : null;
         }
     }
@@ -143,15 +143,15 @@ public class IntersectionNode<S extends IState>
         return String.format("[\"%s\", %d, %d]", state.getName(), node.getID(), acceptSet);
     }
 
-    private class NodeIterator implements Iterator<IntersectionNode<S>> {
+    private class TransitionIterator implements Iterator<IIntersectionTransition<S>> {
 
         private Iterator<IStateTransition> stateIter;
         private Iterator<Map.Entry<ITransitionCondition, IBuchiNode>> nodeIter;
 
         private IStateTransition nextStateTransition;
-        private IntersectionNode<S> next;
+        private IIntersectionTransition<S> next;
 
-        private NodeIterator() {
+        private TransitionIterator() {
             reset();
         }
 
@@ -174,8 +174,9 @@ public class IntersectionNode<S extends IState>
                 if (nodeIter.hasNext()) {
                     nextBuchiTransition = nodeIter.next();
                     if (nextBuchiTransition.getKey().getValue()) {
-                        next = automata.getNode((S) nextStateTransition.getTarget(),
-                                                nextBuchiTransition.getValue(), nextAcceptSet);
+                        IntersectionNode<S> node = automata.getNode((S) nextStateTransition.getTarget(),
+                                nextBuchiTransition.getValue(), nextAcceptSet);
+                        next = new IntersectionTransition<S>(nextStateTransition, node);
                         return true;
                     }
                 } else if (stateIter.hasNext()) {
@@ -189,11 +190,11 @@ public class IntersectionNode<S extends IState>
             }
         }
 
-        public IntersectionNode<S> next() {
+        public IIntersectionTransition<S> next() {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            IntersectionNode<S> res = next;
+            IIntersectionTransition<S> res = next;
             next = null;
             return res;
         }

@@ -5,7 +5,7 @@ package ru.ifmo.test.verifier.concurrent;
 
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.LtlParseException;
-import ru.ifmo.verifier.IInterNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
         String ltlFormula =  "G(!wasAction(o1.z49)) && G(!wasEvent(p1.e49))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -38,7 +38,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -48,7 +48,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
         String ltlFormula =  "G(!wasAction(o1.z49)) && G(!wasEvent(p1.e49))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -59,7 +59,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -69,7 +69,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
         String ltlFormula =  "G(!wasAction(o1.z49)) && G(!wasEvent(p1.e49))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -80,7 +80,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -90,7 +90,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
         String ltlFormula =  "G(!wasAction(o1.z49)) && G(!wasEvent(p1.e49))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -101,7 +101,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -111,7 +111,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
         String ltlFormula =  "G(!wasAction(o1.z49)) && G(!wasEvent(p1.e49))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -122,7 +122,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -132,7 +132,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
         String ltlFormula =  "G(!wasAction(o1.z49)) && G(!wasEvent(p1.e49))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -143,7 +143,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -153,7 +153,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
         String ltlFormula =  "G(!wasAction(o1.z49)) && G(!wasEvent(p1.e49))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -164,7 +164,7 @@ public class GeneratedTest extends AbstractGeneratedTest {
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
         System.out.println("Start verify");
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }

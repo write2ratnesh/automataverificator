@@ -14,8 +14,8 @@ import ru.ifmo.ltl.grammar.LtlUtils;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
-import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.IVerifier;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.concurrent.MultiThreadVerifier;
 import ru.ifmo.verifier.impl.SimpleVerifier;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
@@ -74,10 +74,10 @@ public abstract class AbstractGeneratedTest extends TestCase {
                 parserMultiThread, translator, stateMashine.getStates().size());
     }
 
-    protected List<IInterNode> verify(IVerifier<IState> verifier, IBuchiAutomata buchi,
+    protected List<IIntersectionTransition> verify(IVerifier<IState> verifier, IBuchiAutomata buchi,
                                       IPredicateFactory<IState> predicates) {
         long time = System.currentTimeMillis();
-        List<IInterNode> stack = verifier.verify(buchi, predicates);
+        List<IIntersectionTransition> stack = verifier.verify(buchi, predicates);
         time = System.currentTimeMillis() - time;
         System.out.println(getName() + " time = " + time);
         return stack;

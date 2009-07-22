@@ -4,11 +4,14 @@
 package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
+import ru.ifmo.verifier.automata.IntersectionTransition;
 import ru.ifmo.verifier.IDfs;
 import ru.ifmo.verifier.AbstractDfs;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.util.concurrent.DfsStackTreeNode;
 import ru.ifmo.util.concurrent.DfsStackTree;
+import ru.ifmo.automata.statemashine.IState;
 
 import java.util.*;
 
@@ -17,16 +20,16 @@ public class ConcurrentMainDfs implements IDfs<Void> {
 //    private int childDepth = 0;
 //    private int maxChildDepth = 0;
 
-    private DfsStackTree<IntersectionNode> stackTree;
+    private DfsStackTree<IIntersectionTransition> stackTree;
     //current dfs stack tree node
-    private DfsStackTreeNode<IntersectionNode> stackTreeNode;
+    private DfsStackTreeNode<IIntersectionTransition> stackTreeNode;
 
     private final Set<IntersectionNode> visited;
 
     private final ISharedData sharedData;
     private final int threadId;
 
-    public ConcurrentMainDfs(ISharedData sharedData, DfsStackTree<IntersectionNode> stackTree, int threadId) {
+    public ConcurrentMainDfs(ISharedData sharedData, DfsStackTree<IIntersectionTransition> stackTree, int threadId) {
         this.sharedData = sharedData;
         this.visited = sharedData.getVisited();
         this.threadId = threadId;
@@ -35,7 +38,7 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     }
 
     protected boolean leaveNode() {
-        IntersectionNode node = stackTreeNode.getItem();
+        IntersectionNode node = stackTreeNode.getItem().getTarget();
         if (stackTreeNode.wasLeft.compareAndSet(false, true)) {
             stackTreeNode.remove();
 
@@ -50,25 +53,26 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     }
 
     public Void dfs(IntersectionNode node) {
-        if (node != stackTreeNode.getItem()) {
+        if (node != stackTreeNode.getItem().getTarget()) {
             throw new IllegalArgumentException();
         }
 
         visited.add(node);
         node.addOwner(threadId);
         while (stackTreeNode != null && sharedData.getContraryInstance() == null) {
-            IntersectionNode child = stackTreeNode.getItem().next(-1);
+            IIntersectionTransition trans = stackTreeNode.getItem().getTarget().next(-1);
+            IntersectionNode child = (trans != null) ? trans.getTarget() : null;
             if (child != null) {
                 if (!visited.contains(child)) {
                     if (visited.add(child)) {
-                        stackTreeNode = stackTree.addChild(stackTreeNode, child);
-                        stackTreeNode.getItem().addOwner(threadId);
+                        stackTreeNode = stackTree.addChild(stackTreeNode, trans);
+                        stackTreeNode.getItem().getTarget().addOwner(threadId);
                     }
                 }
             } else {
                 boolean flag = true;
                 if (stackTreeNode.hasChildren()) {
-                    for (DfsStackTreeNode<IntersectionNode> childNode: stackTreeNode.getChildren()) {
+                    for (DfsStackTreeNode<IIntersectionTransition> childNode: stackTreeNode.getChildren()) {
                         if (!childNode.wasLeft.get()) {
                             //TODO
 //                            childVisit++;
@@ -77,7 +81,7 @@ public class ConcurrentMainDfs implements IDfs<Void> {
 
                             flag = false;
                             stackTreeNode = childNode;
-                            stackTreeNode.getItem().addOwner(threadId);
+                            stackTreeNode.getItem().getTarget().addOwner(threadId);
                             break;
                         }
                     }
@@ -90,7 +94,7 @@ public class ConcurrentMainDfs implements IDfs<Void> {
 //                        maxChildDepth = Math.max(childDepth, maxChildDepth);
 //                        childDepth--;
 //                    }
-                    stackTreeNode.getItem().removeOwner(threadId);
+                    stackTreeNode.getItem().getTarget().removeOwner(threadId);
                     stackTreeNode = stackTreeNode.getParent();
                 }
             }

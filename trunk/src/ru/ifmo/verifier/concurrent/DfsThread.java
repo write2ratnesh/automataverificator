@@ -4,6 +4,7 @@
 package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.util.concurrent.DfsStackTree;
 
@@ -17,11 +18,11 @@ import java.io.PrintStream;
  */
 public class DfsThread extends Thread {
 
-    private DfsStackTree<IntersectionNode> stackTree;
+    private DfsStackTree<IIntersectionTransition> stackTree;
     private ISharedData sharedData;
     private int threadId;
 
-    public DfsThread(DfsStackTree<IntersectionNode> stackTree, ISharedData sharedData, int threadId) {
+    public DfsThread(DfsStackTree<IIntersectionTransition> stackTree, ISharedData sharedData, int threadId) {
         super();
         if (sharedData == null) {
             throw new IllegalArgumentException();
@@ -35,7 +36,7 @@ public class DfsThread extends Thread {
         return threadId;
     }
 
-    public void setDfsStackTree(DfsStackTree<IntersectionNode> stackTree) {
+    public void setDfsStackTree(DfsStackTree<IIntersectionTransition> stackTree) {
         this.stackTree = stackTree;
     }
 
@@ -45,7 +46,7 @@ public class DfsThread extends Thread {
         }
         try {
             ConcurrentMainDfs dfs = new ConcurrentMainDfs(sharedData, stackTree, threadId);
-            dfs.dfs(stackTree.getRoot().getItem());
+            dfs.dfs(stackTree.getRoot().getItem().getTarget());
         } catch (Throwable t) {
             printAllStacks(System.err);
             t.printStackTrace();

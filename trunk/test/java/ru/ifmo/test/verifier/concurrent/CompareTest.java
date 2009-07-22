@@ -3,7 +3,7 @@
  */
 package ru.ifmo.test.verifier.concurrent;
 
-import ru.ifmo.verifier.IInterNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
@@ -28,7 +28,7 @@ public class CompareTest extends AbstractCompareTest {
                 + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))";
 
         IBuchiAutomata buchi = parse(parser, ltlFormula);
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
         
         assertTrue(stack.isEmpty());
     }
@@ -39,7 +39,7 @@ public class CompareTest extends AbstractCompareTest {
                 + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))";
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -48,7 +48,7 @@ public class CompareTest extends AbstractCompareTest {
         String ltlFormula = "G(wasInState(A3, A3.s1) || wasEvent(p3.e82))";
 
         IBuchiAutomata buchi = parse(parser, ltlFormula);
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertFalse(stack.isEmpty());
     }
@@ -57,7 +57,7 @@ public class CompareTest extends AbstractCompareTest {
         String ltlFormula = "G(wasInState(A3, A3.s1) || wasEvent(p3.e82))";
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertFalse(stack.isEmpty());
     }
@@ -67,7 +67,7 @@ public class CompareTest extends AbstractCompareTest {
                 + "(isInState(A3, A3.s1) || isInState(A3, A3.stateP) || isInState(A3, A3.stateQ))))";
 
         IBuchiAutomata buchi = parse(parser, ltlFormula);
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -77,7 +77,7 @@ public class CompareTest extends AbstractCompareTest {
                 + "(isInState(A3, A3.s1) || isInState(A3, A3.stateP) || isInState(A3, A3.stateQ))))";
 
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -85,7 +85,7 @@ public class CompareTest extends AbstractCompareTest {
     public void testOneThread4() throws LtlParseException {
         String ltlFormula = "G(!wasInState(A2, A2.PoliceCrash) || R(wasEvent(p3.e81), wasInState(A2, A2.PoliceCrash)))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -93,7 +93,7 @@ public class CompareTest extends AbstractCompareTest {
     public void testMultiThread4() throws LtlParseException {
         String ltlFormula = "G(!wasInState(A2, A2.PoliceCrash) || R(wasEvent(p3.e81), wasInState(A2, A2.PoliceCrash)))";
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }
@@ -106,7 +106,7 @@ public class CompareTest extends AbstractCompareTest {
                 + "|| (!isInState(A3, A3.stateP) || R(wasAction(o2.z11), wasAction(o2.z10))) "
                 + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))";
         IBuchiAutomata buchi = parse(parser, ltlFormula);
-        List<IInterNode> stack = verify(verifier, buchi, predicates);
+        List<IIntersectionTransition> stack = verify(verifier, buchi, predicates);
 
         assertTrue(stack.isEmpty());
     }
@@ -119,7 +119,7 @@ public class CompareTest extends AbstractCompareTest {
                 + "|| (!isInState(A3, A3.stateP) || R(wasAction(o2.z11), wasAction(o2.z10))) "
                 + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))";
         IBuchiAutomata buchi = parse(parserMultiThread, ltlFormula);
-        List<IInterNode> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
+        List<IIntersectionTransition> stack = verify(verifierMultiThread, buchi, predicatesMultiThread);
 
         assertTrue(stack.isEmpty());
     }

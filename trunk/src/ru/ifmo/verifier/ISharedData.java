@@ -1,6 +1,7 @@
 package ru.ifmo.verifier;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.concurrent.DfsThread;
 import ru.ifmo.util.concurrent.DfsStackTreeNode;
 
@@ -9,14 +10,14 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public interface ISharedData {
-    DfsStackTreeNode<IntersectionNode> getContraryInstance();
+    DfsStackTreeNode<IIntersectionTransition> getContraryInstance();
 
     /**
      * Set contrary instance
      * @param contraryInstance contrary instance
      * @return false if contrary instance has been already set.
      */
-    boolean setContraryInstance(DfsStackTreeNode<IntersectionNode> contraryInstance);
+    boolean setContraryInstance(DfsStackTreeNode<IIntersectionTransition> contraryInstance);
 
     Set<IntersectionNode> getVisited();
 
