@@ -4,6 +4,7 @@
 package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.AbstractDfs;
@@ -12,9 +13,9 @@ import ru.ifmo.util.concurrent.DfsStackTreeNode;
 import java.util.HashSet;
 
 public class ConcurrentSecondDfs extends AbstractDfs<Boolean> {
-    private DfsStackTreeNode<IntersectionNode> mainDfsStack;
+    private DfsStackTreeNode<IIntersectionTransition> mainDfsStack;
 
-    public ConcurrentSecondDfs(ISharedData sharedData, DfsStackTreeNode<IntersectionNode> mainDfsStack,  int threadId) {
+    public ConcurrentSecondDfs(ISharedData sharedData, DfsStackTreeNode<IIntersectionTransition> mainDfsStack,  int threadId) {
         super(sharedData, new HashSet<IntersectionNode>(), threadId);
         this.mainDfsStack = mainDfsStack;
         setResult(false);
@@ -30,7 +31,7 @@ public class ConcurrentSecondDfs extends AbstractDfs<Boolean> {
                 setResult(true);
 
                 //TODO: delete stack print  ------------------------
-                synchronized (System.out) {
+                /*synchronized (System.out) {
                     if (getStack().isEmpty()) {
                         System.out.println("Stack is empty");
                     } else {
@@ -48,7 +49,7 @@ public class ConcurrentSecondDfs extends AbstractDfs<Boolean> {
                         System.out.print("-->" + tmp);
                     }
                     System.out.println("-->" + node);
-                }
+                }*/
                 //--------------------------------------------------
                 return true;
             }

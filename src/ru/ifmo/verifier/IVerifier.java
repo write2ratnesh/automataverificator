@@ -7,6 +7,7 @@ import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.automata.statemashine.IState;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public interface IVerifier<S extends IState> {
 
-    List<IInterNode> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates);
+    List<IIntersectionTransition> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates);
 
-    List<IInterNode> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException;
+    List<IIntersectionTransition> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException;
 }

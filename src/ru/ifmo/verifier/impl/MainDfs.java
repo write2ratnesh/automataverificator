@@ -4,6 +4,7 @@
 package ru.ifmo.verifier.impl;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.AbstractDfs;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.util.CollectionUtils;
@@ -15,12 +16,12 @@ import java.util.Deque;
  *
  * @author Kirill Egorov
  */
-public class MainDfs extends AbstractDfs<Deque<IntersectionNode>> {
+public class MainDfs extends AbstractDfs<Deque<IIntersectionTransition>> {
     private final int curThreadId;
     
     public MainDfs(ISharedData sharedData, int curThreadId) {
         super(sharedData, sharedData.getVisited(), -1);
-        setResult(CollectionUtils.<IntersectionNode>emptyDeque());
+        setResult(CollectionUtils.<IIntersectionTransition>emptyDeque());
         this.curThreadId = curThreadId;
     }
 
@@ -29,7 +30,7 @@ public class MainDfs extends AbstractDfs<Deque<IntersectionNode>> {
         if (node.isTerminal()) {
             AbstractDfs<Boolean> dfs2 = new SecondDfs(sharedData, getStack(), curThreadId);
             if (dfs2.dfs(node)) {
-                setResult(getStack());
+                setResult(getTransitionStack());
                 return true;
             }
         }

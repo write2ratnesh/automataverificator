@@ -6,8 +6,8 @@ package ru.ifmo.test.verifier.concurrent;
 import junit.framework.TestCase;
 import ru.ifmo.verifier.automata.statemashine.ComplexState;
 import ru.ifmo.verifier.automata.statemashine.ComplexStateFactory;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.IVerifier;
-import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.concurrent.MultiThreadVerifier;
 import ru.ifmo.verifier.impl.SimpleVerifier;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
@@ -72,9 +72,9 @@ public abstract class AbstractCompareTest extends TestCase {
                 parserMultiThread, translator, stateMashine.getStates().size());
     }
 
-    protected List<IInterNode> verify(IVerifier<ComplexState> verifier, IBuchiAutomata buchi, IPredicateFactory<ComplexState> predicates) {
+    protected List<IIntersectionTransition> verify(IVerifier<ComplexState> verifier, IBuchiAutomata buchi, IPredicateFactory<ComplexState> predicates) {
         long time = System.currentTimeMillis();
-        List<IInterNode> stack = verifier.verify(buchi, predicates);
+        List<IIntersectionTransition> stack = verifier.verify(buchi, predicates);
         time = System.currentTimeMillis() - time;
         System.out.println(getName() + " time = " + time);
         return stack;

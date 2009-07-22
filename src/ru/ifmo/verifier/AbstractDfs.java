@@ -4,10 +4,14 @@
 package ru.ifmo.verifier;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IntersectionTransition;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.util.DequeSet;
+import ru.ifmo.automata.statemashine.IState;
 
 import java.util.Deque;
 import java.util.Set;
+import java.util.LinkedList;
 
 /**
  * TODO: add comment
@@ -16,6 +20,7 @@ import java.util.Set;
  */
 public abstract class AbstractDfs<R> implements IDfs<R> {
     private final Deque<IntersectionNode> stack = new DequeSet<IntersectionNode>();
+    private final Deque<IIntersectionTransition> transStack = new LinkedList<IIntersectionTransition>();
     
     private final Set<IntersectionNode> visited;
     private R result;
@@ -44,19 +49,27 @@ public abstract class AbstractDfs<R> implements IDfs<R> {
         return stack;
     }
 
+    protected Deque<IIntersectionTransition> getTransitionStack() {
+        return transStack;
+    }
+
     protected void setResult(R result) {
         this.result = result;
     }
 
     public R dfs(IntersectionNode node) {
         stack.clear();
+        transStack.clear();
 
         enterNode(node);
         visited.add(node);
         stack.push(node);
+        transStack.push(new IntersectionTransition<IState>(null, node));
+
         while (!stack.isEmpty() && sharedData.getContraryInstance() == null) {
             IntersectionNode n = stack.getFirst();
-            IntersectionNode child = n.next(threadId);
+            IIntersectionTransition trans = n.next(threadId);
+            IntersectionNode child = (trans != null) ? trans.getTarget() : null;
             if (child != null) {
                 if (visitNode(child)) {
                     break;
@@ -64,6 +77,7 @@ public abstract class AbstractDfs<R> implements IDfs<R> {
                 if (!visited.contains(child)) {
                     if (visited.add(child)) {
                         stack.push(child);
+                        transStack.push(trans);
                         enterNode(child);
                     }
                 }
@@ -72,6 +86,7 @@ public abstract class AbstractDfs<R> implements IDfs<R> {
                     break;
                 }
                 stack.pop();
+                transStack.pop();
             }
         }
         return result;

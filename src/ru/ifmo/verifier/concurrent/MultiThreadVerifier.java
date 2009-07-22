@@ -4,14 +4,14 @@
 package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.IVerifier;
-import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.verifier.automata.IntersectionNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
+import ru.ifmo.verifier.automata.IntersectionTransition;
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
-import ru.ifmo.ltl.buchi.translator.Ltl2baTranslator;
 import ru.ifmo.ltl.buchi.translator.JLtl2baTranslator;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
@@ -110,7 +110,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         this.parser = parser;
     }
 
-    public List<IInterNode> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException {
+    public List<IIntersectionTransition> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException {
         if (parser == null) {
             throw new UnsupportedOperationException("Can't verify LTL formula without LTL parser."
                     + "Define it first or use List<IStateTransition> verify(IBuchiAutomata buchi) method instead");
@@ -127,7 +127,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         return verify(buchi, predicates);
     }
 
-    public List<IInterNode> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
+    public List<IIntersectionTransition> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
         if (!(predicates instanceof MultiThreadPredicateFactory)) {
             throw new IllegalArgumentException("Unexpected predicates class: "
                     + predicates.getClass() + ". Expected instance of "
@@ -155,7 +155,8 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
     }
 
     protected void startAndWait(List<DfsThread> threads, IntersectionNode initial) {
-        DfsStackTree<IntersectionNode> stackTree = new DfsStackTree<IntersectionNode>(initial, threadNumber);
+        DfsStackTree<IIntersectionTransition> stackTree = new DfsStackTree<IIntersectionTransition>(
+                new IntersectionTransition(null, initial), threadNumber);
 
         for (DfsThread t: threads) {
             t.setDfsStackTree(stackTree);
@@ -170,8 +171,8 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         }
     }
 
-    protected List<IInterNode> extractStack(DfsStackTreeNode<IntersectionNode> node) {
-        LinkedList<IInterNode> res = new LinkedList<IInterNode>();
+    protected List<IIntersectionTransition> extractStack(DfsStackTreeNode<IIntersectionTransition> node) {
+        LinkedList<IIntersectionTransition> res = new LinkedList<IIntersectionTransition>();
 
         for (; node != null; node = node.getParent()) {
             res.addFirst(node.getItem());

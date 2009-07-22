@@ -4,6 +4,7 @@
 package ru.ifmo.test.verifier;
 
 import ru.ifmo.verifier.IInterNode;
+import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.ltl.LtlParseException;
 
 import java.util.List;
@@ -20,37 +21,37 @@ public class VerifierTest2 extends AbstractSingleAutomataVerifierTest {
     }
 
     public void testGlobalWasEvent1() throws LtlParseException {
-        List<IInterNode> stack = verifier.verify("G(isInState(A3, A3.s1) || wasEvent(p3.e82))", predicates);
+        List<IIntersectionTransition> stack = verifier.verify("G(isInState(A3, A3.s1) || wasEvent(p3.e82))", predicates);
         printStack(stack);
         assertFalse(stack.isEmpty());
     }
 
     public void testGlobalWasEvent2() throws LtlParseException {
-        List<IInterNode> stack = verifier.verify("G(isInState(A3, A3.s1) || X(wasEvent(p3.e82)))", predicates);
+        List<IIntersectionTransition> stack = verifier.verify("G(isInState(A3, A3.s1) || X(wasEvent(p3.e82)))", predicates);
         printStack(stack);
         assertTrue(stack.isEmpty());
     }
 
     public void testGlobalWasEvent3() throws LtlParseException {
-        List<IInterNode> stack = verifier.verify("G(wasInState(A3, A3.s1) || wasEvent(p3.e82))", predicates);
+        List<IIntersectionTransition> stack = verifier.verify("G(wasInState(A3, A3.s1) || wasEvent(p3.e82))", predicates);
         printStack(stack);
         assertTrue(stack.isEmpty());
     }
 
     public void testGlobalWasEvent4() throws LtlParseException {
-        List<IInterNode> stack = verifier.verify("G(wasInState(A3, A3.s1) || G(wasEvent(p3.e82)))", predicates);
+        List<IIntersectionTransition> stack = verifier.verify("G(wasInState(A3, A3.s1) || G(wasEvent(p3.e82)))", predicates);
         printStack(stack);
         assertTrue(stack.isEmpty());
     }
 
     public void testGlobalIsInState() throws LtlParseException {
-        List<IInterNode> stack = verifier.verify("G(!wasInState(A3, A3.stateP) || X(wasEvent(p3.e82)))", predicates);
+        List<IIntersectionTransition> stack = verifier.verify("G(!wasInState(A3, A3.stateP) || X(wasEvent(p3.e82)))", predicates);
         printStack(stack);
         assertTrue(stack.isEmpty());
     }
 
     public void testReleaseWasAction() throws LtlParseException {
-        List<IInterNode> stack = verifier.verify("G(wasInState(A3, A3.s1) "
+        List<IIntersectionTransition> stack = verifier.verify("G(wasInState(A3, A3.s1) "
                 + "|| (!isInState(A3, A3.stateP) || R(wasAction(o2.z11), wasAction(o2.z10))) "
                 + "|| (!isInState(A3, A3.stateQ) || R(wasAction(o2.z10), wasAction(o2.z11))))", predicates);
         printStack(stack);
