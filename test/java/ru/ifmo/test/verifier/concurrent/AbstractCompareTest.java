@@ -4,8 +4,8 @@
 package ru.ifmo.test.verifier.concurrent;
 
 import junit.framework.TestCase;
-import ru.ifmo.verifier.automata.statemashine.ComplexState;
-import ru.ifmo.verifier.automata.statemashine.ComplexStateFactory;
+import ru.ifmo.verifier.automata.statemachine.ComplexState;
+import ru.ifmo.verifier.automata.statemachine.ComplexStateFactory;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.IVerifier;
 import ru.ifmo.verifier.concurrent.MultiThreadVerifier;
@@ -21,12 +21,12 @@ import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.translator.SimpleTranslator;
 import ru.ifmo.ltl.LtlParseException;
-import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
-import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.IAutomataContext;
-import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMachine;
-import ru.ifmo.automata.statemashine.io.StateMachineReader;
+import ru.ifmo.automata.statemachine.impl.AutomataFormatException;
+import ru.ifmo.automata.statemachine.impl.AutomataContext;
+import ru.ifmo.automata.statemachine.IAutomataContext;
+import ru.ifmo.automata.statemachine.IState;
+import ru.ifmo.automata.statemachine.IStateMachine;
+import ru.ifmo.automata.statemachine.io.StateMachineReader;
 
 import java.io.IOException;
 import java.util.List;

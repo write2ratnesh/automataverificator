@@ -4,8 +4,8 @@
 package ru.ifmo.verifier.automata;
 
 import ru.ifmo.automata.ITransition;
-import ru.ifmo.automata.statemashine.IStateTransition;
-import ru.ifmo.automata.statemashine.IState;
+import ru.ifmo.automata.statemachine.IStateTransition;
+import ru.ifmo.automata.statemachine.IState;
 
 /**
  * @author kegorov

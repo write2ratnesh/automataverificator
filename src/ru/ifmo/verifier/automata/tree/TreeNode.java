@@ -3,8 +3,8 @@
  */
 package ru.ifmo.verifier.automata.tree;
 
-import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMachine;
+import ru.ifmo.automata.statemachine.IState;
+import ru.ifmo.automata.statemachine.IStateMachine;
 
 import java.util.*;
 

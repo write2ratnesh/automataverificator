@@ -7,7 +7,7 @@ import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.automata.IntersectionTransition;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.util.DequeSet;
-import ru.ifmo.automata.statemashine.IState;
+import ru.ifmo.automata.statemachine.IState;
 
 import java.util.Deque;
 import java.util.Set;
