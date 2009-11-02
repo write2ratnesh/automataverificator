@@ -4,7 +4,7 @@
 package ru.ifmo.verifier.automata.tree;
 
 import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 
 import java.util.*;
 
@@ -15,15 +15,15 @@ import java.util.*;
  */
 public class TreeNode<S extends IState> implements ITreeNode<S> {
     private S state;
-    private IStateMashine<S> stateMashine;
+    private IStateMachine<S> stateMachine;
     private boolean active;
 
-    private Map<IStateMashine<S>, ITreeNode<S>> children
-            = new LinkedHashMap<IStateMashine<S>, ITreeNode<S>>();
+    private Map<IStateMachine<S>, ITreeNode<S>> children
+            = new LinkedHashMap<IStateMachine<S>, ITreeNode<S>>();
 
-    public TreeNode(S state, IStateMashine<S> stateMashine, boolean active) {
+    public TreeNode(S state, IStateMachine<S> stateMachine, boolean active) {
         this.state = state;
-        this.stateMashine = stateMashine;
+        this.stateMachine = stateMachine;
         this.active = active;
     }
 
@@ -31,8 +31,8 @@ public class TreeNode<S extends IState> implements ITreeNode<S> {
         return state;
     }
 
-    public IStateMashine<S> getStateMashine() {
-        return stateMashine;
+    public IStateMachine<S> getStateMachine() {
+        return stateMachine;
     }
 
     public boolean isActive() {
@@ -40,7 +40,7 @@ public class TreeNode<S extends IState> implements ITreeNode<S> {
     }
 
     public void addChildren(ITreeNode<S> node) {
-        children.put(node.getStateMashine(), node);
+        children.put(node.getStateMachine(), node);
     }
 
     /**
@@ -51,8 +51,8 @@ public class TreeNode<S extends IState> implements ITreeNode<S> {
         return children.values();
     }
 
-    public ITreeNode<S> getChild(IStateMashine<S> stateMashine) {
-        return children.get(stateMashine);
+    public ITreeNode<S> getChild(IStateMachine<S> stateMachine) {
+        return children.get(stateMachine);
     }
 
     public boolean equals(Object o) {
@@ -67,6 +67,6 @@ public class TreeNode<S extends IState> implements ITreeNode<S> {
     }
 
     public String toString() {
-        return stateMashine.getName() + '.' + state.getName();
+        return stateMachine.getName() + '.' + state.getName();
     }
 }

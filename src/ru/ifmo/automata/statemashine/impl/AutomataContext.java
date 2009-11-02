@@ -19,8 +19,8 @@ public class AutomataContext implements IAutomataContext {
 
     private Map<String, IControlledObject> ctrlObjects = new HashMap<String, IControlledObject>();
     private Map<String, IEventProvider> eventProviders = new HashMap<String, IEventProvider>();
-    private Map<String, IStateMashine<? extends IState>> stateMashines
-            = new HashMap<String, IStateMashine<? extends IState>>();
+    private Map<String, IStateMachine<? extends IState>> stateMachines
+            = new HashMap<String, IStateMachine<? extends IState>>();
 
     public AutomataContext() {
     }
@@ -48,8 +48,8 @@ public class AutomataContext implements IAutomataContext {
         return eventProviders.get(name);
     }
 
-    public IStateMashine<? extends IState> getStateMashine(String name) {
-        return stateMashines.get(name);
+    public IStateMachine<? extends IState> getStateMachine(String name) {
+        return stateMachines.get(name);
     }
 
     public void putControlledObject(String name, IControlledObject o) {
@@ -60,13 +60,13 @@ public class AutomataContext implements IAutomataContext {
         eventProviders.put(name, p);
     }
 
-    public void putStateMashine(String name, IStateMashine<? extends IState> m) {
-        stateMashines.put(name, m);
+    public void putStateMachine(String name, IStateMachine<? extends IState> m) {
+        stateMachines.put(name, m);
     }
 
     public void putAll(IAutomataReader reader) throws AutomataFormatException {
         ctrlObjects.putAll(reader.readControlledObjects());
-        stateMashines.putAll(reader.readStateMashines());
+        stateMachines.putAll(reader.readStateMachines());
         eventProviders.putAll(reader.readEventProviders());
     }
 }

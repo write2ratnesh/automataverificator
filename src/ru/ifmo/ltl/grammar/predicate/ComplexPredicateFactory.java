@@ -5,7 +5,7 @@ package ru.ifmo.ltl.grammar.predicate;
 
 import ru.ifmo.verifier.automata.statemashine.ComplexState;
 import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 
 /**
@@ -16,16 +16,16 @@ import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 public class ComplexPredicateFactory extends PredicateFactory<ComplexState> {
 
     @Predicate
-    public Boolean isInState(IStateMashine<? extends IState> a, IState s) {
+    public Boolean isInState(IStateMachine<? extends IState> a, IState s) {
         if (!wasTransition()) {
             return null;
         }
         ComplexState cs = (ComplexState) transition.getTarget();
-        return cs.getStateMashineState(a).equals(s);
+        return cs.getStateMachineState(a).equals(s);
     }
 
     @Predicate
-    public Boolean wasInState(IStateMashine<? extends IState> a, IState s) {
-        return (wasTransition()) ? state.getStateMashineState(a).equals(s): null;
+    public Boolean wasInState(IStateMachine<? extends IState> a, IState s) {
+        return (wasTransition()) ? state.getStateMachineState(a).equals(s): null;
     }
 }

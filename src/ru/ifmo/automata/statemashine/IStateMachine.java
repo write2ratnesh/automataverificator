@@ -1,5 +1,5 @@
 /**
- * IStateMashine.java, 01.03.2008
+ * IStateMachine.java, 01.03.2008
  */
 package ru.ifmo.automata.statemashine;
 
@@ -8,19 +8,19 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * State mashine
+ * State machine
  *
  * @author Kirill Egorov
  */
-public interface IStateMashine<S extends IState> {
+public interface IStateMachine<S extends IState> {
 
     String getName();
 
-    IStateMashine<S> getParentStateMashine();
+    IStateMachine<S> getParentStateMachine();
 
-    Set<IStateMashine<S>> getNestedStateMashines();
+    Set<IStateMachine<S>> getNestedStateMachines();
 
-    Map<S, IStateMashine<S>> getParentStates();
+    Map<S, IStateMachine<S>> getParentStates();
 
     boolean isNested();
 

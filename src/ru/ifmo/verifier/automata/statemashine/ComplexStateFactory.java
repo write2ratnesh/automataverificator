@@ -4,7 +4,7 @@
 package ru.ifmo.verifier.automata.statemashine;
 
 import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 import ru.ifmo.verifier.automata.tree.ITree;
 import ru.ifmo.verifier.automata.tree.ITreeNode;
 import ru.ifmo.verifier.automata.tree.TreeNode;
@@ -27,17 +27,17 @@ public class ComplexStateFactory<S extends IState> implements IComplexStateFacto
         //
     }
 
-    public static <S extends IState> ComplexState createInitialState(IStateMashine<S> stateMashine) {
+    public static <S extends IState> ComplexState createInitialState(IStateMachine<S> stateMachine) {
         ComplexStateFactory<S> factory = new ComplexStateFactory<S>();
-        ITree<S> initTree = new StateTree<S>(factory.getInitial(stateMashine, true));
+        ITree<S> initTree = new StateTree<S>(factory.getInitial(stateMachine, true));
 
         return new ComplexState<S>(initTree, factory);
     }
 
 
-    /*public ComplexState getInitialState(IStateMashine<IState> stateMashine) {
+    /*public ComplexState getInitialState(IStateMachine<IState> stateMachine) {
         if (initial == null) {
-            ITree<IState> initTree = new StateTree(getInitial(stateMashine, true));
+            ITree<IState> initTree = new StateTree(getInitial(stateMachine, true));
             
             initial = new ComplexState(initTree, this);
         }
@@ -53,10 +53,10 @@ public class ComplexStateFactory<S extends IState> implements IComplexStateFacto
         return res;
     }
 
-    private ITreeNode<S> getInitial(IStateMashine<S> stateMashine, boolean active) {
-        TreeNode<S> node = new TreeNode<S>(stateMashine.getInitialState(), stateMashine, active);
+    private ITreeNode<S> getInitial(IStateMachine<S> stateMachine, boolean active) {
+        TreeNode<S> node = new TreeNode<S>(stateMachine.getInitialState(), stateMachine, active);
 
-        for (IStateMashine<S> sm: stateMashine.getNestedStateMashines()) {
+        for (IStateMachine<S> sm: stateMachine.getNestedStateMachines()) {
             //Only root node can be active
             node.addChildren(getInitial(sm, false));
         }

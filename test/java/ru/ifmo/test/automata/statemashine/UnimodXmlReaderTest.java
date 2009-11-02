@@ -25,7 +25,7 @@ public class UnimodXmlReaderTest extends TestCase {
     public void testReadRootStateMashine() throws IOException, AutomataFormatException {
         IAutomataReader reader = new UnimodXmlReader("CarA1.xml");
         try {
-            IStateMashine<? extends IState> m = reader.readRootStateMashine();
+            IStateMachine<? extends IState> m = reader.readRootStateMachine();
             assertEquals(6, m.getStates().size());
             assertNull(m.getState("Top"));
             assertEquals(StateType.INITIAL, m.getState("s1").getType());
@@ -56,7 +56,7 @@ public class UnimodXmlReaderTest extends TestCase {
         IAutomataReader reader = new UnimodXmlReader("CarA1.xml");
 
 
-        Map<String, ? extends IStateMashine<? extends IState>> stateMashines = reader.readStateMashines();
+        Map<String, ? extends IStateMachine<? extends IState>> stateMashines = reader.readStateMachines();
         Set<IEventProvider> eventProviders = stateMashines.get("A1").getEventProviders();
         assertEquals(1, eventProviders.size());
         

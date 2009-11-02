@@ -8,18 +8,18 @@ import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
 
-public class StateMashineUtils {
+public class StateMachineUtils {
     private static final String ANY_EVENT = "*";
 
-    public static final String STATE_MASHINE = "stateMachine";
-    public static final String ROOT_STATE_MASHINE = "rootStateMachine";
+    public static final String STATE_MACHINE = "stateMachine";
+    public static final String ROOT_STATE_MACHINE = "rootStateMachine";
     public static final String CTRL_OBJECT = "controlledObject";
     public static final String EVENT_PROVIDER = "eventProvider";
     public static final String ASSOCIATION = "association";
     public static final String STATE = "state";
     public static final String OUT_ACTION = "outputAction";
     public static final String TRANSITION = "transition";
-    public static final String STATE_MASHINE_REF = "stateMachineRef";
+    public static final String STATE_MACHINE_REF = "stateMachineRef";
     public static final String ATTR_NAME = "name";
     public static final String ATTR_TYPE = "type";
     public static final String ATTR_CLASS = "class";
@@ -32,9 +32,9 @@ public class StateMashineUtils {
 
     public static final String METHOD_PATTERN = "\\p{Alpha}\\w*\\.\\p{Alpha}\\w*";
 
-    private StateMashineUtils() {}
+    private StateMachineUtils() {}
 
-    public static IAction extractAction(String actionFullName, IStateMashine<? extends IState> sm)
+    public static IAction extractAction(String actionFullName, IStateMachine<? extends IState> sm)
             throws AutomataFormatException {
         if (!actionFullName.matches(METHOD_PATTERN)) {
             throw new AutomataFormatException("Wrong output action format: " + actionFullName);
@@ -55,13 +55,13 @@ public class StateMashineUtils {
 
     /**
      * Extract event provider name and event name from eventAttr.
-     * @param m state mashine
+     * @param m state machine
      * @param eventProviders event providers map
      * @param eventAttr event full qualifier
      * @return IEvent instance or null if event Attr is blank
      * @throws AutomataFormatException
      */
-    public static IEvent parseEvent(IStateMashine<? extends IState> m,
+    public static IEvent parseEvent(IStateMachine<? extends IState> m,
                                     Map<String, IEventProvider> eventProviders,
                                     String eventAttr) throws AutomataFormatException {
         if (eventAttr == null) {
@@ -82,7 +82,7 @@ public class StateMashineUtils {
                 throw new AutomataFormatException("Unknown event name: " + a[1]);
             }
         } else if (StringUtils.isNotBlank(eventAttr)) {
-            //try to find event in state mashine's event providers set
+            //try to find event in state machine's event providers set
             event = findEventByName(m, eventAttr);
             if (event != null) {
                 return event;
@@ -94,17 +94,17 @@ public class StateMashineUtils {
             return null;
         }
 
-        throw new AutomataFormatException(String.format("Unknown event %s in state mashine %s", eventAttr, m.getName()));
+        throw new AutomataFormatException(String.format("Unknown event %s in state machine %s", eventAttr, m.getName()));
     }
 
-    private static <M extends IStateMashine<? extends IState>> IEvent findEventByName(M m, String eventName) {
+    private static <M extends IStateMachine<? extends IState>> IEvent findEventByName(M m, String eventName) {
         for (IEventProvider p: m.getEventProviders()) {
             IEvent event = p.getEvent(eventName);
             if (event != null) {
                 return event;
             }
         }
-        IStateMashine<? extends IState> parent = m.getParentStateMashine();
+        IStateMachine<? extends IState> parent = m.getParentStateMachine();
         return (parent != null) ? findEventByName(parent, eventName) : null;
     }
 }

@@ -20,7 +20,7 @@ public interface IEventProvider {
 
     public Collection<IEvent> getEvents();
 
-//    public Collection<IStateMashine> getTargets();
+//    public Collection<IStateMachine> getTargets();
 
     public Class getImplClass();
 }

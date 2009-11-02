@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * The state mashine state
+ * The state machine state
  *
  * @author Kirill Egorov
  */
@@ -21,7 +21,7 @@ public interface IState extends INode<IStateTransition> {
 
     List<IAction> getActions();
 
-    Set<IStateMashine<? extends IState>> getNestedStateMashines();
+    Set<IStateMachine<? extends IState>> getNestedStateMachines();
 
     String getUniqueName();
 }

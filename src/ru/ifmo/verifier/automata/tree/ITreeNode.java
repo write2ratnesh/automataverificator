@@ -3,10 +3,9 @@
  */
 package ru.ifmo.verifier.automata.tree;
 
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 import ru.ifmo.automata.statemashine.IState;
 
-import java.util.List;
 import java.util.Collection;
 
 /**
@@ -17,7 +16,7 @@ import java.util.Collection;
 public interface ITreeNode<S extends IState> {
     S getState();
 
-    IStateMashine<S> getStateMashine();
+    IStateMachine<S> getStateMachine();
 
     boolean isActive();
 
@@ -27,5 +26,5 @@ public interface ITreeNode<S extends IState> {
      */
     Collection<ITreeNode<S>> getChildren();
 
-    ITreeNode<S> getChild(IStateMashine<S> stateMashine);
+    ITreeNode<S> getChild(IStateMachine<S> stateMachine);
 }

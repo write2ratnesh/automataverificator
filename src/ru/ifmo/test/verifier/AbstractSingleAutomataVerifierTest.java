@@ -5,12 +5,10 @@ package ru.ifmo.test.verifier;
 
 import ru.ifmo.verifier.IVerifier;
 import ru.ifmo.verifier.impl.SimpleVerifier;
-import ru.ifmo.verifier.concurrent.MultiThreadVerifier;
 import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.grammar.predicate.PredicateFactory;
-import ru.ifmo.ltl.grammar.predicate.MultiThreadPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.buchi.translator.JLtl2baTranslator;
 
@@ -20,13 +18,13 @@ import ru.ifmo.ltl.buchi.translator.JLtl2baTranslator;
  * @author Kirill Egorov
  */
 public abstract class AbstractSingleAutomataVerifierTest extends AbstractVerifierTest<IState> {
-    protected AbstractSingleAutomataVerifierTest(String xmlFileName, String stateMashineName) {
-        super(xmlFileName, stateMashineName);
+    protected AbstractSingleAutomataVerifierTest(String xmlFileName, String stateMachineName) {
+        super(xmlFileName, stateMachineName);
     }
 
-    protected IVerifier<IState> createVerifier(IStateMashine<? extends IState> stateMashine, ILtlParser parser) {
-        return new SimpleVerifier<IState>(stateMashine.getInitialState(), parser, new JLtl2baTranslator());
-//        return new MultiThreadVerifier<IState>(stateMashine.getInitialState(), parser, stateMashine.getStates().size());
+    protected IVerifier<IState> createVerifier(IStateMachine<? extends IState> stateMachine, ILtlParser parser) {
+        return new SimpleVerifier<IState>(stateMachine.getInitialState(), parser, new JLtl2baTranslator());
+//        return new MultiThreadVerifier<IState>(stateMachine.getInitialState(), parser, stateMachine.getStates().size());
     }
 
     protected IPredicateFactory<IState> createPredicateUtils() {
