@@ -11,9 +11,9 @@ import ru.ifmo.ltl.grammar.exception.UnexpectedMethodException;
 import ru.ifmo.ltl.grammar.exception.UnexpectedOperatorException;
 import ru.ifmo.ltl.grammar.exception.UnexpectedParameterException;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
-import ru.ifmo.automata.statemashine.*;
-import ru.ifmo.automata.statemashine.ICondition;
-import ru.ifmo.automata.statemashine.IEvent;
+import ru.ifmo.automata.statemachine.*;
+import ru.ifmo.automata.statemachine.ICondition;
+import ru.ifmo.automata.statemachine.IEvent;
 
 import java.lang.reflect.Method;
 import java.util.Map;

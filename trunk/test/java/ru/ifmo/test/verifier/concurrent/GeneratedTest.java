@@ -6,7 +6,7 @@ package ru.ifmo.test.verifier.concurrent;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
-import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
+import ru.ifmo.automata.statemachine.impl.AutomataFormatException;
 
 import java.util.List;
 import java.io.IOException;

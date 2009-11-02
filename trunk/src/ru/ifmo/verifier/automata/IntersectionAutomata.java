@@ -3,7 +3,7 @@
  */
 package ru.ifmo.verifier.automata;
 
-import ru.ifmo.automata.statemashine.IState;
+import ru.ifmo.automata.statemachine.IState;
 import ru.ifmo.ltl.buchi.IBuchiNode;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;

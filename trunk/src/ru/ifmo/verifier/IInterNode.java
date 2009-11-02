@@ -3,7 +3,7 @@
  */
 package ru.ifmo.verifier;
 
-import ru.ifmo.automata.statemashine.IState;
+import ru.ifmo.automata.statemachine.IState;
 import ru.ifmo.ltl.buchi.IBuchiNode;
 
 /**
