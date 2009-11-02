@@ -56,8 +56,8 @@ public class UnimodXmlReaderTest extends TestCase {
         IAutomataReader reader = new UnimodXmlReader("CarA1.xml");
 
 
-        Map<String, ? extends IStateMachine<? extends IState>> stateMashines = reader.readStateMachines();
-        Set<IEventProvider> eventProviders = stateMashines.get("A1").getEventProviders();
+        Map<String, ? extends IStateMachine<? extends IState>> stateMachines = reader.readStateMachines();
+        Set<IEventProvider> eventProviders = stateMachines.get("A1").getEventProviders();
         assertEquals(1, eventProviders.size());
         
         IEventProvider p = eventProviders.iterator().next();

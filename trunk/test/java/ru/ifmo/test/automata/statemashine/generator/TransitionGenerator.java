@@ -4,7 +4,7 @@
 package ru.ifmo.test.automata.statemashine.generator;
 
 import ru.ifmo.test.automata.statemashine.impl.Transition;
-import ru.ifmo.test.automata.statemashine.impl.StatemashineContext;
+import ru.ifmo.test.automata.statemashine.impl.StatemachineContext;
 import ru.ifmo.test.automata.statemashine.impl.State;
 
 import java.util.Random;
@@ -23,7 +23,7 @@ public enum TransitionGenerator {
             return (rand.nextInt(MAX_P) < p) ? this : EXIST_TARGET;
         }
 
-        public Transition getTransition(StatemashineContext context) {
+        public Transition getTransition(StatemachineContext context) {
             State target = context.generateState();
             return (target != null) ? generateTransition(context, target) : null;
         }
@@ -33,7 +33,7 @@ public enum TransitionGenerator {
             return (rand.nextInt(MAX_P) < p) ? this : NEW_TARGET;
         }
 
-        public Transition getTransition(StatemashineContext context) {
+        public Transition getTransition(StatemachineContext context) {
             List<State> states = context.getStates();
             State target = states.get(rand.nextInt(states.size()));
             return generateTransition(context, target);
@@ -50,9 +50,9 @@ public enum TransitionGenerator {
 
     public abstract TransitionGenerator next();
 
-    public abstract Transition getTransition(StatemashineContext context);
+    public abstract Transition getTransition(StatemachineContext context);
 
-    protected Transition generateTransition(StatemashineContext context, State target) {
+    protected Transition generateTransition(StatemachineContext context, State target) {
         //last event isn't used
         String e = context.getEvents().get(rand.nextInt(context.getEvents().size() - 1));
         int n = (int) (Math.abs(rand.nextGaussian()) + 2);
