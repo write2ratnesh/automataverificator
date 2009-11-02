@@ -16,7 +16,7 @@ public class StatemachineGenerator {
 
     public static void main(String[] args) throws IOException {
         final int transitionCount = 1000;
-        StatemashineContext context = new StatemashineContext(TestEventProvider.class, TestControlledObject.class);
+        StatemachineContext context = new StatemachineContext(TestEventProvider.class, TestControlledObject.class);
 
         State curState = context.getInitState();
         long tCount = 0;
@@ -29,7 +29,7 @@ public class StatemachineGenerator {
             curState = t.getTarget();
             tCount++;
         }
-        StatemashineWriter.getInstance().write("test\\resources\\A" + transitionCount + ".xml", context);
+        StatemachineWriter.getInstance().write("test\\resources\\A" + transitionCount + ".xml", context);
         System.out.println("State: " + context.getStates().size());
         System.out.println("Transitions: " + tCount);
     }

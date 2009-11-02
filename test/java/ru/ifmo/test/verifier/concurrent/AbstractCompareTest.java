@@ -39,7 +39,7 @@ import java.util.List;
 public abstract class AbstractCompareTest extends TestCase {
     private IAutomataContext context;
 
-    protected final String stateMashineName;
+    protected final String stateMachineName;
 
     protected IVerifier<ComplexState> verifier;
     protected IVerifier<ComplexState> verifierMultiThread;
@@ -50,9 +50,9 @@ public abstract class AbstractCompareTest extends TestCase {
     protected ILtlParser parserMultiThread;
     protected ITranslator translator = new SimpleTranslator();
 
-    protected AbstractCompareTest(String xmlFileName, String stateMashineName) throws IOException, AutomataFormatException {
+    protected AbstractCompareTest(String xmlFileName, String stateMachineName) throws IOException, AutomataFormatException {
         super();
-        this.stateMashineName = stateMashineName;
+        this.stateMachineName = stateMachineName;
         context = new AutomataContext(new StateMachineReader(xmlFileName));
     }
 
@@ -63,7 +63,7 @@ public abstract class AbstractCompareTest extends TestCase {
         parser = new LtlParser(context, predicates);
         parserMultiThread = new LtlParser(context, predicatesMultiThread);
 
-        IStateMachine<? extends IState> stateMachine = context.getStateMachine(stateMashineName);
+        IStateMachine<? extends IState> stateMachine = context.getStateMachine(stateMachineName);
 
         ComplexState initState = ComplexStateFactory.createInitialState(stateMachine);
 

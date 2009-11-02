@@ -47,26 +47,26 @@ public abstract class AbstractGeneratedTest extends TestCase {
     protected ILtlParser parserMultiThread;
     protected ITranslator translator = new SimpleTranslator();
 
-    protected void initSimpleVerifier(String xmlFileName, String stateMashineName) throws IOException, AutomataFormatException {
+    protected void initSimpleVerifier(String xmlFileName, String stateMachineName) throws IOException, AutomataFormatException {
         predicates = new PredicateFactory<IState>();
 
         context = new AutomataContext(new StateMachineReader(xmlFileName));
         parser = new LtlParser(context, predicates);
 
-        IStateMachine<? extends IState> stateMachine = context.getStateMachine(stateMashineName);
+        IStateMachine<? extends IState> stateMachine = context.getStateMachine(stateMachineName);
 
         IState initState = stateMachine.getInitialState();
 
         verifier = new SimpleVerifier<IState>(initState, parser, translator);
     }
 
-    protected void initMultiThreadVerifier(String xmlFileName, String stateMashineName) throws IOException, AutomataFormatException {
+    protected void initMultiThreadVerifier(String xmlFileName, String stateMachineName) throws IOException, AutomataFormatException {
         predicatesMultiThread = new MultiThreadPredicateFactory<IState>(new PredicateFactory<IState>());
 
         context = new AutomataContext(new StateMachineReader(xmlFileName));
         parserMultiThread = new LtlParser(context, predicatesMultiThread);
 
-        IStateMachine<? extends IState> stateMachine = context.getStateMachine(stateMashineName);
+        IStateMachine<? extends IState> stateMachine = context.getStateMachine(stateMachineName);
 
         IState initState = stateMachine.getInitialState();
 

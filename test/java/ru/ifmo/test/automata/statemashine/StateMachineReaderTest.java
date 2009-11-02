@@ -16,7 +16,7 @@ import java.util.Set;
 import junit.framework.TestCase;
 
 public class StateMachineReaderTest extends TestCase {
-     public void testReadRootStateMashine() throws IOException, AutomataFormatException {
+     public void testReadRootStateMachine() throws IOException, AutomataFormatException {
         IAutomataReader reader = new StateMachineReader("CarA1.xml");
         try {
             IStateMachine<? extends IState> m = reader.readRootStateMachine();
@@ -50,8 +50,8 @@ public class StateMachineReaderTest extends TestCase {
         IAutomataReader reader = new StateMachineReader("CarA1.xml");
 
 
-        Map<String, ? extends IStateMachine<? extends IState>> stateMashines = reader.readStateMachines();
-        Set<IEventProvider> eventProviders = stateMashines.get("A1").getEventProviders();
+        Map<String, ? extends IStateMachine<? extends IState>> stateMachines = reader.readStateMachines();
+        Set<IEventProvider> eventProviders = stateMachines.get("A1").getEventProviders();
         assertEquals(1, eventProviders.size());
 
         IEventProvider p = eventProviders.iterator().next();
@@ -64,8 +64,8 @@ public class StateMachineReaderTest extends TestCase {
         IAutomataReader reader = new StateMachineReader("GameA1.xml");
 
 
-        Map<String, ? extends IStateMachine<? extends IState>> stateMashines = reader.readStateMachines();
-        Set<IEventProvider> eventProviders = stateMashines.get("A1").getEventProviders();
+        Map<String, ? extends IStateMachine<? extends IState>> stateMachines = reader.readStateMachines();
+        Set<IEventProvider> eventProviders = stateMachines.get("A1").getEventProviders();
         assertEquals(3, eventProviders.size());
     }
 }
