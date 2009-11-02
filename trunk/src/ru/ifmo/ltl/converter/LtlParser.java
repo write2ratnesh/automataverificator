@@ -3,7 +3,7 @@
  */
 package ru.ifmo.ltl.converter;
 
-import ru.ifmo.automata.statemashine.IAutomataContext;
+import ru.ifmo.automata.statemachine.IAutomataContext;
 import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.LtlParseException;

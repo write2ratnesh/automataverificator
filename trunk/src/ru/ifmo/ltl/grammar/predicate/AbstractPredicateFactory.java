@@ -3,8 +3,8 @@
  */
 package ru.ifmo.ltl.grammar.predicate;
 
-import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateTransition;
+import ru.ifmo.automata.statemachine.IState;
+import ru.ifmo.automata.statemachine.IStateTransition;
 
 /**
  * Predicate provider.

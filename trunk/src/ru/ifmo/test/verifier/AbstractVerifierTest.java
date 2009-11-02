@@ -9,12 +9,12 @@ import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
-import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
-import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.io.StateMachineReader;
-import ru.ifmo.automata.statemashine.IAutomataContext;
-import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMachine;
+import ru.ifmo.automata.statemachine.impl.AutomataFormatException;
+import ru.ifmo.automata.statemachine.impl.AutomataContext;
+import ru.ifmo.automata.statemachine.io.StateMachineReader;
+import ru.ifmo.automata.statemachine.IAutomataContext;
+import ru.ifmo.automata.statemachine.IState;
+import ru.ifmo.automata.statemachine.IStateMachine;
 
 import java.util.List;
 import java.io.IOException;

@@ -5,13 +5,11 @@ package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
-import ru.ifmo.verifier.automata.IntersectionTransition;
 import ru.ifmo.verifier.IDfs;
 import ru.ifmo.verifier.AbstractDfs;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.util.concurrent.DfsStackTreeNode;
 import ru.ifmo.util.concurrent.DfsStackTree;
-import ru.ifmo.automata.statemashine.IState;
 
 import java.util.*;
 

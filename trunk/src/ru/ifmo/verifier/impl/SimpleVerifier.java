@@ -4,13 +4,12 @@
 package ru.ifmo.verifier.impl;
 
 import ru.ifmo.verifier.IVerifier;
-import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.verifier.concurrent.SharedData;
 import ru.ifmo.verifier.automata.IntersectionAutomata;
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
-import ru.ifmo.automata.statemashine.IState;
+import ru.ifmo.automata.statemachine.IState;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.grammar.LtlNode;

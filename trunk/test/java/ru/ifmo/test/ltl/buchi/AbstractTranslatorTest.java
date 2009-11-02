@@ -12,10 +12,10 @@ import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 import ru.ifmo.ltl.grammar.LtlNode;
-import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
-import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.*;
-import ru.ifmo.automata.statemashine.io.StateMachineReader;
+import ru.ifmo.automata.statemachine.impl.AutomataFormatException;
+import ru.ifmo.automata.statemachine.impl.AutomataContext;
+import ru.ifmo.automata.statemachine.*;
+import ru.ifmo.automata.statemachine.io.StateMachineReader;
 
 import java.io.IOException;
 

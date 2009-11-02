@@ -4,11 +4,11 @@
 package ru.ifmo.test.verifier;
 
 import ru.ifmo.verifier.IVerifier;
-import ru.ifmo.verifier.automata.statemashine.ComplexStateFactory;
-import ru.ifmo.verifier.automata.statemashine.ComplexState;
+import ru.ifmo.verifier.automata.statemachine.ComplexStateFactory;
+import ru.ifmo.verifier.automata.statemachine.ComplexState;
 import ru.ifmo.verifier.impl.SimpleVerifier;
-import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMachine;
+import ru.ifmo.automata.statemachine.IState;
+import ru.ifmo.automata.statemachine.IStateMachine;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.grammar.predicate.ComplexPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
