@@ -12,10 +12,10 @@ import ru.ifmo.ltl.grammar.exception.UnexpectedParameterException;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
 import ru.ifmo.ltl.LtlParseException;
-import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
-import ru.ifmo.automata.statemashine.IAutomataContext;
-import ru.ifmo.automata.statemashine.io.StateMachineReader;
+import ru.ifmo.automata.statemachine.impl.AutomataContext;
+import ru.ifmo.automata.statemachine.impl.AutomataFormatException;
+import ru.ifmo.automata.statemachine.IAutomataContext;
+import ru.ifmo.automata.statemachine.io.StateMachineReader;
 
 import java.io.IOException;
 

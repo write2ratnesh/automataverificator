@@ -8,7 +8,7 @@ import ru.ifmo.verifier.ISharedData;
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.automata.IntersectionTransition;
-import ru.ifmo.automata.statemashine.IState;
+import ru.ifmo.automata.statemachine.IState;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.buchi.ITranslator;
 import ru.ifmo.ltl.buchi.IBuchiAutomata;

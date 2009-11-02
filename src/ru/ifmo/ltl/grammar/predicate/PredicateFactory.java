@@ -3,9 +3,9 @@
  */
 package ru.ifmo.ltl.grammar.predicate;
 
-import ru.ifmo.automata.statemashine.*;
-import ru.ifmo.automata.statemashine.ICondition;
-import ru.ifmo.automata.statemashine.IEvent;
+import ru.ifmo.automata.statemachine.*;
+import ru.ifmo.automata.statemachine.ICondition;
+import ru.ifmo.automata.statemachine.IEvent;
 import org.apache.commons.lang.NotImplementedException;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 

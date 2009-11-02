@@ -3,7 +3,7 @@
  */
 package ru.ifmo.ltl.grammar.predicate;
 
-import ru.ifmo.automata.statemashine.*;
+import ru.ifmo.automata.statemachine.*;
 import ru.ifmo.ltl.grammar.predicate.annotation.Predicate;
 
 import java.util.Collection;

@@ -5,8 +5,8 @@ package ru.ifmo.test.verifier;
 
 import ru.ifmo.verifier.IVerifier;
 import ru.ifmo.verifier.impl.SimpleVerifier;
-import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMachine;
+import ru.ifmo.automata.statemachine.IState;
+import ru.ifmo.automata.statemachine.IStateMachine;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.grammar.predicate.PredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
