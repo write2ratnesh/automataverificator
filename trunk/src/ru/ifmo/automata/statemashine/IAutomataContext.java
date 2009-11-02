@@ -14,5 +14,5 @@ public interface IAutomataContext {
 
     public IEventProvider getEventProvider(String name);
 
-    public IStateMashine<? extends IState> getStateMashine(String name);
+    public IStateMachine<? extends IState> getStateMachine(String name);
 }

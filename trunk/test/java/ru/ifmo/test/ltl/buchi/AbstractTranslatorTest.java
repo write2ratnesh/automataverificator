@@ -15,7 +15,7 @@ import ru.ifmo.ltl.grammar.LtlNode;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
 import ru.ifmo.automata.statemashine.*;
-import ru.ifmo.automata.statemashine.io.StateMashineReader;
+import ru.ifmo.automata.statemashine.io.StateMachineReader;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ public abstract class AbstractTranslatorTest extends TestCase {
 
     protected void setUp() throws IOException, AutomataFormatException {
         SimplePredicateFactory predicates = new SimplePredicateFactory();
-        IAutomataContext context = new AutomataContext(new StateMashineReader("CarA1.xml"));
+        IAutomataContext context = new AutomataContext(new StateMachineReader("CarA1.xml"));
         parser = new LtlParser(context, predicates);
     }
 
@@ -68,12 +68,12 @@ public abstract class AbstractTranslatorTest extends TestCase {
             throw new NotImplementedException();
         }
 
-        public Boolean isInState(IStateMashine<? extends IState> a, IState s) {
+        public Boolean isInState(IStateMachine<? extends IState> a, IState s) {
             throw new NotImplementedException();
         }
 
         @Predicate
-        public Boolean wasInState(IStateMashine<? extends IState> a, IState s) {
+        public Boolean wasInState(IStateMachine<? extends IState> a, IState s) {
             throw new NotImplementedException();
         }
 

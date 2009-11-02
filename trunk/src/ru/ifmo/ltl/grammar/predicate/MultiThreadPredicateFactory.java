@@ -50,12 +50,12 @@ public class MultiThreadPredicateFactory<S extends IState> implements IPredicate
     }
 
     @Predicate
-    public Boolean isInState(IStateMashine<? extends IState> a, IState s) {
+    public Boolean isInState(IStateMachine<? extends IState> a, IState s) {
         return getPredicate().isInState(a, s);
     }
 
     @Predicate
-    public Boolean wasInState(IStateMashine<? extends IState> a, IState s) {
+    public Boolean wasInState(IStateMachine<? extends IState> a, IState s) {
         return getPredicate().wasInState(a, s);
     }
 

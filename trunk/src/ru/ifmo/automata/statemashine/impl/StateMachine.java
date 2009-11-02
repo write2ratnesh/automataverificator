@@ -1,5 +1,5 @@
 /**
- * StateMashine.java, 02.03.2008
+ * StateMachine.java, 02.03.2008
  */
 package ru.ifmo.automata.statemashine.impl;
 
@@ -10,11 +10,11 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
- * The IStateMashine implementation
+ * The IStateMachine implementation
  *
  * @author Kirill Egorov
  */
-public class StateMashine<S extends IState> implements IStateMashine<S> {
+public class StateMachine<S extends IState> implements IStateMachine<S> {
 
     private String name;
     private S initialState;
@@ -25,12 +25,12 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
     private Map<String, Map<String, ?>> sources;
     private Map<S, List<IFunction>> functions;
 
-    private IStateMashine<S> parentStateMashine;
-    private Map<S, IStateMashine<S>> parentStates = new HashMap<S, IStateMashine<S>>();
+    private IStateMachine<S> parentStateMachine;
+    private Map<S, IStateMachine<S>> parentStates = new HashMap<S, IStateMachine<S>>();
 
-    private Set<IStateMashine<S>> nestedStateMashines = new LinkedHashSet<IStateMashine<S>>();
+    private Set<IStateMachine<S>> nestedStateMachines = new LinkedHashSet<IStateMachine<S>>();
 
-    public StateMashine(String name) {
+    public StateMachine(String name) {
         this.name = name;
     }
 
@@ -49,46 +49,46 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
         return name;
     }
 
-    public IStateMashine<S> getParentStateMashine() {
-        return parentStateMashine;
+    public IStateMachine<S> getParentStateMachine() {
+        return parentStateMachine;
     }
 
-    public Set<IStateMashine<S>> getNestedStateMashines() {
-        return nestedStateMashines;
+    public Set<IStateMachine<S>> getNestedStateMachines() {
+        return nestedStateMachines;
     }
 
-    public Map<S, IStateMashine<S>> getParentStates() {
+    public Map<S, IStateMachine<S>> getParentStates() {
         return parentStates;
     }
 
-    public <T extends IStateMashine<S>> void setParent(T parentStateMashine, S parentState) {
-        if (parentStateMashine == null || parentState == null) {
+    public <T extends IStateMachine<S>> void setParent(T parentStateMachine, S parentState) {
+        if (parentStateMachine == null || parentState == null) {
             throw new IllegalArgumentException("parent parameters can't be null");
         }
-        if (this.parentStateMashine != null && this.parentStateMashine != parentStateMashine) {
-            throw new UnsupportedOperationException("State mashine can't have more than one parent");
+        if (this.parentStateMachine != null && this.parentStateMachine != parentStateMachine) {
+            throw new UnsupportedOperationException("State machine can't have more than one parent");
         }
-//        if (!parentState.equals(parentStateMashine.getState(parentState.getName()))) {
-//            throw new IllegalArgumentException("parentState isn't parentStateMashine state");
+//        if (!parentState.equals(parentStateMachine.getState(parentState.getName()))) {
+//            throw new IllegalArgumentException("parentState isn't parentStateMachine state");
 //        }
-        if (!parentState.getNestedStateMashines().contains(this)) {
-            throw new IllegalArgumentException("This stateMashine isn't nested stateMashine for parentState");
+        if (!parentState.getNestedStateMachines().contains(this)) {
+            throw new IllegalArgumentException("This stateMachine isn't nested stateMachine for parentState");
         }
-        this.parentStateMashine = parentStateMashine;
-        parentStates.put(parentState, parentStateMashine);
+        this.parentStateMachine = parentStateMachine;
+        parentStates.put(parentState, parentStateMachine);
     }
 
-    public void addNestedStateMashine(IStateMashine<S> stateMashine) {
-        nestedStateMashines.add(stateMashine);
+    public void addNestedStateMachine(IStateMachine<S> stateMachine) {
+        nestedStateMachines.add(stateMachine);
     }
 
     public boolean isNested() {
-        return parentStateMashine != null;
+        return parentStateMachine != null;
     }
 
     public S getInitialState() {
         if (initialState == null) {
-            throw new RuntimeException("Automamta hasnot been initialized yet or has not initial state");
+            throw new RuntimeException("Automamta has not been initialized yet or has not initial state");
         }
         return initialState;
     }
@@ -139,7 +139,7 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
     private void checkInitial(S s)  {
         if (StateType.INITIAL == s.getType()) {
             if (initialState != null) {
-                throw new IllegalArgumentException("StateMashine can't contain more than one initial state");
+                throw new IllegalArgumentException("StateMachine can't contain more than one initial state");
             }
             initialState = s;
         }
@@ -151,7 +151,7 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
 
     public List<IFunction> getStateFunctions(S state) {
         if (!states.containsValue(state)) {
-            throw new IllegalArgumentException("State mashine doesn't contain this state: " + state);
+            throw new IllegalArgumentException("State machine doesn't contain this state: " + state);
         }
         synchronized (this) {
             if (functions == null) {
@@ -193,7 +193,7 @@ public class StateMashine<S extends IState> implements IStateMashine<S> {
             return Collections.emptySet();
         }
         Set<String> invocations = new HashSet<String>();
-        Pattern p = Pattern.compile(StateMashineUtils.METHOD_PATTERN);
+        Pattern p = Pattern.compile(StateMachineUtils.METHOD_PATTERN);
         Matcher m = p.matcher(expr);
         while (m.find()) {
             invocations.add(expr.substring(m.start(), m.end()));

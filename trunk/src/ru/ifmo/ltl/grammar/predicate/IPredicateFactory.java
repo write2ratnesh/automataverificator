@@ -19,10 +19,10 @@ public interface IPredicateFactory<S extends IState> {
     Boolean wasEvent(IEvent e);
 
     @Predicate
-    Boolean isInState(IStateMashine<? extends IState> a, IState s);
+    Boolean isInState(IStateMachine<? extends IState> a, IState s);
 
     @Predicate
-    Boolean wasInState(IStateMashine<? extends IState> a, IState s);
+    Boolean wasInState(IStateMachine<? extends IState> a, IState s);
 
     @Predicate
     boolean cameToFinalState();

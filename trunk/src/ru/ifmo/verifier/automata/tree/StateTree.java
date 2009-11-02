@@ -5,7 +5,7 @@ package ru.ifmo.verifier.automata.tree;
 
 import ru.ifmo.automata.statemashine.IState;
 import ru.ifmo.automata.statemashine.IStateTransition;
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 
 import java.util.Iterator;
 
@@ -32,23 +32,23 @@ public class StateTree<S extends IState> implements ITree<S> {
         return root;
     }
 
-    public ITreeNode<S> getNodeForStateMashine(IStateMashine<S> stateMashine) {
-        IStateMashine<S> parentSM = stateMashine.getParentStateMashine();
+    public ITreeNode<S> getNodeForStateMachine(IStateMachine<S> stateMachine) {
+        IStateMachine<S> parentSM = stateMachine.getParentStateMachine();
         
         if (parentSM != null) {
-            ITreeNode<S> parentNode = getNodeForStateMashine(parentSM);
+            ITreeNode<S> parentNode = getNodeForStateMachine(parentSM);
 
-            assert parentNode.getStateMashine().equals(parentSM);
-            return parentNode.getChild(stateMashine);
+            assert parentNode.getStateMachine().equals(parentSM);
+            return parentNode.getChild(stateMachine);
         }
-        assert root.getStateMashine().equals(stateMashine);
+        assert root.getStateMachine().equals(stateMachine);
         return root;
     }
 
     protected ITreeNode<S> copy(ITreeNode<S> node, ITreeNode<S> fromNode, IStateTransition trans) {
         boolean isTransNode = (node == fromNode);
         S state = isTransNode ? (S) trans.getTarget() : node.getState();
-        TreeNode<S> newNode = new TreeNode<S>(state, node.getStateMashine(), node.isActive());
+        TreeNode<S> newNode = new TreeNode<S>(state, node.getStateMachine(), node.isActive());
 
         if (isTransNode) {
             assert node.isActive();
@@ -65,8 +65,8 @@ public class StateTree<S extends IState> implements ITree<S> {
     }
 
     protected ITreeNode<S> copyTransSubnode(ITreeNode<S> parent, ITreeNode<S> node) {
-        boolean active = node.getStateMashine().getParentStates().containsKey(parent.getState());
-        TreeNode<S> newNode = new TreeNode<S>(node.getState(), node.getStateMashine(), active);
+        boolean active = node.getStateMachine().getParentStates().containsKey(parent.getState());
+        TreeNode<S> newNode = new TreeNode<S>(node.getState(), node.getStateMachine(), active);
 
         for (ITreeNode<S> child: node.getChildren()) {
             newNode.addChildren(copyTransSubnode(node, child));

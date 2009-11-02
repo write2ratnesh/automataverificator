@@ -18,7 +18,7 @@ import java.lang.reflect.Modifier;
 public class EventProvider implements IEventProvider {
     private String name;
     private Map<String, IEvent> events;
-//    private Collection<IStateMashine> targets;
+//    private Collection<IStateMachine> targets;
     private Class implClass;
 
     public EventProvider(String name, Class implClass) {
@@ -58,7 +58,7 @@ public class EventProvider implements IEventProvider {
         return Collections.unmodifiableCollection(events.values());
     }
 
-//    public Collection<IStateMashine> getTargets() {
+//    public Collection<IStateMachine> getTargets() {
 //        return Collections.unmodifiableCollection(targets);
 //    }
 

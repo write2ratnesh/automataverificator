@@ -24,7 +24,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import org.apache.commons.lang.StringUtils;
 
-import static ru.ifmo.automata.statemashine.StateMashineUtils.*;
+import static ru.ifmo.automata.statemashine.StateMachineUtils.*;
 
 /**
  * Xml unimod model reader
@@ -35,7 +35,7 @@ public class UnimodXmlReader implements IAutomataReader {
 
     private Document document;
 
-    private Map<String, StateMashine<State>> stateMashines;
+    private Map<String, StateMachine<State>> stateMachines;
     private Map<String, IEventProvider> eventProviders;
     private Map<String, IControlledObject> ctrlObjects;
 
@@ -71,15 +71,15 @@ public class UnimodXmlReader implements IAutomataReader {
         return factory.newDocumentBuilder();
     }
 
-    public IStateMashine<? extends IState> readRootStateMashine() throws AutomataFormatException {
-        readStateMashines();
+    public IStateMachine<? extends IState> readRootStateMachine() throws AutomataFormatException {
+        readStateMachines();
         
-        NodeList l1 = document.getElementsByTagName(ROOT_STATE_MASHINE);
+        NodeList l1 = document.getElementsByTagName(ROOT_STATE_MACHINE);
         Element e = (Element) l1.item(0);
-        NodeList l2 = e.getElementsByTagName(STATE_MASHINE_REF);
+        NodeList l2 = e.getElementsByTagName(STATE_MACHINE_REF);
         Element root = (Element) l2.item(0);
         String name = root.getAttribute(ATTR_NAME);
-        return stateMashines.get(name);
+        return stateMachines.get(name);
     }
 
     public Map<String, IEventProvider> readEventProviders() throws AutomataFormatException {
@@ -87,7 +87,7 @@ public class UnimodXmlReader implements IAutomataReader {
             return eventProviders;
         }
         eventProviders = new HashMap<String, IEventProvider>();
-        createStateMashines();
+        createStateMachines();
 
         try {
             NodeList list = document.getElementsByTagName(EVENT_PROVIDER);
@@ -103,9 +103,9 @@ public class UnimodXmlReader implements IAutomataReader {
                 IEventProvider provider = new EventProvider(name, aClass);
                 eventProviders.put(name, provider);
 
-                //parse event provider targets (state mashines to be notified)
-                Collection<StateMashine<State>> targets = parseTargets((Element) list.item(i));
-                for (StateMashine<State> m: targets) {
+                //parse event provider targets (state machines to be notified)
+                Collection<StateMachine<State>> targets = parseTargets((Element) list.item(i));
+                for (StateMachine<State> m: targets) {
                     m.addEventProvider(provider);
                 }
             }
@@ -117,11 +117,11 @@ public class UnimodXmlReader implements IAutomataReader {
 
     }
 
-    private Collection<StateMashine<State>> parseTargets(Element e) {
+    private Collection<StateMachine<State>> parseTargets(Element e) {
         if (!StringUtils.equals(EVENT_PROVIDER, e.getNodeName())) {
             throw new IllegalArgumentException("Element isn't eventProvider");
         }
-        Collection<StateMashine<State>> targets = new ArrayList<StateMashine<State>>();
+        Collection<StateMachine<State>> targets = new ArrayList<StateMachine<State>>();
 
         NodeList list = e.getElementsByTagName(ASSOCIATION);
         if (list == null) {
@@ -131,7 +131,7 @@ public class UnimodXmlReader implements IAutomataReader {
         for (int i = 0; i < list.getLength(); i++) {
             Element association = (Element) list.item(i);
             String ref = association.getAttribute(ATTR_TARGET);
-            targets.add(stateMashines.get(ref));
+            targets.add(stateMachines.get(ref));
         }
         return targets;
     }
@@ -160,17 +160,17 @@ public class UnimodXmlReader implements IAutomataReader {
         }
     }
 
-    public Map<String, ? extends IStateMashine<? extends IState>> readStateMashines() throws AutomataFormatException {
-        if (stateMashines == null) {
+    public Map<String, ? extends IStateMachine<? extends IState>> readStateMachines() throws AutomataFormatException {
+        if (stateMachines == null) {
             ctrlObjects = readControlledObjects();
             eventProviders = readEventProviders();
-            createStateMashines();
+            createStateMachines();
 
-            NodeList list = document.getElementsByTagName(STATE_MASHINE);
+            NodeList list = document.getElementsByTagName(STATE_MACHINE);
             for (int i = 0; i < list.getLength(); i++) {
                 Element e = (Element) list.item(i);
-                String name = parseStateMashineName((Element) list.item(i));
-                StateMashine<State> m = stateMashines.get(name);
+                String name = parseStateMachineName((Element) list.item(i));
+                StateMachine<State> m = stateMachines.get(name);
 
                 parseCtrlObjects(m, e);
 
@@ -179,31 +179,31 @@ public class UnimodXmlReader implements IAutomataReader {
                 addTransitions(m, e);
             }
         }
-        return stateMashines;
+        return stateMachines;
     }
 
-    public void createStateMashines() {
-        if (stateMashines == null) {
-            stateMashines = new HashMap<String, StateMashine<State>>();
-            NodeList list = document.getElementsByTagName(STATE_MASHINE);
+    public void createStateMachines() {
+        if (stateMachines == null) {
+            stateMachines = new HashMap<String, StateMachine<State>>();
+            NodeList list = document.getElementsByTagName(STATE_MACHINE);
             for (int i = 0; i < list.getLength(); i++) {
-                String name = parseStateMashineName((Element) list.item(i));
-                stateMashines.put(name, new StateMashine<State>(name));
+                String name = parseStateMachineName((Element) list.item(i));
+                stateMachines.put(name, new StateMachine<State>(name));
             }
         }
     }
 
-    private String parseStateMashineName(Element e) {
-        if (!StringUtils.equals(STATE_MASHINE, e.getNodeName())) {
-            throw new IllegalArgumentException("Element isn't stateMashinet");
+    private String parseStateMachineName(Element e) {
+        if (!StringUtils.equals(STATE_MACHINE, e.getNodeName())) {
+            throw new IllegalArgumentException("Element isn't stateMachine");
         }
 
         return e.getAttribute(ATTR_NAME);
     }
 
-    private void parseCtrlObjects(StateMashine<State> m, Element e) {
-        if (!StringUtils.equals(STATE_MASHINE, e.getNodeName())) {
-            throw new IllegalArgumentException("Element isn't stateMashine");
+    private void parseCtrlObjects(StateMachine<State> m, Element e) {
+        if (!StringUtils.equals(STATE_MACHINE, e.getNodeName())) {
+            throw new IllegalArgumentException("Element isn't stateMachine");
         }
         NodeList list = e.getElementsByTagName(ASSOCIATION);
         for (int i = 0; i < list.getLength(); i++) {
@@ -218,9 +218,9 @@ public class UnimodXmlReader implements IAutomataReader {
         }
     }
 
-    private Map<String, State> parseStates(StateMashine<State> m, Element e) throws AutomataFormatException {
-        if (!StringUtils.equals(STATE_MASHINE, e.getNodeName())) {
-            throw new IllegalArgumentException("Element isn't stateMashine");
+    private Map<String, State> parseStates(StateMachine<State> m, Element e) throws AutomataFormatException {
+        if (!StringUtils.equals(STATE_MACHINE, e.getNodeName())) {
+            throw new IllegalArgumentException("Element isn't stateMachine");
         }
         Map<String, State> states = new HashMap<String, State>();
 
@@ -233,7 +233,7 @@ public class UnimodXmlReader implements IAutomataReader {
         return states;
     }
 
-    private State parseState(StateMashine<State> m, Element e) throws AutomataFormatException {
+    private State parseState(StateMachine<State> m, Element e) throws AutomataFormatException {
         if (!StringUtils.equals(STATE, e.getNodeName())) {
             throw new IllegalArgumentException("Element isn't state element");
         }
@@ -248,29 +248,29 @@ public class UnimodXmlReader implements IAutomataReader {
         }
         State state = new State(name, StateType.getByName(type), actions);
 
-        NodeList listSM = e.getElementsByTagName(STATE_MASHINE_REF);
+        NodeList listSM = e.getElementsByTagName(STATE_MACHINE_REF);
         for (int i = 0; i < listSM.getLength(); i++) {
             Element node = (Element) listSM.item(i);
             String sm = node.getAttribute(ATTR_NAME);
-            StateMashine<State> nested = stateMashines.get(sm);
-            state.addNestedStateMashine(nested);
+            StateMachine<State> nested = stateMachines.get(sm);
+            state.addNestedStateMachine(nested);
             nested.setParent(m, state);
-            m.addNestedStateMashine(nested);
+            m.addNestedStateMachine(nested);
         }
 
         return state;
     }
 
     /**
-     * Parse transition in state <code>e</code> and add it to state mashine <code>m</code>.
+     * Parse transition in state <code>e</code> and add it to state machine <code>m</code>.
      * I.e. add transition to source and target states
-     * @param m state mashine
+     * @param m state machine
      * @param e element to be parsed
      * @throws AutomataFormatException
      */
-    private void addTransitions(StateMashine<State> m, Element e) throws AutomataFormatException {
-        if (!StringUtils.equals(STATE_MASHINE, e.getNodeName())) {
-            throw new IllegalArgumentException("Element isn't stateMashine");
+    private void addTransitions(StateMachine<State> m, Element e) throws AutomataFormatException {
+        if (!StringUtils.equals(STATE_MACHINE, e.getNodeName())) {
+            throw new IllegalArgumentException("Element isn't stateMachine");
         }
 
         NodeList list = e.getElementsByTagName(TRANSITION);
@@ -279,7 +279,7 @@ public class UnimodXmlReader implements IAutomataReader {
         }
     }
 
-    private void parseTransition(StateMashine<State> m, Element e) throws AutomataFormatException {
+    private void parseTransition(StateMachine<State> m, Element e) throws AutomataFormatException {
         if (!StringUtils.equals(TRANSITION, e.getNodeName())) {
             throw new IllegalArgumentException("Element isn't transition");
         }
@@ -292,7 +292,7 @@ public class UnimodXmlReader implements IAutomataReader {
         State stateSource = m.getState(source);
         State stateTarget = m.getState(target);
 
-        IEvent event = StateMashineUtils.parseEvent(m, eventProviders, eventFullName);
+        IEvent event = StateMachineUtils.parseEvent(m, eventProviders, eventFullName);
         Transition t = new Transition(event, new Condition(condExpr), stateTarget);
 
         NodeList list = e.getElementsByTagName(OUT_ACTION);
@@ -305,15 +305,15 @@ public class UnimodXmlReader implements IAutomataReader {
 
     /**
      * Extract controlled object and action from node attribute.
-     * @param m state mashine
+     * @param m state machine
      * @param node node with action
      * @return action
      * @throws AutomataFormatException
      */
-    private IAction parseAction(StateMashine<State> m, Element node) throws AutomataFormatException {
+    private IAction parseAction(StateMachine<State> m, Element node) throws AutomataFormatException {
         String actionFullName = node.getAttribute(ATTR_ACTION);
         
-        return StateMashineUtils.extractAction(actionFullName, m);
+        return StateMachineUtils.extractAction(actionFullName, m);
     }
 
     public void close() throws IOException {

@@ -35,7 +35,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
      * Create MultiTreadVerifier that verify automata with <code>initState</code>
      * and uses number of threads equals available processors for VM
      * @param initState automata initial state
-     * @param stateCount state mashine states count
+     * @param stateCount state machine states count
      */
     public MultiThreadVerifier(S initState, int stateCount) {
         this(initState, stateCount, 0);
@@ -46,7 +46,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
      * Create MultiTreadVerifier that verify automata with <code>initState</code>
      * and uses number of threads = <code>threadNumber</code>
      * @param initState automata initial state
-     * @param stateCount state mashine states count
+     * @param stateCount state machine states count
      * @param threadNumber number of threads
      */
     public MultiThreadVerifier(S initState, int stateCount, int threadNumber) {
@@ -58,7 +58,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
      * and uses number of threads = <code>threadNumber</code>.
      * @param initState automata initial state
      * @param parser ltl formula parser instance
-     * @param stateCount state mashine states count
+     * @param stateCount state machine states count
      */
     public MultiThreadVerifier(S initState, ILtlParser parser, int stateCount) {
         this(initState, parser, new JLtl2baTranslator(), stateCount, 0);
@@ -78,7 +78,7 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
      * @param initState automata initial state
      * @param parser ltl formula parser
      * @param translator ltl to buchi translator
-     * @param stateCount state mashine states count
+     * @param stateCount state machine states count
      * @param threadNumber number of threads
      */
     public MultiThreadVerifier(S initState, ILtlParser parser, ITranslator translator, int stateCount, int threadNumber) {

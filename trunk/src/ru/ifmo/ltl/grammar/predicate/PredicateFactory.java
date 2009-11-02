@@ -22,12 +22,12 @@ public class PredicateFactory<S extends IState> extends AbstractPredicateFactory
     }
 
     @Predicate
-    public Boolean isInState(IStateMashine<? extends IState> a, IState s) {
+    public Boolean isInState(IStateMachine<? extends IState> a, IState s) {
         return (wasTransition()) ? transition.getTarget().equals(s) : null;
     }
 
     @Predicate
-    public Boolean wasInState(IStateMashine<? extends IState> a, IState s) {
+    public Boolean wasInState(IStateMachine<? extends IState> a, IState s) {
         return (wasTransition()) ? state.equals(s): null;
     }
 

@@ -15,7 +15,7 @@ import ru.ifmo.verifier.concurrent.DfsThread;
 import java.util.*;
 
 /**
- * Node received during state mashine and buchi automata intersection
+ * Node received during state machine and buchi automata intersection
  *
  * @author Kirill Egorov
  */

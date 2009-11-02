@@ -12,7 +12,7 @@ import java.io.IOException;
  *
  * @author Kirill Egorov
  */
-public class StatemashineGenerator {
+public class StatemachineGenerator {
 
     public static void main(String[] args) throws IOException {
         final int transitionCount = 1000;

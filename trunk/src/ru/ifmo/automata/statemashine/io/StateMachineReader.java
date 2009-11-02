@@ -20,18 +20,18 @@ import java.io.FileInputStream;
 import java.net.URLClassLoader;
 import java.net.URL;
 
-import static ru.ifmo.automata.statemashine.StateMashineUtils.*;
+import static ru.ifmo.automata.statemashine.StateMachineUtils.*;
 
-public class StateMashineReader implements IAutomataReader {
+public class StateMachineReader implements IAutomataReader {
 
-    private StateMashine<State> rootStateMashine;
-    private Map<String, StateMashine<State>> stateMashines;
+    private StateMachine<State> rootStateMachine;
+    private Map<String, StateMachine<State>> stateMachines;
     private Map<String, IEventProvider> eventProviders;
     private Map<String, IControlledObject> ctrlObjects;
 
     private XMLStreamReader reader;
 
-    public StateMashineReader(String fileLocation) throws IOException {
+    public StateMachineReader(String fileLocation) throws IOException {
         URLClassLoader urlLoader = (URLClassLoader) getClass().getClassLoader();
         URL fileLoc = urlLoader.findResource(fileLocation);
 
@@ -46,7 +46,7 @@ public class StateMashineReader implements IAutomataReader {
         }
     }
 
-    public StateMashineReader(File file) throws IOException {
+    public StateMachineReader(File file) throws IOException {
         try {
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             inputFactory.setProperty(XMLInputFactory.IS_VALIDATING, false);
@@ -67,18 +67,18 @@ public class StateMashineReader implements IAutomataReader {
     }
 
     private void init() {
-        if (rootStateMashine == null) {
+        if (rootStateMachine == null) {
             ctrlObjects = new HashMap<String, IControlledObject>();
             eventProviders = new HashMap<String, IEventProvider>();
-            stateMashines = new HashMap<String, StateMashine<State>>();
+            stateMachines = new HashMap<String, StateMachine<State>>();
         }
     }
 
-    public IStateMashine<? extends IState> readRootStateMashine() throws AutomataFormatException {
+    public IStateMachine<? extends IState> readRootStateMachine() throws AutomataFormatException {
         try {
             init();
             readAll();
-            return rootStateMashine;
+            return rootStateMachine;
         } catch (XMLStreamException e) {
             throw new AutomataFormatException(e);
         } catch (ClassNotFoundException e) {
@@ -110,11 +110,11 @@ public class StateMashineReader implements IAutomataReader {
         }
     }
 
-    public Map<String, ? extends IStateMashine<? extends IState>> readStateMashines() throws AutomataFormatException {
+    public Map<String, ? extends IStateMachine<? extends IState>> readStateMachines() throws AutomataFormatException {
         try {
             init();
             readAll();
-            return stateMashines;
+            return stateMachines;
         } catch (XMLStreamException e) {
             throw new AutomataFormatException(e);
         } catch (ClassNotFoundException e) {
@@ -131,10 +131,10 @@ public class StateMashineReader implements IAutomataReader {
                         parseControlledObject();
                     } else if (EVENT_PROVIDER.equals(elementName)) {
                         parseEventProvider();
-                    } else if (STATE_MASHINE_REF.equals(elementName)) {
-                        parseRootStateMashine();
-                    } else if (STATE_MASHINE.equals(elementName)) {
-                        parseStateMashine();
+                    } else if (STATE_MACHINE_REF.equals(elementName)) {
+                        parseRootStateMachine();
+                    } else if (STATE_MACHINE.equals(elementName)) {
+                        parseStateMachine();
                     }
                     break;
                 default:
@@ -143,18 +143,18 @@ public class StateMashineReader implements IAutomataReader {
         }
     }
 
-    private void parseRootStateMashine() {
-        assert STATE_MASHINE_REF.equals(reader.getName().toString());
+    private void parseRootStateMachine() {
+        assert STATE_MACHINE_REF.equals(reader.getName().toString());
 
         String name = reader.getAttributeValue(null, ATTR_NAME);
-        rootStateMashine = getStateMashine(name);
+        rootStateMachine = getStateMachine(name);
     }
 
-    private void parseStateMashine() throws XMLStreamException, AutomataFormatException {
-        assert STATE_MASHINE.equals(reader.getName().toString());
+    private void parseStateMachine() throws XMLStreamException, AutomataFormatException {
+        assert STATE_MACHINE.equals(reader.getName().toString());
 
         String name = reader.getAttributeValue(null, ATTR_NAME);
-        StateMashine<State> sm = getStateMashine(name);
+        StateMachine<State> sm = getStateMachine(name);
 
         int startCount = 1;
         while (startCount > 0) {
@@ -180,7 +180,7 @@ public class StateMashineReader implements IAutomataReader {
             }
         }
 
-        if (!STATE_MASHINE.equals(reader.getName().toString())) {
+        if (!STATE_MACHINE.equals(reader.getName().toString())) {
             throw new AutomataFormatException("Unexpected end tag: " + reader.getName());
         }
     }
@@ -211,7 +211,7 @@ public class StateMashineReader implements IAutomataReader {
                     if (ASSOCIATION.equals(reader.getName().toString())) {
                         String smName = reader.getAttributeValue(null, ATTR_TARGET);
 
-                        getStateMashine(smName).addEventProvider(eProvider);
+                        getStateMachine(smName).addEventProvider(eProvider);
                     } else {
                         throw new AutomataFormatException("Unexpected element name: " + reader.getName());
                     }
@@ -228,7 +228,7 @@ public class StateMashineReader implements IAutomataReader {
         }
     }
 
-    private void parseStates(StateMashine<State> sm) throws XMLStreamException, AutomataFormatException {
+    private void parseStates(StateMachine<State> sm) throws XMLStreamException, AutomataFormatException {
         assert STATE.equals(reader.getName().toString());
         assert "Top".equals(reader.getAttributeValue(null, ATTR_NAME));
 
@@ -255,7 +255,7 @@ public class StateMashineReader implements IAutomataReader {
         }
     }
 
-    private void parseSingleState(StateMashine<State> sm) throws XMLStreamException, AutomataFormatException {
+    private void parseSingleState(StateMachine<State> sm) throws XMLStreamException, AutomataFormatException {
         assert STATE.equals(reader.getName().toString());
 
         String name = reader.getAttributeValue(null, ATTR_NAME);
@@ -271,13 +271,13 @@ public class StateMashineReader implements IAutomataReader {
                     String elementName = reader.getName().toString();
                     if (OUT_ACTION.equals(elementName)) {
                         String actionFullName = reader.getAttributeValue(null, ATTR_ACTION);
-                        actions.add(StateMashineUtils.extractAction(actionFullName, sm));
-                    } else if (STATE_MASHINE_REF.equals(elementName)) {
+                        actions.add(StateMachineUtils.extractAction(actionFullName, sm));
+                    } else if (STATE_MACHINE_REF.equals(elementName)) {
                         String smName = reader.getAttributeValue(null, ATTR_NAME);
-                        StateMashine<State> nested = getStateMashine(smName);
-                        state.addNestedStateMashine(nested);
+                        StateMachine<State> nested = getStateMachine(smName);
+                        state.addNestedStateMachine(nested);
                         nested.setParent(sm, state);
-                        sm.addNestedStateMashine(nested);
+                        sm.addNestedStateMachine(nested);
                     } else {
                         throw new AutomataFormatException("Unexpected tag: " + reader.getName());
                     }
@@ -297,7 +297,7 @@ public class StateMashineReader implements IAutomataReader {
         }
     }
 
-    private void parseTransition(StateMashine<State> sm) throws XMLStreamException, AutomataFormatException {
+    private void parseTransition(StateMachine<State> sm) throws XMLStreamException, AutomataFormatException {
         assert TRANSITION.equals(reader.getName().toString());
 
         String eventFullName = reader.getAttributeValue(null, ATTR_EVENT);
@@ -308,7 +308,7 @@ public class StateMashineReader implements IAutomataReader {
         State stateSource = sm.getState(source);
         State stateTarget = sm.getState(target);
 
-        IEvent event = StateMashineUtils.parseEvent(sm, eventProviders, eventFullName);
+        IEvent event = StateMachineUtils.parseEvent(sm, eventProviders, eventFullName);
         Transition t = new Transition(event, new Condition(condExpr), stateTarget);
 
         int startCount = 1;
@@ -318,7 +318,7 @@ public class StateMashineReader implements IAutomataReader {
                     startCount++;
                     if (OUT_ACTION.equals(reader.getName().toString())) {
                         String actionFullName = reader.getAttributeValue(null, ATTR_ACTION);
-                        t.addAction(StateMashineUtils.extractAction(actionFullName, sm));
+                        t.addAction(StateMachineUtils.extractAction(actionFullName, sm));
                     } else {
                         throw new AutomataFormatException("Unexpected tag: " + reader.getName());
                     }
@@ -337,7 +337,7 @@ public class StateMashineReader implements IAutomataReader {
         }
     }
 
-    private void parseCtrlObjAssociation(StateMashine<State> sm) {
+    private void parseCtrlObjAssociation(StateMachine<State> sm) {
         String role = reader.getAttributeValue(null, ATTR_SUPPLIER_ROLE);
         String target = reader.getAttributeValue(null, ATTR_TARGET);
 
@@ -347,11 +347,11 @@ public class StateMashineReader implements IAutomataReader {
         }
     }
 
-    protected StateMashine<State> getStateMashine(String name) {
-        StateMashine<State> sm = stateMashines.get(name);
+    protected StateMachine<State> getStateMachine(String name) {
+        StateMachine<State> sm = stateMachines.get(name);
         if (sm == null) {
-            sm = new StateMashine<State>(name);
-            stateMashines.put(name, sm);
+            sm = new StateMachine<State>(name);
+            stateMachines.put(name, sm);
         }
         return sm;
     }

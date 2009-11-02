@@ -8,7 +8,7 @@ import ru.ifmo.verifier.automata.statemashine.ComplexStateFactory;
 import ru.ifmo.verifier.automata.statemashine.ComplexState;
 import ru.ifmo.verifier.impl.SimpleVerifier;
 import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.grammar.predicate.ComplexPredicateFactory;
 import ru.ifmo.ltl.grammar.predicate.IPredicateFactory;
@@ -21,12 +21,12 @@ import ru.ifmo.ltl.buchi.translator.JLtl2baTranslator;
  */
 public abstract class AbstractAutomataHierarhyVerifierTest extends AbstractVerifierTest<ComplexState> {
 
-    protected AbstractAutomataHierarhyVerifierTest(String xmlFileName, String stateMashineName) {
-        super(xmlFileName, stateMashineName);
+    protected AbstractAutomataHierarhyVerifierTest(String xmlFileName, String stateMachineName) {
+        super(xmlFileName, stateMachineName);
     }
 
-    protected IVerifier<ComplexState> createVerifier(IStateMashine<? extends IState> stateMashine, ILtlParser parser) {
-        return new SimpleVerifier<ComplexState>(ComplexStateFactory.createInitialState(stateMashine), parser, new JLtl2baTranslator());
+    protected IVerifier<ComplexState> createVerifier(IStateMachine<? extends IState> stateMachine, ILtlParser parser) {
+        return new SimpleVerifier<ComplexState>(ComplexStateFactory.createInitialState(stateMachine), parser, new JLtl2baTranslator());
     }
 
     protected IPredicateFactory<ComplexState> createPredicateUtils() {

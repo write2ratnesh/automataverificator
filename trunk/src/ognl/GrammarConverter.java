@@ -126,9 +126,9 @@ public class GrammarConverter {
                 }
                 throw new UnexpectedParameterException(pClass, o.toString());
             } else {
-                if (IStateMashine.class.isAssignableFrom(pClass)) {
+                if (IStateMachine.class.isAssignableFrom(pClass)) {
                     String name = getValue((ASTProperty) node.children[i]);
-                    addToList(args, context.getStateMashine(name), pClass, name);
+                    addToList(args, context.getStateMachine(name), pClass, name);
                 } else if (IControlledObject.class.isAssignableFrom(pClass)) {
                     String name = getValue((ASTProperty) node.children[i]);
                     addToList(args, context.getControlledObject(name), pClass, name);
@@ -138,7 +138,7 @@ public class GrammarConverter {
                 } else if (IState.class.isAssignableFrom(pClass)) {
                     ASTChain chain = (ASTChain) node.children[i];
                     String automata = getValue((ASTProperty) chain.children[0]);
-                    IStateMashine<? extends IState> sm = context.getStateMashine(automata);
+                    IStateMachine<? extends IState> sm = context.getStateMachine(automata);
                     String state = getValue((ASTProperty) chain.children[1]);
                     IState s = sm.getState(state);
                     addToList(args, s, pClass, chain.toString());

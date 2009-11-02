@@ -25,8 +25,8 @@ import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
 import ru.ifmo.automata.statemashine.IAutomataContext;
 import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMashine;
-import ru.ifmo.automata.statemashine.io.StateMashineReader;
+import ru.ifmo.automata.statemashine.IStateMachine;
+import ru.ifmo.automata.statemashine.io.StateMachineReader;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +53,7 @@ public abstract class AbstractCompareTest extends TestCase {
     protected AbstractCompareTest(String xmlFileName, String stateMashineName) throws IOException, AutomataFormatException {
         super();
         this.stateMashineName = stateMashineName;
-        context = new AutomataContext(new StateMashineReader(xmlFileName));
+        context = new AutomataContext(new StateMachineReader(xmlFileName));
     }
 
     protected void setUp() throws IOException, AutomataFormatException {
@@ -63,13 +63,13 @@ public abstract class AbstractCompareTest extends TestCase {
         parser = new LtlParser(context, predicates);
         parserMultiThread = new LtlParser(context, predicatesMultiThread);
 
-        IStateMashine<? extends IState> stateMashine = context.getStateMashine(stateMashineName);
+        IStateMachine<? extends IState> stateMachine = context.getStateMachine(stateMashineName);
 
-        ComplexState initState = ComplexStateFactory.createInitialState(stateMashine);
+        ComplexState initState = ComplexStateFactory.createInitialState(stateMachine);
 
         verifier = new SimpleVerifier<ComplexState>(initState, parser, translator);
         verifierMultiThread = new MultiThreadVerifier<ComplexState>(initState,
-                parserMultiThread, translator, stateMashine.getStates().size());
+                parserMultiThread, translator, stateMachine.getStates().size());
     }
 
     protected List<IIntersectionTransition> verify(IVerifier<ComplexState> verifier, IBuchiAutomata buchi, IPredicateFactory<ComplexState> predicates) {

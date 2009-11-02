@@ -9,22 +9,22 @@ import ru.ifmo.automata.statemashine.StateType;
 import java.util.*;
 
 /**
- * IState implementation. May contain nested state mashine.
+ * IState implementation. May contain nested state machine.
  *
  * @author Kirill Egorov
  */
 public class State extends SimpleState {
-    private Set<IStateMashine<? extends IState>> nestedStateMashines = new LinkedHashSet<IStateMashine<? extends IState>>();
+    private Set<IStateMachine<? extends IState>> nestedStateMachines = new LinkedHashSet<IStateMachine<? extends IState>>();
 
     public State(String name, StateType type, List<IAction> actions) {
         super(name, type, actions);
     }
 
-    public Set<IStateMashine<? extends IState>> getNestedStateMashines() {
-        return nestedStateMashines;
+    public Set<IStateMachine<? extends IState>> getNestedStateMachines() {
+        return nestedStateMachines;
     }
 
-    public void addNestedStateMashine(IStateMashine<? extends IState> m) {
-        nestedStateMashines.add(m);
+    public void addNestedStateMachine(IStateMachine<? extends IState> m) {
+        nestedStateMachines.add(m);
     }
 }

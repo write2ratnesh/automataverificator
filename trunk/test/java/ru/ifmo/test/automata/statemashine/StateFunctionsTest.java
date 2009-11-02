@@ -5,9 +5,9 @@ package ru.ifmo.test.automata.statemashine;
 
 import junit.framework.TestCase;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
-import ru.ifmo.automata.statemashine.impl.StateMashine;
+import ru.ifmo.automata.statemashine.impl.StateMachine;
 import ru.ifmo.automata.statemashine.io.IAutomataReader;
-import ru.ifmo.automata.statemashine.io.StateMashineReader;
+import ru.ifmo.automata.statemashine.io.StateMachineReader;
 import ru.ifmo.automata.statemashine.IControlledObject;
 import ru.ifmo.automata.statemashine.IFunction;
 
@@ -21,11 +21,11 @@ import java.io.IOException;
  */
 public class StateFunctionsTest extends TestCase {
 
-    private StateMashine m;
+    private StateMachine m;
 
     protected void setUp() throws IOException, AutomataFormatException {
-        IAutomataReader reader = new StateMashineReader("CarA1.xml");
-        m = (StateMashine) reader.readRootStateMashine();
+        IAutomataReader reader = new StateMachineReader("CarA1.xml");
+        m = (StateMachine) reader.readRootStateMachine();
         reader.close();
     }
 

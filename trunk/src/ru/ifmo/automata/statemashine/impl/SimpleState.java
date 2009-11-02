@@ -8,7 +8,7 @@ import ru.ifmo.automata.statemashine.*;
 import java.util.*;
 
 /**
- * IState implementation whithout nested state mashines
+ * IState implementation whithout nested state machines
  * @author kegorov
  *         Date: Jun 18, 2009
  */
@@ -47,7 +47,7 @@ public class SimpleState implements IState {
         return outTransitions;
     }
 
-    public Set<IStateMashine<? extends IState>> getNestedStateMashines() {
+    public Set<IStateMachine<? extends IState>> getNestedStateMachines() {
         throw new UnsupportedOperationException();
     }
 
@@ -59,7 +59,7 @@ public class SimpleState implements IState {
         outTransitions.add(t);
     }
 
-    public void addNestedStateMashine(IStateMashine<? extends IState> m) {
+    public void addNestedStateMachine(IStateMachine<? extends IState> m) {
         throw new UnsupportedOperationException();
     }
 

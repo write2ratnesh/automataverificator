@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.IAutomataContext;
-import ru.ifmo.automata.statemashine.io.StateMashineReader;
+import ru.ifmo.automata.statemashine.io.StateMachineReader;
 import ru.ifmo.ltl.grammar.*;
 import ru.ifmo.ltl.grammar.predicate.PredicateFactory;
 import ru.ifmo.ltl.converter.ILtlParser;
@@ -27,7 +27,7 @@ public class LtlUtilsTest extends TestCase {
 
     protected void setUp() throws IOException, AutomataFormatException {
         PredicateFactory predicates = new PredicateFactory();
-        IAutomataContext context = new AutomataContext(new StateMashineReader("CarA1.xml"));
+        IAutomataContext context = new AutomataContext(new StateMachineReader("CarA1.xml"));
         parser = new LtlParser(context, predicates);
     }
 

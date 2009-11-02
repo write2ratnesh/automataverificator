@@ -4,7 +4,7 @@
 package ru.ifmo.verifier.automata.tree;
 
 import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 
 /**
  * TODO: add comment
@@ -15,5 +15,5 @@ public interface ITree<S extends IState> {
 
     ITreeNode<S> getRoot();
 
-    ITreeNode<S> getNodeForStateMashine(IStateMashine<S> stateMashine);
+    ITreeNode<S> getNodeForStateMachine(IStateMachine<S> stateMachine);
 }

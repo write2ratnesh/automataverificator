@@ -60,7 +60,7 @@ public class ComplexState<S extends IState> implements IState {
         return activeState.getActions();
     }
 
-    public Set<IStateMashine<? extends IState>> getNestedStateMashines() {
+    public Set<IStateMachine<? extends IState>> getNestedStateMachines() {
         return Collections.emptySet();
     }
 
@@ -99,10 +99,10 @@ public class ComplexState<S extends IState> implements IState {
         }
     }
 
-    public S getStateMashineState(IStateMashine<S> stateMashine) {
-        ITreeNode<S> node = tree.getNodeForStateMashine(stateMashine);
+    public S getStateMachineState(IStateMachine<S> stateMachine) {
+        ITreeNode<S> node = tree.getNodeForStateMachine(stateMachine);
 
-        assert node.getStateMashine().equals(stateMashine);
+        assert node.getStateMachine().equals(stateMachine);
         return node.getState();
     }
 
@@ -112,9 +112,9 @@ public class ComplexState<S extends IState> implements IState {
                 transitions.add(createTransition(node, trans));
             }
             for (ITreeNode<S> child: node.getChildren()) {
-                assert child.isActive() == child.getStateMashine().getParentStates().containsKey(node.getState())
+                assert child.isActive() == child.getStateMachine().getParentStates().containsKey(node.getState())
                         : String.format("Child: %s, stateMahine parent state:%s, parentStates: %s",
-                                        child, child.getStateMashine().getParentStates(), node);
+                                        child, child.getStateMachine().getParentStates(), node);
                 addIfActive(child);
             }
         }

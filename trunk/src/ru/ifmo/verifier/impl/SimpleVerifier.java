@@ -38,7 +38,7 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
 
     public SimpleVerifier(S initState, ILtlParser parser, ITranslator translator) {
         if (initState == null) {
-            throw new IllegalArgumentException("stateMashine can't be null");
+            throw new IllegalArgumentException("stateMachine can't be null");
         }
 
         this.initState = initState;

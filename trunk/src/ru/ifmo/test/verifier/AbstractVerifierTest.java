@@ -11,10 +11,10 @@ import ru.ifmo.ltl.converter.ILtlParser;
 import ru.ifmo.ltl.converter.LtlParser;
 import ru.ifmo.automata.statemashine.impl.AutomataFormatException;
 import ru.ifmo.automata.statemashine.impl.AutomataContext;
-import ru.ifmo.automata.statemashine.io.StateMashineReader;
+import ru.ifmo.automata.statemashine.io.StateMachineReader;
 import ru.ifmo.automata.statemashine.IAutomataContext;
 import ru.ifmo.automata.statemashine.IState;
-import ru.ifmo.automata.statemashine.IStateMashine;
+import ru.ifmo.automata.statemashine.IStateMachine;
 
 import java.util.List;
 import java.io.IOException;
@@ -26,25 +26,25 @@ import java.io.IOException;
  */
 public abstract class AbstractVerifierTest<S extends IState> extends TestCase {
     protected final String xmlFileName;
-    protected final String stateMashineName;
+    protected final String stateMachineName;
 
     protected IVerifier<S> verifier;
     protected IPredicateFactory<S> predicates;
 
-    protected AbstractVerifierTest(String xmlFileName, String stateMashineName) {
+    protected AbstractVerifierTest(String xmlFileName, String stateMachineName) {
         super();
         this.xmlFileName = xmlFileName;
-        this.stateMashineName = stateMashineName;
+        this.stateMachineName = stateMachineName;
     }
 
     protected void setUp() throws IOException, AutomataFormatException {
         predicates = createPredicateUtils();
-        IAutomataContext context = new AutomataContext(new StateMashineReader(xmlFileName));
+        IAutomataContext context = new AutomataContext(new StateMachineReader(xmlFileName));
         ILtlParser parser = new LtlParser(context, predicates);
-        verifier = createVerifier(context.getStateMashine(stateMashineName), parser);
+        verifier = createVerifier(context.getStateMachine(stateMachineName), parser);
     }
 
-    protected abstract IVerifier<S> createVerifier(IStateMashine<? extends IState> stateMashine, ILtlParser parser);
+    protected abstract IVerifier<S> createVerifier(IStateMachine<? extends IState> stateMachine, ILtlParser parser);
 
     protected abstract IPredicateFactory<S> createPredicateUtils();
 
