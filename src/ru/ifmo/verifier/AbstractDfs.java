@@ -9,16 +9,14 @@ import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.util.DequeSet;
 import ru.ifmo.automata.statemachine.IState;
 
-import java.util.Deque;
-import java.util.Set;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * TODO: add comment
  *
  * @author Kirill Egorov
  */
-public abstract class AbstractDfs<R> implements IDfs<R> {
+public abstract class AbstractDfs<R> extends NotifiableDfs<R> {
     private final Deque<IntersectionNode> stack = new DequeSet<IntersectionNode>();
     private final Deque<IIntersectionTransition> transStack = new LinkedList<IIntersectionTransition>();
     
@@ -35,6 +33,7 @@ public abstract class AbstractDfs<R> implements IDfs<R> {
     }
 
     protected void enterNode(IntersectionNode node) {
+        notifyEnterState(node.getState());
     }
 
     protected boolean visitNode(IntersectionNode node) {
@@ -42,6 +41,7 @@ public abstract class AbstractDfs<R> implements IDfs<R> {
     }
 
     protected boolean leaveNode(IntersectionNode node) {
+        notifyLeaveState(node.getState());
         return false;
     }
 

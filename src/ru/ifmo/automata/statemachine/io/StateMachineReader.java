@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URLClassLoader;
 import java.net.URL;
 
@@ -34,6 +35,10 @@ public class StateMachineReader implements IAutomataReader {
     public StateMachineReader(String fileLocation) throws IOException {
         URLClassLoader urlLoader = (URLClassLoader) getClass().getClassLoader();
         URL fileLoc = urlLoader.findResource(fileLocation);
+
+        if (fileLoc == null) {
+            throw new FileNotFoundException("File not found: " + fileLocation);
+        }
 
         try {
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();

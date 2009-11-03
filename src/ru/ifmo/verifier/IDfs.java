@@ -4,5 +4,8 @@ import ru.ifmo.verifier.automata.IntersectionNode;
 
 public interface IDfs<R> {
 
-    public R dfs(IntersectionNode node);
+    R dfs(IntersectionNode node);
+
+    void add(IDfsListener listener);
+    void remove(IDfsListener listener);
 }

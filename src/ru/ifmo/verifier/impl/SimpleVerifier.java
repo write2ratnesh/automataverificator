@@ -5,6 +5,8 @@ package ru.ifmo.verifier.impl;
 
 import ru.ifmo.verifier.IVerifier;
 import ru.ifmo.verifier.ISharedData;
+import ru.ifmo.verifier.IDfsListener;
+import ru.ifmo.verifier.IDfs;
 import ru.ifmo.verifier.concurrent.SharedData;
 import ru.ifmo.verifier.automata.IntersectionAutomata;
 import ru.ifmo.verifier.automata.IntersectionNode;
@@ -53,7 +55,8 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
         this.translator = translator;
     }
 
-    public List<IIntersectionTransition> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException {
+    public List<IIntersectionTransition> verify(String ltlFormula, IPredicateFactory<S> predicates,
+                                                IDfsListener... listeners) throws LtlParseException {
         if (parser == null) {
             throw new UnsupportedOperationException("Can't verify LTL formula without LTL parser."
                     + "Define it first or use List<IStateTransition> verify(IBuchiAutomata buchi) method instead");
@@ -71,14 +74,21 @@ public class SimpleVerifier<S extends IState> implements IVerifier<S> {
         System.out.println(buchi);
         //-----------------------------
         
-        return verify(buchi, predicates);
+        return verify(buchi, predicates, listeners);
     }
 
-    public List<IIntersectionTransition> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
+    public List<IIntersectionTransition> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates,
+                                                IDfsListener... listeners) {
         IntersectionAutomata<S> automata = new IntersectionAutomata<S>(predicates, buchi);
         IntersectionNode initial = automata.getNode(initState, buchi.getStartNode(), 0);
         ISharedData sharedData = new SharedData(new HashSet<IntersectionNode>(), 0);
-        Deque<IIntersectionTransition> stack = new MainDfs(sharedData, -1).dfs(initial);
+
+        IDfs<Deque<IIntersectionTransition>> dfs = new MainDfs(sharedData, -1);
+        for (IDfsListener l : listeners) {
+            dfs.add(l);
+        }
+
+        Deque<IIntersectionTransition> stack = dfs.dfs(initial);
 
         List<IIntersectionTransition> res = new ArrayList<IIntersectionTransition>(stack.size());
 

@@ -6,6 +6,7 @@ package ru.ifmo.test.automata.statemachine.generator;
 import ru.ifmo.test.automata.statemachine.impl.*;
 
 import java.io.IOException;
+import java.io.File;
 
 /**
  * TODO: add comment
@@ -15,7 +16,15 @@ import java.io.IOException;
 public class StatemachineGenerator {
 
     public static void main(String[] args) throws IOException {
-        final int transitionCount = 1000;
+        generateStateMashine(1000);
+        generateStateMashine(5000);
+        generateStateMashine(10000);
+        generateStateMashine(15000);
+        generateStateMashine(20000);
+        generateStateMashine(25000);
+    }
+
+    public static void generateStateMashine(int transitionCount) throws IOException {
         StatemachineContext context = new StatemachineContext(TestEventProvider.class, TestControlledObject.class);
 
         State curState = context.getInitState();
@@ -29,7 +38,9 @@ public class StatemachineGenerator {
             curState = t.getTarget();
             tCount++;
         }
-        StatemachineWriter.getInstance().write("test\\resources\\A" + transitionCount + ".xml", context);
+        StatemachineWriter.getInstance().write(
+                String.format("test//resources//A%d.xml", transitionCount),
+                context);
         System.out.println("State: " + context.getStates().size());
         System.out.println("Transitions: " + tCount);
     }

@@ -18,7 +18,11 @@ import java.util.List;
  */
 public interface IVerifier<S extends IState> {
 
-    List<IIntersectionTransition> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates);
+    List<IIntersectionTransition> verify(IBuchiAutomata buchi,
+                                         IPredicateFactory<S> predicates,
+                                         IDfsListener... listeners);
 
-    List<IIntersectionTransition> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException;
+    List<IIntersectionTransition> verify(String ltlFormula,
+                                         IPredicateFactory<S> predicates,
+                                         IDfsListener... listeners) throws LtlParseException;
 }

@@ -5,15 +5,15 @@ package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
-import ru.ifmo.verifier.IDfs;
 import ru.ifmo.verifier.AbstractDfs;
 import ru.ifmo.verifier.ISharedData;
+import ru.ifmo.verifier.NotifiableDfs;
 import ru.ifmo.util.concurrent.DfsStackTreeNode;
 import ru.ifmo.util.concurrent.DfsStackTree;
 
 import java.util.*;
 
-public class ConcurrentMainDfs implements IDfs<Void> {
+public class ConcurrentMainDfs extends NotifiableDfs<Void> {
 //    private long childVisit = 0;
 //    private int childDepth = 0;
 //    private int maxChildDepth = 0;
@@ -36,8 +36,10 @@ public class ConcurrentMainDfs implements IDfs<Void> {
     }
 
     protected boolean leaveNode() {
-        IntersectionNode node = stackTreeNode.getItem().getTarget();
         if (stackTreeNode.wasLeft.compareAndSet(false, true)) {
+            IntersectionNode node = stackTreeNode.getItem().getTarget();
+
+            notifyLeaveState(node.getState());
             stackTreeNode.remove();
 
             if (node.isTerminal()) {
@@ -64,7 +66,10 @@ public class ConcurrentMainDfs implements IDfs<Void> {
                 if (!visited.contains(child)) {
                     if (visited.add(child)) {
                         stackTreeNode = stackTree.addChild(stackTreeNode, trans);
-                        stackTreeNode.getItem().getTarget().addOwner(threadId);
+
+                        IntersectionNode n = stackTreeNode.getItem().getTarget();
+                        n.addOwner(threadId);
+                        notifyEnterState(n.getState());
                     }
                 }
             } else {
