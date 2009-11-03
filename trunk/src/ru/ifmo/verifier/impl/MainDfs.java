@@ -26,6 +26,7 @@ public class MainDfs extends AbstractDfs<Deque<IIntersectionTransition>> {
     }
 
     protected boolean leaveNode(IntersectionNode node) {
+        super.leaveNode(node);
         assert node.next(threadId) == null;
         if (node.isTerminal()) {
             AbstractDfs<Boolean> dfs2 = new SecondDfs(sharedData, getStack(), curThreadId);

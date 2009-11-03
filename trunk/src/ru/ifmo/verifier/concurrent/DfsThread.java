@@ -6,6 +6,7 @@ package ru.ifmo.verifier.concurrent;
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.ISharedData;
+import ru.ifmo.verifier.IDfsListener;
 import ru.ifmo.util.concurrent.DfsStackTree;
 
 import java.util.Map;
@@ -21,6 +22,8 @@ public class DfsThread extends Thread {
     private DfsStackTree<IIntersectionTransition> stackTree;
     private ISharedData sharedData;
     private int threadId;
+
+    private IDfsListener[] listeners = new IDfsListener[0];
 
     public DfsThread(DfsStackTree<IIntersectionTransition> stackTree, ISharedData sharedData, int threadId) {
         super();
@@ -40,12 +43,21 @@ public class DfsThread extends Thread {
         this.stackTree = stackTree;
     }
 
+    public void setDfsListeners(IDfsListener ... listeners) {
+        this.listeners = listeners;     //TODO: move listeners to shared data?
+    }
+
     public void run() {
         if (stackTree == null) {
             throw new RuntimeException("Initial stack tree node hasn't been initialized yet");
         }
         try {
             ConcurrentMainDfs dfs = new ConcurrentMainDfs(sharedData, stackTree, threadId);
+
+            for (IDfsListener l : listeners) {
+                dfs.add(l);
+            }
+
             dfs.dfs(stackTree.getRoot().getItem().getTarget());
         } catch (Throwable t) {
             printAllStacks(System.err);

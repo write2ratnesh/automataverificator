@@ -5,6 +5,7 @@ package ru.ifmo.verifier.concurrent;
 
 import ru.ifmo.verifier.IVerifier;
 import ru.ifmo.verifier.ISharedData;
+import ru.ifmo.verifier.IDfsListener;
 import ru.ifmo.verifier.automata.IntersectionNode;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.verifier.automata.IntersectionTransition;
@@ -110,7 +111,8 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         this.parser = parser;
     }
 
-    public List<IIntersectionTransition> verify(String ltlFormula, IPredicateFactory<S> predicates) throws LtlParseException {
+    public List<IIntersectionTransition> verify(String ltlFormula, IPredicateFactory<S> predicates,
+                                                IDfsListener ... listeners) throws LtlParseException {
         if (parser == null) {
             throw new UnsupportedOperationException("Can't verify LTL formula without LTL parser."
                     + "Define it first or use List<IStateTransition> verify(IBuchiAutomata buchi) method instead");
@@ -124,10 +126,11 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         System.out.println(buchi);
         //-----------------------------
 
-        return verify(buchi, predicates);
+        return verify(buchi, predicates, listeners);
     }
 
-    public List<IIntersectionTransition> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates) {
+    public List<IIntersectionTransition> verify(IBuchiAutomata buchi, IPredicateFactory<S> predicates,
+                                                IDfsListener... listeners) {
         if (!(predicates instanceof MultiThreadPredicateFactory)) {
             throw new IllegalArgumentException("Unexpected predicates class: "
                     + predicates.getClass() + ". Expected instance of "
@@ -142,7 +145,9 @@ public class MultiThreadVerifier<S extends IState> implements IVerifier<S> {
         //create threads
         List<DfsThread> threads = new ArrayList<DfsThread>(threadNumber);
         for (int i = 0; i < threadNumber; i++) {
-            threads.add(new DfsThread(null, sharedData, i));
+            DfsThread t = new DfsThread(null, sharedData, i);
+            t.setDfsListeners(listeners);
+            threads.add(t);
         }
         automata.setThreads(threads);
         ((MultiThreadPredicateFactory) predicates).init(threads);

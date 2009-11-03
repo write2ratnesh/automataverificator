@@ -6,6 +6,7 @@ package ru.ifmo.test.verifier;
 import ru.ifmo.verifier.IInterNode;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
 import ru.ifmo.ltl.LtlParseException;
+import ru.ifmo.automata.statemachine.IState;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Kirill Egorov
  */
-public class VerifierTest extends AbstractSingleAutomataVerifierTest {
+public abstract class VerifierTest extends AbstractVerifierTest<IState> {
 
     public VerifierTest() {
         super("CarA2.xml", "A1");

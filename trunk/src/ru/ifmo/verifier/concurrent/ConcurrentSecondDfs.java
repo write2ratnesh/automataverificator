@@ -56,4 +56,8 @@ public class ConcurrentSecondDfs extends AbstractDfs<Boolean> {
         }
         return false;
     }
+
+    protected boolean leaveNode(IntersectionNode node) {
+        return false;
+    }
 }

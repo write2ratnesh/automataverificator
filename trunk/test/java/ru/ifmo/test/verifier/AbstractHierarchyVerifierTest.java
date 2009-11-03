@@ -5,6 +5,7 @@ package ru.ifmo.test.verifier;
 
 import ru.ifmo.ltl.LtlParseException;
 import ru.ifmo.verifier.automata.IIntersectionTransition;
+import ru.ifmo.verifier.automata.statemachine.ComplexState;
 
 import java.util.List;
 
@@ -13,8 +14,8 @@ import java.util.List;
  *
  * @author Kirill Egorov
  */
-public class AutomataHierarchyVerifierTest extends AbstractAutomataHierarhyVerifierTest {
-    public AutomataHierarchyVerifierTest() {
+public abstract class AbstractHierarchyVerifierTest extends  AbstractVerifierTest<ComplexState> {
+    public AbstractHierarchyVerifierTest() {
         super("GameA1.xml", "A1");
     }
 
