@@ -36,6 +36,7 @@ public abstract class NotifiableDfs<R> implements IDfs<R> {
         if (listeners == null) {
             listeners = new ArrayList<IDfsListener>();
         }
+        listeners.add(listener);
     }
 
     public void remove(IDfsListener listener) {
