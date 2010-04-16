@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE model PUBLIC "-//eVelopers Corp.//DTD State machine model V1.0//EN" "http://www.evelopers.com/dtd/unimod/statemachine.dtd">
+<model name="Model1">
+  <controlledObject class="ru.ifmo.test.bank.BankControlledObject" name="co"/>
+  <eventProvider class="ru.ifmo.test.bank.BankEventProvider" name="ep">
+    <association clientRole="ep" targetRef="A1"/>
+  </eventProvider>
+  <rootStateMachine>
+    <stateMachineRef name="A1"/>
+  </rootStateMachine>
+  <stateMachine name="A1">
+    <configStore class="com.evelopers.unimod.runtime.config.DistinguishConfigManager"/>
+    <association clientRole="A1" supplierRole="co" targetRef="co"/>
+    <state name="Top" type="NORMAL">
+      <state name="s0" type="INITIAL"/>
+      <state name="s1" type="NORMAL"/>
+      <state name="s2" type="NORMAL"/>
+        <state name="s3" type="NORMAL"/>
+        <state name="s4" type="NORMAL"/>
+        <state name="s5" type="NORMAL"/>
+        <state name="s6" type="NORMAL"/>
+        <state name="s7" type="NORMAL"/>
+        <state name="s8" type="NORMAL"/>
+    </state>
+    <transition event="IC" sourceRef="s0" targetRef="s1">
+      <outputAction ident="co.z1"/>
+    </transition>
+    <transition event="EC" sourceRef="s1" targetRef="s0">
+      <outputAction ident="co.z2"/>
+    </transition>
+    <transition event="A" sourceRef="s1" targetRef="s2">
+      <outputAction ident="co.z3"/>
+    </transition>
+    <transition event="AE" sourceRef="s2" targetRef="s1">
+      <outputAction ident="co.z1"/>
+    </transition>
+    <transition event="AS" sourceRef="s2" targetRef="s3">
+      <outputAction ident="co.z4"/>
+    </transition>
+    <transition event="EC" sourceRef="s3" targetRef="s0">
+      <outputAction ident="co.z2"/>
+    </transition>
+    <transition event="C" sourceRef="s3" targetRef="s4">
+      <outputAction ident="co.z5"/>
+    </transition>
+    <transition event="M" sourceRef="s3" targetRef="s6">
+      <outputAction ident="co.z8"/>
+    </transition>
+    <transition event="CR" sourceRef="s4" targetRef="s5">
+      <outputAction ident="co.z6"/>
+    </transition>
+    <transition event="CNL" sourceRef="s5" targetRef="s3">
+      <outputAction ident="co.z4"/>
+    </transition>
+    <transition event="CP" sourceRef="s5" targetRef="s3">
+      <outputAction ident="co.z7"/>
+      <outputAction ident="co.z4"/>
+    </transition>
+    <transition event="CNL" sourceRef="s6" targetRef="s3">
+      <outputAction ident="co.z4"/>
+    </transition>
+    <transition event="MR" sourceRef="s6" targetRef="s7">
+      <outputAction ident="co.z9"/>
+    </transition>
+    <transition event="ME" sourceRef="s7" targetRef="s6">
+      <outputAction ident="co.z8"/>
+    </transition>
+    <transition event="MS" sourceRef="s7" targetRef="s8">
+      <outputAction ident="co.z10"/>
+    </transition>
+    <transition event="CNL" sourceRef="s8" targetRef="s3">
+      <outputAction ident="co.z11"/>
+      <outputAction ident="co.z12"/>
+      <outputAction ident="co.z4"/>
+    </transition>
+    <transition event="MP" sourceRef="s8" targetRef="s3">
+      <outputAction ident="co.z11"/>
+      <outputAction ident="co.z12"/>
+      <outputAction ident="co.z13"/>
+      <outputAction ident="co.z4"/>
+    </transition>
+  </stateMachine>
+</model>
