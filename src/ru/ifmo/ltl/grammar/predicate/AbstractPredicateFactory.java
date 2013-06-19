@@ -33,6 +33,6 @@ public abstract class AbstractPredicateFactory<S extends IState> implements IPre
 
     protected boolean wasTransition() {
         return !(transition.getEvent() == null && transition.getCondition() == null
-                && transition.getTarget() == state);
+                && transition.getTarget() == state && (state.getOutcomingTransitions().size() > 1));
     }
 }
