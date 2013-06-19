@@ -31,7 +31,7 @@ JDK=	/usr/lib/jvm/java-6-sun
 JDKMD=	linux
 
 CC=gcc
-CFLAGS= -O3 -ansi -DNXT -shared -I$(JDK)/include -I$(JDK)/include/$(JDKMD)
+CFLAGS= -fPIC -O3 -ansi -DNXT -shared -I$(JDK)/include -I$(JDK)/include/$(JDKMD)
 
 LTL2BA=	parse.o lex.o main.o trans.o buchi.o set.o \
 	mem.o rewrt.o cache.o alternating.o generalized.o \
