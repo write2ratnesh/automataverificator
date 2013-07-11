@@ -19,32 +19,30 @@
         </state>
         <transition event="nfv5" sourceRef="s0" targetRef="s1">
             <outputAction ident="co.mr1"/>
-            <outputAction ident="co.mr2"/>
-            <outputAction ident="co.mr3"/>
         </transition>
         <transition event="nfv9" sourceRef="s0" targetRef="s1">
-            <outputAction ident="co.mr1"/>
             <outputAction ident="co.mr2"/>
-            <outputAction ident="co.mr3"/>
         </transition>
         <transition event="tmpl" sourceRef="s1" targetRef="s2">
             <outputAction ident="co.mc1"/>
+        </transition>
+        <transition event="tmpl" sourceRef="s2" targetRef="s0">
             <outputAction ident="co.mc2"/>
-            <outputAction ident="co.mc3"/>
         </transition>
-        <transition event="tmpl" sourceRef="s2" targetRef="s3">
-            <outputAction ident="co.mc1"/>
+        <transition event="t" sourceRef="s0" targetRef="s3">
         </transition>
-        <transition event="nt" sourceRef="s3" targetRef="s0">
+        <transition event="c2_next" sourceRef="s3" targetRef="s4">
+            <outputAction ident="co.c1_exp"/>
         </transition>
-        <transition event="t" sourceRef="s3" targetRef="s4">
-        </transition>
-        <transition event="c2_next" sourceRef="s4" targetRef="s4">
-            <outputAction ident="co.c1_top10"/>
-        </transition>
-        <transition event="c2_empty" sourceRef="s4" targetRef="s0">
+        <transition event="c2_empty" sourceRef="s3" targetRef="s0">
             <outputAction ident="co.c1_clean"/>
+            <outputAction ident="co.c2_clean"/>
             <outputAction ident="co.t_reset"/>
+        </transition>
+        <transition event="e1" sourceRef="s4" targetRef="s4">
+            <outputAction ident="co.sl"/>
+        </transition>
+        <transition event="e2" sourceRef="s4" targetRef="s3">
         </transition>
     </stateMachine>
 </model>

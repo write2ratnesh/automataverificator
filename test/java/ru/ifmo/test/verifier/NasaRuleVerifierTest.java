@@ -35,42 +35,41 @@ public class NasaRuleVerifierTest extends AbstractVerifierTest<IState> {
     }
 
     public void test1() throws LtlParseException {
-        test("G( !wasEvent(ep.nfv5) or ( wasAction(co.mr1) and wasAction(co.mr2) and wasAction(co.mr3) ) )");
+        test("G( !wasEvent(ep.nfv5) or wasAction(co.mr1) )");
     }
 
     public void test2() throws LtlParseException {
-        test("G( !wasEvent(ep.nfv9) or ( wasAction(co.mr1) and wasAction(co.mr2) and wasAction(co.mr3) ) )");
+        test("G( !wasEvent(ep.nfv9) or wasAction(co.mr2) )");
     }
 
     public void test3() throws LtlParseException {
-        test("G( !wasEvent(ep.c2_next) or wasAction(co.c1_top10) )");
+        test("G( !wasEvent(ep.c2_next) or wasAction(co.c1_exp) )");
     }
 
     public void test4() throws LtlParseException {
-        test("G( !wasEvent(ep.c2_empty) or ( wasAction(co.c1_clean) and wasAction(co.t_reset) ) )");
+        test("G( !wasEvent(ep.c2_empty) or ( wasAction(co.c1_clean) and wasAction(co.c2_clean) and wasAction(co.t_reset) ) )");
     }
 
     public void test5() throws LtlParseException {
-        test("G( !wasEvent(ep.nt) or X(wasEvent(ep.nfv5) or wasEvent(ep.nfv9)) )");
+        test("G( !(wasEvent(ep.c2_empty) or wasAction(co.mc2)) or X(wasEvent(ep.nfv5) or wasEvent(ep.nfv9) or wasEvent(ep.t)) )");
     }
 
     public void test6() throws LtlParseException {
-        test("G( !wasEvent(ep.nfv5) or " +
-                " X(wasEvent(ep.tmpl) and wasAction(co.mc1) and wasAction(co.mc2) and wasAction(co.mc3) " +
-                " and X( wasEvent(ep.tmpl) and wasAction(co.mc1) )) )");
-    }
-
-    public void test7() throws LtlParseException {
-        test("G( !wasEvent(ep.t) or X(G(wasEvent(ep.c2_next)) or U(wasEvent(ep.c2_next), wasEvent(ep.c2_empty)) ) )");
+        test("G( !wasEvent(ep.e1) or wasAction(co.sl) )");
     }
 
     public void test8() throws LtlParseException {
-        test("G( !wasEvent(ep.nfv5) or " +
-                " X(R( wasEvent(ep.nt) or wasEvent(ep.c2_empty), !wasEvent(ep.nfv5) and !wasEvent(ep.nfv9) )) )");
+        test("G( !wasEvent(ep.c2_next) or X( G(wasEvent(ep.e1)) or U(wasEvent(ep.e1), wasEvent(ep.e2)) ) )");
     }
 
     public void test9() throws LtlParseException {
-        test("G( !X(wasEvent(ep.tmpl)) or (wasAction(co.mr1) or wasAction(co.mc2)) )");
+        test("G( !(wasEvent(ep.nfv5) or wasEvent(ep.nfv9)) or " +
+                " X(R( wasEvent(ep.tmpl) and wasAction(co.mc2), !wasEvent(ep.nfv5) and !wasEvent(ep.nfv9) and !wasEvent(ep.t) )) )");
+    }
+
+    public void test10() throws LtlParseException {
+        test("G( !wasEvent(ep.t) or " +
+                " X(R( wasEvent(ep.c2_empty), !wasEvent(ep.nfv5) and !wasEvent(ep.nfv9) and !wasEvent(ep.t) )) )");
     }
 
     private void test(String formula) throws LtlParseException {

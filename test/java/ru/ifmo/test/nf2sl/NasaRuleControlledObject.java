@@ -12,10 +12,12 @@ import com.evelopers.unimod.runtime.context.StateMachineContext;
 public class NasaRuleControlledObject {
     /*
      * ACTIONS:
-     * mr1, mr2, mr3... - match rules (extract_field(...))
-     * mc1, mc2, mc3... - collect
-     * c1_top10 - send top 10 for current exporter iterator
+     * mr1, mr2. - match rules (extract_field(...))
+     * mc1, mc2 - collect
+     * sl - send syslog
+     * c1_exp - set current exporter
      * c1_clean - clean c1
+     * c2_clean - clean c2
      * t_reset - reset timer
      */
 
@@ -26,22 +28,22 @@ public class NasaRuleControlledObject {
     public void mr2(StateMachineContext c) {
     }
 
-    public void mr3(StateMachineContext c) {
-    }
-
     public void mc1(StateMachineContext c) {
     }
 
     public void mc2(StateMachineContext c) {
     }
 
-    public void mc3(StateMachineContext c) {
+    public void sl(StateMachineContext c) {
     }
 
-    public void c1_top10(StateMachineContext c) {
+    public void c1_exp(StateMachineContext c) {
     }
 
     public void c1_clean(StateMachineContext c) {
+    }
+
+    public void c2_clean(StateMachineContext c) {
     }
 
     public void t_reset(StateMachineContext c) {
